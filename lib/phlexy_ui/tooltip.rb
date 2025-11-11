@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Tooltip < Base
+    component :tooltip
+
     def initialize(*, tip:, as: :div, **)
       super(*, **)
       @tip = tip

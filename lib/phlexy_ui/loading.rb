@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Loading < Base
+    component :loading
+
     def initialize(*, as: :span, **)
       super(*, **)
       @as = as

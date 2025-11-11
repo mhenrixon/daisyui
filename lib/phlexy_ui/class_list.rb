@@ -35,6 +35,7 @@ module PhlexyUI
 
     def component_classes
       return unless component_html_class
+      return if component_html_class.to_s.strip.empty?
       return if responsive_options&.values&.any? do |v|
         v == true || (v.is_a?(Array) && v.include?(true))
       end

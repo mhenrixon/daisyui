@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Skeleton < Base
+    component :skeleton
+
     def initialize(*, as: :div, **)
       super(*, **)
       @as = as

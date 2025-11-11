@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Menu < Base
+    component :menu
+
     def view_template(&)
       generate_classes!(
         # "menu"

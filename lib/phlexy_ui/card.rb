@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Card < Base
+    component :card
+
     def initialize(*, as: :section, **)
       super(*, **)
       @as = as

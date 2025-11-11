@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Badge < Base
+    component :badge
+
     def initialize(*, as: :span, **)
       super(*, **)
       @as = as

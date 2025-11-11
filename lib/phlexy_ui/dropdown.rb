@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Dropdown < Base
+    component :dropdown
+
     def initialize(*, as: :div, **)
       super(*, **)
       @as = as

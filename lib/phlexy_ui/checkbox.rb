@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Checkbox < Base
+    component :checkbox
+
     def view_template(&)
       attributes = generate_attributes(base_modifiers, options, ATTRIBUTES_MAP)
 

@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Link < Base
+    component :link, base_class: ""
+
     def view_template(&)
       generate_classes!(
         modifiers_map: modifiers,

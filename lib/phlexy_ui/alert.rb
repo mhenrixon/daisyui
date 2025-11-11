@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Alert < Base
+    component :alert
+
     def initialize(*, as: :div, **)
       super(*, **)
       @as = as

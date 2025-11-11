@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Drawer < Base
+    component :drawer
+
     def initialize(*, id:, as: :section, **)
       super(*, **)
       @as = as

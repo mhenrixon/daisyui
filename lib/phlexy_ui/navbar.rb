@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Navbar < Base
+    component :navbar
+
     def initialize(*, as: :nav, **)
       super(*, **)
       @as = as

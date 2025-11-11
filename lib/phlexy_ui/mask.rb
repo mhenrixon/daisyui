@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Mask < Base
+    component :mask
+
     def initialize(*, as: :div, **)
       super(*, **)
       @as = as

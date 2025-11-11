@@ -3,12 +3,12 @@ require "spec_helper"
 describe "modifiers inheritance" do
   let(:phlexy_ui_class) do
     Class.new(PhlexyUI::Base) do
+      component :base_component
+
       def view_template(&)
         generate_classes!(
-          component_html_class: "base-component",
-          modifiers_map: modifiers,
-          base_modifiers:,
-          options:
+          base_modifiers: base_modifiers,
+          options: options
         ).then do |classes|
           div(class: classes, **options, &)
         end
@@ -22,6 +22,8 @@ describe "modifiers inheritance" do
 
   let(:custom_component_class) do
     Class.new(phlexy_ui_class) do
+      component :custom_component
+
       register_modifiers(
         custom_modifier: "custom-modifier-value"
       )
@@ -55,7 +57,7 @@ describe "modifiers inheritance" do
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <button class="btn btn-primary"></button>
-        <div class="base-component base-modifier-value custom-modifier-value">Custom</div>
+        <div class="custom-component base-modifier-value custom-modifier-value">Custom</div>
       HTML
 
       is_expected.to eq(expected_html)
@@ -65,12 +67,12 @@ describe "modifiers inheritance" do
   describe "sibling classes don't interfere with each other" do
     let(:parent_class) do
       Class.new(PhlexyUI::Base) do
+        component :parent_component
+
         def view_template(&)
           generate_classes!(
-            component_html_class: "parent-component",
-            modifiers_map: modifiers,
-            base_modifiers:,
-            options:
+            base_modifiers: base_modifiers,
+            options: options
           ).then do |classes|
             div(class: classes, **options, &)
           end
@@ -84,12 +86,12 @@ describe "modifiers inheritance" do
 
     let(:sibling_a_class) do
       Class.new(parent_class) do
+        component :sibling_a
+
         def view_template(&)
           generate_classes!(
-            component_html_class: "sibling-a",
-            modifiers_map: modifiers,
-            base_modifiers:,
-            options:
+            base_modifiers: base_modifiers,
+            options: options
           ).then do |classes|
             div(class: classes, **options, &)
           end
@@ -104,12 +106,12 @@ describe "modifiers inheritance" do
 
     let(:sibling_b_class) do
       Class.new(parent_class) do
+        component :sibling_b
+
         def view_template(&)
           generate_classes!(
-            component_html_class: "sibling-b",
-            modifiers_map: modifiers,
-            base_modifiers:,
-            options:
+            base_modifiers: base_modifiers,
+            options: options
           ).then do |classes|
             div(class: classes, **options, &)
           end

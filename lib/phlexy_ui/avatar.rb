@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Avatar < Base
+    component :avatar
+
     def initialize(*, as: :div, **)
       super(*, **)
       @as = as

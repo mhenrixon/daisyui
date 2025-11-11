@@ -3,6 +3,8 @@
 module PhlexyUI
   # @private
   class Tab < Base
+    component :tab
+
     def initialize(*, id: nil, **)
       super(*, **)
       @id = id

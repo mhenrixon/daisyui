@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class RadialProgress < Base
+    component :radial_progress
+
     def initialize(*, value:, as: :div, size: nil, thickness: nil, **)
       super(*, **)
       @as = as

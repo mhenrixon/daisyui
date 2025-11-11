@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Modal < Base
+    component :modal
+
     def initialize(*, id:, **)
       super(*, **)
       @id = id

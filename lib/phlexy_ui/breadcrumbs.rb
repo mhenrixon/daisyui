@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Breadcrumbs < Base
+    component :breadcrumbs
+
     def initialize(*, as: :div, **)
       super(*, **)
       @as = as
@@ -22,11 +24,8 @@ module PhlexyUI
     end
 
     def crumb(**options, &)
-      generate_classes!(
-        options:
-      ).then do |classes|
-        li(class: classes, **options, &)
-      end
+      # Don't use component class for child items, just pass through options
+      li(class: options.delete(:class), **options, &)
     end
     alias_method :breadcrumb, :crumb
     alias_method :item, :crumb

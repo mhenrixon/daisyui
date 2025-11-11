@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Tabs < Base
+    component :tabs
+
     def initialize(*, id: nil, as: :div, **)
       super(*, **)
       @as = as

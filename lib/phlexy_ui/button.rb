@@ -4,6 +4,8 @@ require "phlex/version"
 
 module PhlexyUI
   class Button < Base
+    component :button, base_class: "btn"
+
     def initialize(*, as: :button, modal: nil, **)
       super(*, **)
       @as = as
@@ -12,11 +14,9 @@ module PhlexyUI
 
     def view_template(&)
       generate_classes!(
-        # "btn"
-        component_html_class: :btn,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
+        component: :button,
+        base_modifiers: base_modifiers,
+        options: options
       ).then do |classes|
         if modal
           public_send(
