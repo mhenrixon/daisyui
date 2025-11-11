@@ -29,7 +29,5 @@ module PhlexyUI
     end
     alias_method :breadcrumb, :crumb
     alias_method :item, :crumb
-
-    register_modifiers({})
   end
 end

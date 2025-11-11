@@ -80,5 +80,13 @@ module PhlexyUI
     def clear!
       @registry.clear
     end
+
+    # Unregister a specific component (useful for testing)
+    #
+    # @param component_name [Symbol] the component identifier to remove
+    # @return [void]
+    def unregister(component_name)
+      @registry.delete(component_name)
+    end
   end
 end

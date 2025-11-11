@@ -22,7 +22,5 @@ module PhlexyUI
     end
 
     private
-
-    register_modifiers({})
   end
 end

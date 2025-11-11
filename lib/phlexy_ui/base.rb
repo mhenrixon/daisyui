@@ -43,19 +43,34 @@ module PhlexyUI
       # Register modifiers for this component
       # For components with component_name: registers in global registry
       # For sub-components without component_name: stores locally on class
-      # The base_class uses the value from component() or auto-derives from component_name
-      # If parent class has a different component_name with modifiers, they are merged
       #
       # @param modifiers [Hash] mapping of modifier symbols to CSS classes
+      # @param merge [Boolean] if true, merge with existing modifiers (for extending same component)
       # @return [void]
       #
-      # @example
+      # @example Base component
       #   component :button, base_class: "btn"
       #   register_modifiers(
       #     primary: "btn-primary",
       #     large: "btn-lg"
       #   )
-      def register_modifiers(modifiers)
+      #
+      # @example Extending same component in subclass
+      #   class CustomDropdown < PhlexyUI::Dropdown
+      #     register_modifiers(
+      #       { custom: "custom-class" },
+      #       merge: true  # Adds to existing :dropdown modifiers
+      #     )
+      #   end
+      #
+      # @example Sibling with different component_name (inherits parent's modifiers)
+      #   class SiblingA < ParentComponent
+      #     component :sibling_a  # Different name
+      #     register_modifiers(
+      #       unique: "unique-class"  # Inherits parent's modifiers automatically
+      #     )
+      #   end
+      def register_modifiers(merge: false, **modifiers)
         # If no component_name, store modifiers locally (for sub-components)
         unless @component_name
           @local_modifiers = modifiers.freeze
@@ -64,15 +79,24 @@ module PhlexyUI
 
         base_class = @component_base_class || @component_name.to_s.tr("_", "-")
 
-        # Merge with parent's modifiers if parent has a different component_name
-        parent_component_name = superclass.respond_to?(:component_name) ? superclass.component_name : nil
-        parent_modifiers = if parent_component_name && parent_component_name != @component_name
-          PhlexyUI.modifiers_for(parent_component_name)
+        # Determine what to merge with
+        base_modifiers = if merge && PhlexyUI.registered?(@component_name)
+          # Explicitly merging with existing registry entry (same component_name)
+          PhlexyUI.modifiers_for(@component_name)
+        elsif !merge && PhlexyUI.registered?(@component_name)
+          # Component already registered and not merging - this is an error
+          raise ArgumentError, "Component :#{@component_name} is already registered. Use `merge: true` to add modifiers to existing component."
         else
-          {}
+          # Not registered yet - inherit from parent if parent has different component_name
+          parent_component_name = superclass.respond_to?(:component_name) ? superclass.component_name : nil
+          if parent_component_name && parent_component_name != @component_name && PhlexyUI.registered?(parent_component_name)
+            PhlexyUI.modifiers_for(parent_component_name)
+          else
+            {}
+          end
         end
 
-        merged_modifiers = parent_modifiers.merge(modifiers)
+        merged_modifiers = base_modifiers.merge(modifiers)
         PhlexyUI.register_component(@component_name, base_class: base_class, modifiers: merged_modifiers)
       end
     end

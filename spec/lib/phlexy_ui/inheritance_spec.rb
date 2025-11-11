@@ -1,6 +1,15 @@
 require "spec_helper"
 
 describe "modifiers inheritance" do
+  after do
+    # Clean up test component registrations
+    PhlexyUI.registry.unregister(:base_component)
+    PhlexyUI.registry.unregister(:custom_component)
+    PhlexyUI.registry.unregister(:parent_component)
+    PhlexyUI.registry.unregister(:sibling_a)
+    PhlexyUI.registry.unregister(:sibling_b)
+  end
+
   let(:phlexy_ui_class) do
     Class.new(PhlexyUI::Base) do
       component :base_component
