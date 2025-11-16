@@ -3,13 +3,7 @@
 module PhlexyUI
   class TableRow < Base
     def view_template(&)
-      generate_classes!(
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        tr(class: classes, **options, &)
-      end
+      tr(class: classes, **attributes, &)
     end
 
     def head(*, **, &)

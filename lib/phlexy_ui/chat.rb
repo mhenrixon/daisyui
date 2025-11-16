@@ -9,55 +9,23 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "chat"
-        component_html_class: :chat,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def image(**options, &)
-      generate_classes!(
-        # "chat-image"
-        component_html_class: :"chat-image",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def image(**opts, &)
+      div(class: component_classes("chat-image", from: opts), **opts, &)
     end
 
-    def header(**options, &)
-      generate_classes!(
-        # "chat-header"
-        component_html_class: :"chat-header",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def header(**opts, &)
+      div(class: component_classes("chat-header", from: opts), **opts, &)
     end
 
-    def bubble(**options, &)
-      generate_classes!(
-        # "chat-bubble"
-        component_html_class: :"chat-bubble",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def bubble(**opts, &)
+      div(class: component_classes("chat-bubble", from: opts), **opts, &)
     end
 
-    def footer(**options, &)
-      generate_classes!(
-        # "chat-footer"
-        component_html_class: :"chat-footer",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def footer(**opts, &)
+      div(class: component_classes("chat-footer", from: opts), **opts, &)
     end
 
     register_modifiers(

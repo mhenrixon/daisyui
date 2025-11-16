@@ -3,25 +3,19 @@
 module PhlexyUI
   # @component html class="collapse"
   class Accordion < Base
+    self.component_class = :collapse
+
     def initialize(*, name:, checked: false, as: :div, **)
-      super(*, **)
+      super(*, as:, **)
       @name = name
       @checked = checked
-      @as = as
     end
 
     def view_template(&block)
-      generate_classes!(
-        component_html_class: :collapse,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options) do
-          input(type: :radio, name:, checked:)
-          div(class: "collapse-title", &title_block) if title_block
-          div(class: "collapse-content", &block) if block
-        end
+      public_send(as, class: classes, **attributes) do
+        input(type: :radio, name:, checked:)
+        div(class: "collapse-title", &title_block) if title_block
+        div(class: "collapse-content", &block) if block
       end
     end
 

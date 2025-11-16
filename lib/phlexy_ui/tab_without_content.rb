@@ -4,15 +4,7 @@ module PhlexyUI
   # @private
   class TabWithoutContent < Base
     def view_template(&)
-      generate_classes!(
-        # "tab"
-        component_html_class: :tab,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        div role: :tab, class: classes, &
-      end
+      div role: :tab, class: classes, &
     end
 
     private

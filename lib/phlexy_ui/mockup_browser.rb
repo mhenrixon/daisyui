@@ -9,25 +9,11 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "mockup-browser"
-        component_html_class: :"mockup-browser",
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def toolbar(**options, &)
-      generate_classes!(
-        # "mockup-browser-toolbar"
-        component_html_class: :"mockup-browser-toolbar",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def toolbar(**opts, &)
+      div(class: component_classes("mockup-browser-toolbar", from: opts), **opts, &)
     end
   end
 end

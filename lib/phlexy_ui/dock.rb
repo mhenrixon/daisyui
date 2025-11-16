@@ -9,25 +9,11 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "dock"
-        component_html_class: :dock,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def label(**options, &)
-      generate_classes!(
-        # "dock-label"
-        component_html_class: :"dock-label",
-        options:
-      ).then do |classes|
-        span(class: classes, **options, &)
-      end
+    def label(**opts, &)
+      span(class: component_classes("dock-label", from: opts), **opts, &)
     end
 
     register_modifiers(

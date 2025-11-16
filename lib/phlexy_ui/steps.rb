@@ -9,35 +9,11 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "steps"
-        component_html_class: :steps,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def step(**options, &)
-      generate_classes!(
-        # "step"
-        component_html_class: :step,
-        options:
-      ).then do |classes|
-        li(class: classes, **options, &)
-      end
-    end
-
-    def icon(**options, &)
-      generate_classes!(
-        # "step-icon"
-        component_html_class: :"step-icon",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def step(**opts, &)
+      div(class: component_classes("step-icon", from: opts), **opts, &)
     end
 
     register_modifiers(

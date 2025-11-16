@@ -9,15 +9,7 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "toggle"
-        component_html_class: :toggle,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, type: :checkbox, class: classes, **options, &)
-      end
+      public_send(as, type: :checkbox, class: classes, **attributes, &)
     end
 
     register_modifiers(

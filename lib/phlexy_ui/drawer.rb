@@ -9,18 +9,10 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "drawer"
-        component_html_class: :drawer,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def toggle(**options, &)
+    def toggle(**opts, &)
       generate_classes!(
         # "drawer-toggle"
         component_html_class: :"drawer-toggle",
@@ -31,23 +23,11 @@ module PhlexyUI
     end
 
     def content(as: :div, **options, &)
-      generate_classes!(
-        # "drawer-content"
-        component_html_class: :"drawer-content",
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: component_classes("drawer-content", from: opts), **opts, &)
     end
 
     def side(as: :div, **options, &)
-      generate_classes!(
-        # "drawer-side"
-        component_html_class: :"drawer-side",
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: component_classes("drawer-side", from: opts), **opts, &)
     end
 
     def overlay(**options, &)

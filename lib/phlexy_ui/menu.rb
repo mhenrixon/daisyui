@@ -3,25 +3,11 @@
 module PhlexyUI
   class Menu < Base
     def view_template(&)
-      generate_classes!(
-        # "menu"
-        component_html_class: :menu,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        ul(class: classes, **options, &)
-      end
+      ul(class: classes, **attributes, &)
     end
 
-    def title(*, as: :li, **options, &)
-      generate_classes!(
-        # "menu-title"
-        component_html_class: :"menu-title",
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+    def title(*, as: :li, **opts, &)
+      public_send(as, class: component_classes("menu-title", from: opts), **opts, &)
     end
 
     def item(*, **, &)

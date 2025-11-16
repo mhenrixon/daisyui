@@ -9,27 +9,11 @@ module PhlexyUI
     end
 
     def view_template(&block)
-      generate_classes!(
-        # "validator"
-        component_html_class: :validator,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options)
-
-        block&.call(self)
-      end
+      public_send(as, class: classes, **attributes, &block)
     end
 
     def hint(**options, &block)
-      generate_classes!(
-        # "validator-hint"
-        component_html_class: :"validator-hint",
-        options:
-      ).then do |classes|
-        p(class: classes, **options, &block)
-      end
+      p(class: component_classes("validator-hint", from: opts), **opts, &block)
     end
   end
 end

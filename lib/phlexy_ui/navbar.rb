@@ -8,45 +8,19 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "navbar"
-        component_html_class: :navbar,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def start(*, as: :div, **options, &)
-      generate_classes!(
-        # "navbar-start"
-        component_html_class: :"navbar-start",
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+    def start(*, as: :div, **opts, &)
+      public_send(as, class: component_classes("navbar-start", from: opts), **opts, &)
     end
 
-    def center(*, as: :div, **options, &)
-      generate_classes!(
-        # "navbar-center"
-        component_html_class: :"navbar-center",
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+    def center(*, as: :div, **opts, &)
+      public_send(as, class: component_classes("navbar-center", from: opts), **opts, &)
     end
 
-    def end(*, as: :div, **options, &)
-      generate_classes!(
-        # "navbar-end"
-        component_html_class: :"navbar-end",
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+    def end(*, as: :div, **opts, &)
+      public_send(as, class: component_classes("navbar-end", from: opts), **opts, &)
     end
 
     register_modifiers(

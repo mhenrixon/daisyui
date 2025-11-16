@@ -9,35 +9,15 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "hero"
-        component_html_class: :hero,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def content(**options, &)
-      generate_classes!(
-        # "hero-content"
-        component_html_class: :"hero-content",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def content(**opts, &)
+      div(class: component_classes("hero-content", from: opts), **opts, &)
     end
 
-    def overlay(**options, &)
-      generate_classes!(
-        # "hero-overlay"
-        component_html_class: :"hero-overlay",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def overlay(**opts, &)
+      div(class: component_classes("hero-overlay", from: opts), **opts, &)
     end
   end
 end

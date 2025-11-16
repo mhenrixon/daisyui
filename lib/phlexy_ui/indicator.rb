@@ -9,25 +9,11 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "indicator"
-        component_html_class: :indicator,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def item(**options, &)
-      generate_classes!(
-        # "indicator-item"
-        component_html_class: :"indicator-item",
-        options:
-      ).then do |classes|
-        span(class: classes, **options, &)
-      end
+    def item(**opts, &)
+      span(class: component_classes("indicator-item", from: opts), **opts, &)
     end
 
     register_modifiers(

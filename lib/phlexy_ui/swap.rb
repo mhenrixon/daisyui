@@ -9,45 +9,19 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "swap"
-        component_html_class: :swap,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def on(**options, &)
-      generate_classes!(
-        # "swap-on"
-        component_html_class: :"swap-on",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def on(**opts, &)
+      div(class: component_classes("swap-on", from: opts), **opts, &)
     end
 
-    def off(**options, &)
-      generate_classes!(
-        # "swap-off"
-        component_html_class: :"swap-off",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def off(**opts, &)
+      div(class: component_classes("swap-off", from: opts), **opts, &)
     end
 
-    def indeterminate(**options, &)
-      generate_classes!(
-        # "swap-indeterminate"
-        component_html_class: :"swap-indeterminate",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def indeterminate(**opts, &)
+      div(class: component_classes("swap-indeterminate", from: opts), **opts, &)
     end
 
     register_modifiers(

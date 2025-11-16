@@ -9,25 +9,11 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "fieldset"
-        component_html_class: :fieldset,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def legend(**options, &)
-      generate_classes!(
-        # "fieldset-legend"
-        component_html_class: :"fieldset-legend",
-        options:
-      ).then do |classes|
-        super(class: classes, **options, &)
-      end
+    def legend(**opts, &)
+      super(class: component_classes("fieldset-legend", from: opts), **opts, &)
     end
   end
 end

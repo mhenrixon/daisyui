@@ -11,35 +11,27 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "radial-progress"
-        component_html_class: :"radial-progress",
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        style = options.delete(:style)
+      style = options.delete(:style)
 
-        if style.nil?
-          style = "--value: #{value};"
+      if style.nil?
+        style = "--value: #{value};"
 
-          if size && !size.empty?
-            style += " --size: #{size};"
-          end
+        if size && !size.empty?
+          style += " --size: #{size};"
+        end
 
-          if thickness && !thickness.empty?
-            style += " --thickness: #{thickness};"
-          end
-        elsif style.is_a?(String)
-          style = "#{style} --value: #{value};"
+        if thickness && !thickness.empty?
+          style + " --thickness: #{thickness};"
+        end
+      elsif style.is_a?(String)
+        style = "#{style} --value: #{value};"
 
-          if size && !size.empty?
-            style += " --size: #{size};"
-          end
+        if size && !size.empty?
+          style += " --size: #{size};"
+        end
 
-          if thickness && !thickness.empty?
-            style += " --thickness: #{thickness};"
-          end
+        if thickness && !thickness.empty?
+          style += " --thickness: #{thickness};"
         end
 
         public_send(as, role: :progressbar, class: classes, style:, **options, &)

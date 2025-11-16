@@ -9,15 +9,7 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "stack"
-        component_html_class: :stack,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
     register_modifiers(

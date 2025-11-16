@@ -8,13 +8,7 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "avatar-group"
-        component_html_class: :"avatar-group",
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
     def avatar(*, **, &)

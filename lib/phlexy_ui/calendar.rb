@@ -27,26 +27,19 @@ module PhlexyUI
     attr_reader :type
 
     def render_cally(&block)
-      generate_classes!(
-        # "cally"
-        component_html_class: :cally,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        calendar_date(class: classes, **options, &block)
-      end
+      calendar_date(class: classes, **attributes, &block)
     end
 
     def render_pikaday
-      generate_classes!(
-        # "input pika-single"
-        component_html_class: "input pika-single",
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        input(type: :text, class: classes, **options)
+      input(type: :text, class: classes, **attributes)
+    end
+
+    def base_class
+      case type
+      when :cally
+        "cally"
+      when :pikaday
+        "input pika-single"
       end
     end
   end

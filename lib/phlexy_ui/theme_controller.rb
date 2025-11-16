@@ -32,13 +32,8 @@ module PhlexyUI
     end
 
     def view_template(&block)
-      input_classes = generate_classes!(
-        # "theme-controller"
-        component_html_class: :"theme-controller",
-        modifiers_map: {},
-        base_modifiers: [],
-        options: {}
-      )
+      # Input always has just the theme-controller class
+      input_classes = self.class.component_class.to_s
 
       attrs = {type: :checkbox, class: input_classes}
       attrs[:value] = theme_value if theme_value
@@ -47,12 +42,7 @@ module PhlexyUI
 
       if block
         # If block given, wrap in label with modifier classes (swap, toggle, etc.)
-        wrapper_classes = generate_classes!(
-          component_html_class: nil,
-          modifiers_map: modifiers,
-          base_modifiers:,
-          options: {}
-        )
+        wrapper_classes = merge_classes(*modifier_classes, *responsive_classes)
 
         label(class: wrapper_classes) do
           public_send(as, **attrs)

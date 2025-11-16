@@ -8,45 +8,19 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "card"
-        component_html_class: :card,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def body(**options, &)
-      generate_classes!(
-        # "card-body"
-        component_html_class: :"card-body",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def body(**opts, &)
+      div(class: component_classes("card-body", from: opts), **opts, &)
     end
 
-    def title(**options, &)
-      generate_classes!(
-        # "card-title"
-        component_html_class: :"card-title",
-        options:
-      ).then do |classes|
-        header(class: classes, **options, &)
-      end
+    def title(**opts, &)
+      header(class: component_classes("card-title", from: opts), **opts, &)
     end
 
-    def actions(**options, &)
-      generate_classes!(
-        # "card-actions"
-        component_html_class: :"card-actions",
-        options:
-      ).then do |classes|
-        footer(class: classes, **options, &)
-      end
+    def actions(**opts, &)
+      footer(class: component_classes("card-actions", from: opts), **opts, &)
     end
 
     register_modifiers(

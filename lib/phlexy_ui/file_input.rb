@@ -9,15 +9,7 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "file-input"
-        component_html_class: :"file-input",
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, type: :file, class: classes, **options, &)
-      end
+      public_send(as, type: :file, class: classes, **attributes, &)
     end
 
     register_modifiers(

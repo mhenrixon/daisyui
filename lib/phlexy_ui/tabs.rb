@@ -9,15 +9,7 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "tabs"
-        component_html_class: :tabs,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, role: :tablist, class: classes, **options, &)
-      end
+      public_send(as, role: :tablist, class: classes, **attributes, &)
     end
 
     def tab(*, **, &)

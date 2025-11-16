@@ -9,25 +9,11 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "carousel"
-        component_html_class: :carousel,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def item(**options, &)
-      generate_classes!(
-        # "carousel-item"
-        component_html_class: :"carousel-item",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def item(**opts, &)
+      div(class: component_classes("carousel-item", from: opts), **opts, &)
     end
 
     register_modifiers(

@@ -3,15 +3,7 @@
 module PhlexyUI
   class Table < Base
     def view_template(&)
-      generate_classes!(
-        # "table"
-        component_html_class: :table,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        table(class: classes, **options, &)
-      end
+      table(class: classes, **attributes, &)
     end
 
     def header(*, **, &)

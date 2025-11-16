@@ -3,13 +3,7 @@
 module PhlexyUI
   class Link < Base
     def view_template(&)
-      generate_classes!(
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        a(class: classes, **options, &)
-      end
+      a(class: classes, **attributes, &)
     end
 
     private

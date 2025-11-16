@@ -9,25 +9,11 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "footer"
-        component_html_class: :footer,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def title(**options, &)
-      generate_classes!(
-        # "footer-title"
-        component_html_class: :"footer-title",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def title(**opts, &)
+      div(class: component_classes("footer-title", from: opts), **opts, &)
     end
 
     register_modifiers(

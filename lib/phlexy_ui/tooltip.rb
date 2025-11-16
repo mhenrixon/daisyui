@@ -9,15 +9,7 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "tooltip"
-        component_html_class: :tooltip,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, data_tip: tip, **options, &)
-      end
+      public_send(as, class: classes, data_tip: tip, **attributes, &)
     end
 
     private

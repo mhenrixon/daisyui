@@ -9,18 +9,10 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "filter"
-        component_html_class: :filter,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def reset(**options, &)
+    def reset(**opts, &)
       generate_classes!(
         # "filter-reset"
         component_html_class: :"filter-reset",

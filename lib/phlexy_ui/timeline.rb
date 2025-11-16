@@ -9,45 +9,19 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "timeline"
-        component_html_class: :timeline,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def start(**options, &)
-      generate_classes!(
-        # "timeline-start"
-        component_html_class: :"timeline-start",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def start(**opts, &)
+      div(class: component_classes("timeline-start", from: opts), **opts, &)
     end
 
-    def middle(**options, &)
-      generate_classes!(
-        # "timeline-middle"
-        component_html_class: :"timeline-middle",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def middle(**opts, &)
+      div(class: component_classes("timeline-middle", from: opts), **opts, &)
     end
 
-    def end(**options, &)
-      generate_classes!(
-        # "timeline-end"
-        component_html_class: :"timeline-end",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def end(**opts, &)
+      div(class: component_classes("timeline-end", from: opts), **opts, &)
     end
 
     register_modifiers(

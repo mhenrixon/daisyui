@@ -8,18 +8,10 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "dropdown"
-        component_html_class: :dropdown,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        if base_modifiers.include?(:tap_to_close)
-          details(class: classes, **options, &)
-        else
-          public_send(as, class: classes, **options, &)
-        end
+      if base_modifiers.include?(:tap_to_close)
+        details(class: classes, **attributes, &)
+      else
+        public_send(as, class: classes, **attributes, &)
       end
     end
 
@@ -31,7 +23,7 @@ module PhlexyUI
       end
     end
 
-    def content(*, as: :div, **options, &)
+    def content(*, as: :div, **opts, &)
       generate_classes!(
         # "dropdown-content"
         component_html_class: :"dropdown-content",

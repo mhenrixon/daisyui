@@ -9,35 +9,15 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "fab"
-        component_html_class: :fab,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def close(**options, &)
-      generate_classes!(
-        # "fab-close"
-        component_html_class: :"fab-close",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def close(**opts, &)
+      div(class: component_classes("fab-close", from: opts), **opts, &)
     end
 
-    def main_action(**options, &)
-      generate_classes!(
-        # "fab-main-action"
-        component_html_class: :"fab-main-action",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def main_action(**opts, &)
+      div(class: component_classes("fab-main-action", from: opts), **opts, &)
     end
 
     register_modifiers(

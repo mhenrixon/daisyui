@@ -9,25 +9,11 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "list"
-        component_html_class: :list,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def row(**options, &)
-      generate_classes!(
-        # "list-row"
-        component_html_class: :"list-row",
-        options:
-      ).then do |classes|
-        li(class: classes, **options, &)
-      end
+    def row(**opts, &)
+      li(class: component_classes("list-row", from: opts), **opts, &)
     end
 
     register_modifiers(

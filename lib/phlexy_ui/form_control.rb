@@ -8,12 +8,7 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        component_html_class: "form-control",
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
   end
 end

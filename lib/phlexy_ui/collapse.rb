@@ -9,35 +9,15 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "collapse"
-        component_html_class: :collapse,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
+      public_send(as, class: classes, **attributes, &)
     end
 
-    def title(**options, &)
-      generate_classes!(
-        # "collapse-title"
-        component_html_class: :"collapse-title",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def title(**opts, &)
+      div(class: component_classes("collapse-title", from: opts), **opts, &)
     end
 
-    def content(**options, &)
-      generate_classes!(
-        # "collapse-content"
-        component_html_class: :"collapse-content",
-        options:
-      ).then do |classes|
-        div(class: classes, **options, &)
-      end
+    def content(**opts, &)
+      div(class: component_classes("collapse-content", from: opts), **opts, &)
     end
 
     register_modifiers(

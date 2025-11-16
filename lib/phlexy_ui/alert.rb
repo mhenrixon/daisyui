@@ -8,15 +8,7 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "alert"
-        component_html_class: :alert,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        public_send(as, role: :alert, class: classes, **options, &)
-      end
+      public_send(as, role: :alert, class: classes, **attributes, &)
     end
 
     private

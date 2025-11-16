@@ -8,43 +8,14 @@ module PhlexyUI
     end
 
     def view_template(&)
-      generate_classes!(
-        # "modal"
-        component_html_class: :modal,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        dialog(id:, class: classes, **options, &)
-      end
+      dialog(id:, class: classes, **attributes, &)
     end
 
-    def body(*, as: :div, **options, &)
-      generate_classes!(
-        # "modal-box"
-        component_html_class: :"modal-box",
-        options:
-      ).then do |classes|
-        if base_modifiers.include?(:tap_outside_to_close)
-          public_send(as, class: classes, **options, &)
-          backdrop
-        else
-          public_send(as, class: classes, **options, &)
-        end
-      end
+    def body(*, as: :div, **opts, &)
+      public_send(as, class: component_classes("modal-action", from: opts), **opts, &)
     end
 
-    def action(*, as: :div, **options, &)
-      generate_classes!(
-        # "modal-action"
-        component_html_class: :"modal-action",
-        options:
-      ).then do |classes|
-        public_send(as, class: classes, **options, &)
-      end
-    end
-
-    def backdrop(*, **options, &)
+    def backdrop(*, **opts, &)
       generate_classes!(
         # "modal-backdrop"
         component_html_class: :"modal-backdrop",

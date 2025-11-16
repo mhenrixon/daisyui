@@ -4,31 +4,24 @@ require "phlex/version"
 
 module PhlexyUI
   class Button < Base
+    self.component_class = :btn
+
     def initialize(*, as: :button, modal: nil, **)
-      super(*, **)
-      @as = as
+      super(*, as:, **)
       @modal = modal
     end
 
     def view_template(&)
-      generate_classes!(
-        # "btn"
-        component_html_class: :btn,
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        if modal
-          public_send(
-            as,
-            class: classes,
-            onclick: safe("#{Phlex::Escape.html_escape(modal)}.showModal()"),
-            **options,
-            &
-          )
-        else
-          public_send(as, class: classes, **options, &)
-        end
+      if modal
+        public_send(
+          as,
+          class: classes,
+          onclick: safe("#{Phlex::Escape.html_escape(modal)}.showModal()"),
+          **attributes,
+          &
+        )
+      else
+        public_send(as, class: classes, **attributes, &)
       end
     end
 

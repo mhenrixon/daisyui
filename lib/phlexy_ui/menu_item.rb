@@ -4,23 +4,11 @@ module PhlexyUI
   # @private
   class MenuItem < Base
     def view_template(&)
-      generate_classes!(
-        modifiers_map: modifiers,
-        base_modifiers:,
-        options:
-      ).then do |classes|
-        li(class: classes, **options, &)
-      end
+      li(class: classes, **attributes, &)
     end
 
     def title(*, **options, &block)
-      generate_classes!(
-        # "menu-title"
-        component_html_class: :"menu-title",
-        options:
-      ).then do |classes|
-        h2(class: classes, **options, &block)
-      end
+      h2(class: component_classes("menu-title", from: opts), **opts, &block)
     end
 
     def submenu(*base_modifiers, **, &)
