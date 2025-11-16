@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="chat"
   class Chat < Base
+    self.component_class = :chat
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,19 +14,19 @@ module PhlexyUI
     end
 
     def image(**opts, &)
-      div(class: component_classes("chat-image", from: opts), **opts, &)
+      div(class: component_classes("chat-image", options: opts), **opts, &)
     end
 
     def header(**opts, &)
-      div(class: component_classes("chat-header", from: opts), **opts, &)
+      div(class: component_classes("chat-header", options: opts), **opts, &)
     end
 
     def bubble(**opts, &)
-      div(class: component_classes("chat-bubble", from: opts), **opts, &)
+      div(class: component_classes("chat-bubble", options: opts), **opts, &)
     end
 
     def footer(**opts, &)
-      div(class: component_classes("chat-footer", from: opts), **opts, &)
+      div(class: component_classes("chat-footer", options: opts), **opts, &)
     end
 
     register_modifiers(

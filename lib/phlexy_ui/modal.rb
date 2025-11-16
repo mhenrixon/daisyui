@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Modal < Base
+    self.component_class = :modal
+
     def initialize(*, id:, **)
       super(*, **)
       @id = id
@@ -9,25 +11,25 @@ module PhlexyUI
 
     def view_template(&block)
       dialog(id:, class: classes, **attributes) do
-        block.call(self) if block
+        block&.call(self)
         # Auto-render backdrop if tap_outside_to_close modifier is present
         backdrop if modifiers.include?(:tap_outside_to_close)
       end
     end
 
     def body(*, as: :div, **opts, &)
-      public_send(as, class: component_classes("modal-box", from: opts), **opts, &)
+      public_send(as, class: component_classes("modal-box", options: opts), **opts, &)
     end
 
     def action(*, as: :div, **opts, &block)
-      action_classes = component_classes("modal-action", from: opts)
+      action_classes = component_classes("modal-action", options: opts)
       public_send(as, class: action_classes, **opts) do
-        block.call(self) if block
+        block&.call(self)
       end
     end
 
     def backdrop(*, **opts, &)
-      backdrop_classes = component_classes("modal-backdrop", from: opts)
+      backdrop_classes = component_classes("modal-backdrop", options: opts)
       form method: :dialog, class: backdrop_classes, **opts do
         button
       end

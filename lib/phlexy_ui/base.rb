@@ -2,6 +2,88 @@
 
 module PhlexyUI
   class Base < Phlex::HTML
+    # Shared color modifiers used across multiple components
+    # Maps color names to their DaisyUI background/text class combinations
+    COLOR_MODIFIERS = {
+      # "sm:bg-primary sm:text-primary-content"
+      # "@sm:bg-primary @sm:text-primary-content"
+      # "md:bg-primary md:text-primary-content"
+      # "@md:bg-primary @md:text-primary-content"
+      # "lg:bg-primary lg:text-primary-content"
+      # "@lg:bg-primary @lg:text-primary-content"
+      primary: "bg-primary text-primary-content",
+      # "sm:bg-secondary sm:text-secondary-content"
+      # "@sm:bg-secondary @sm:text-secondary-content"
+      # "md:bg-secondary md:text-secondary-content"
+      # "@md:bg-secondary @md:text-secondary-content"
+      # "lg:bg-secondary lg:text-secondary-content"
+      # "@lg:bg-secondary @lg:text-secondary-content"
+      secondary: "bg-secondary text-secondary-content",
+      # "sm:bg-accent sm:text-accent-content"
+      # "@sm:bg-accent @sm:text-accent-content"
+      # "md:bg-accent md:text-accent-content"
+      # "@md:bg-accent @md:text-accent-content"
+      # "lg:bg-accent lg:text-accent-content"
+      # "@lg:bg-accent @lg:text-accent-content"
+      accent: "bg-accent text-accent-content",
+      # "sm:bg-neutral sm:text-neutral-content"
+      # "@sm:bg-neutral @sm:text-neutral-content"
+      # "md:bg-neutral md:text-neutral-content"
+      # "@md:bg-neutral @md:text-neutral-content"
+      # "lg:bg-neutral lg:text-neutral-content"
+      # "@lg:bg-neutral @lg:text-neutral-content"
+      neutral: "bg-neutral text-neutral-content",
+      # "sm:bg-base-100 sm:text-base-content"
+      # "@sm:bg-base-100 @sm:text-base-content"
+      # "md:bg-base-100 md:text-base-content"
+      # "@md:bg-base-100 @md:text-base-content"
+      # "lg:bg-base-100 lg:text-base-content"
+      # "@lg:bg-base-100 @lg:text-base-content"
+      base_100: "bg-base-100 text-base-content",
+      # "sm:bg-base-200 sm:text-base-content"
+      # "@sm:bg-base-200 @sm:text-base-content"
+      # "md:bg-base-200 md:text-base-content"
+      # "@md:bg-base-200 @md:text-base-content"
+      # "lg:bg-base-200 lg:text-base-content"
+      # "@lg:bg-base-200 @lg:text-base-content"
+      base_200: "bg-base-200 text-base-content",
+      # "sm:bg-base-300 sm:text-base-content"
+      # "@sm:bg-base-300 @sm:text-base-content"
+      # "md:bg-base-300 md:text-base-content"
+      # "@md:bg-base-300 @md:text-base-content"
+      # "lg:bg-base-300 lg:text-base-content"
+      # "@lg:bg-base-300 @lg:text-base-content"
+      base_300: "bg-base-300 text-base-content",
+      # "sm:bg-info sm:text-info-content"
+      # "@sm:bg-info @sm:text-info-content"
+      # "md:bg-info md:text-info-content"
+      # "@md:bg-info @md:text-info-content"
+      # "lg:bg-info lg:text-info-content"
+      # "@lg:bg-info @lg:text-info-content"
+      info: "bg-info text-info-content",
+      # "sm:bg-success sm:text-success-content"
+      # "@sm:bg-success @sm:text-success-content"
+      # "md:bg-success md:text-success-content"
+      # "@md:bg-success @md:text-success-content"
+      # "lg:bg-success lg:text-success-content"
+      # "@lg:bg-success @lg:text-success-content"
+      success: "bg-success text-success-content",
+      # "sm:bg-warning sm:text-warning-content"
+      # "@sm:bg-warning @sm:text-warning-content"
+      # "md:bg-warning md:text-warning-content"
+      # "@md:bg-warning @md:text-warning-content"
+      # "lg:bg-warning lg:text-warning-content"
+      # "@lg:bg-warning @lg:text-warning-content"
+      warning: "bg-warning text-warning-content",
+      # "sm:bg-error sm:text-error-content"
+      # "@sm:bg-error @sm:text-error-content"
+      # "md:bg-error md:text-error-content"
+      # "@md:bg-error @md:text-error-content"
+      # "lg:bg-error lg:text-error-content"
+      # "@lg:bg-error @lg:text-error-content"
+      error: "bg-error text-error-content"
+    }.freeze
+
     class << self
       attr_writer :component_class
       attr_accessor :modifiers
@@ -140,9 +222,10 @@ module PhlexyUI
     end
 
     # Helper for sub-components
-    def component_classes(*base_classes, from: options)
+    # Builds CSS classes for sub-components, merging with any custom classes
+    def component_classes(*base_classes, options: self.options)
       prefixed_classes = base_classes.map { |c| apply_prefix(c) }
-      merge_classes(*prefixed_classes, from.delete(:class))
+      merge_classes(*prefixed_classes, options.delete(:class))
     end
 
     def render_as(*, as:, **, &)
@@ -151,15 +234,6 @@ module PhlexyUI
       else
         render as.new(*, **, &)
       end
-    end
-
-    # Deprecated methods for backward compatibility during migration
-    def generate_classes!(component_html_class: nil, **_opts)
-      component_html_class&.to_s
-    end
-
-    def generate_attributes(_base_modifiers, _options, _attributes_map)
-      {}
     end
   end
 end

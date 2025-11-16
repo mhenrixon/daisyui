@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="indicator"
   class Indicator < Base
+    self.component_class = :indicator
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,7 +14,7 @@ module PhlexyUI
     end
 
     def item(**opts, &)
-      span(class: component_classes("indicator-item", from: opts), **opts, &)
+      span(class: component_classes("indicator-item", options: opts), **opts, &)
     end
 
     register_modifiers(

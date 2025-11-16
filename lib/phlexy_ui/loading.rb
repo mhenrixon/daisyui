@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Loading < Base
+    self.component_class = :loading
+
     def initialize(*, as: :span, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

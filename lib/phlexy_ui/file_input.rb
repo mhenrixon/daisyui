@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="file-input"
   class FileInput < Base
+    self.component_class = "file-input"
+
     def initialize(*, as: :input, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

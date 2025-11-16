@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="radio"
   class Radio < Base
+    self.component_class = :radio
+
     def initialize(*, as: :input, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

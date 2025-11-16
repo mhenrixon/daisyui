@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="status"
   class Status < Base
+    self.component_class = :status
+
     def initialize(*, as: :span, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

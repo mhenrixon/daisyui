@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="textarea"
   class Textarea < Base
+    self.component_class = :textarea
+
     def initialize(*, as: :textarea, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

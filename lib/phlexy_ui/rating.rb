@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="rating"
   class Rating < Base
+    self.component_class = :rating
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

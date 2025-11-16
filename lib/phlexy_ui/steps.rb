@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="steps"
   class Steps < Base
+    self.component_class = :steps
+
     def initialize(*, as: :ul, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,11 +14,11 @@ module PhlexyUI
     end
 
     def step(**opts, &)
-      li(class: component_classes("step", from: opts), **opts, &)
+      li(class: component_classes("step", options: opts), **opts, &)
     end
 
     def icon(**opts, &)
-      div(class: component_classes("step-icon", from: opts), **opts, &)
+      div(class: component_classes("step-icon", options: opts), **opts, &)
     end
 
     register_modifiers(

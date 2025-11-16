@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="divider"
   class Divider < Base
+    self.component_class = :divider
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

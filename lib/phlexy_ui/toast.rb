@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="toast"
   class Toast < Base
+    self.component_class = :toast
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

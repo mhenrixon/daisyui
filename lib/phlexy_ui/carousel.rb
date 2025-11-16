@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="carousel"
   class Carousel < Base
+    self.component_class = :carousel
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,7 +14,7 @@ module PhlexyUI
     end
 
     def item(**opts, &)
-      div(class: component_classes("carousel-item", from: opts), **opts, &)
+      div(class: component_classes("carousel-item", options: opts), **opts, &)
     end
 
     register_modifiers(

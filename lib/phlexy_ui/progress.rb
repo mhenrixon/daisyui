@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="progress"
   class Progress < Base
+    self.component_class = :progress
+
     def initialize(*, as: :progress, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

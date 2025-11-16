@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="select"
   class Select < Base
+    self.component_class = :select
+
     def initialize(*, as: :select, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

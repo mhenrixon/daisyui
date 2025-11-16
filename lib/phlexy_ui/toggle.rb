@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="toggle"
   class Toggle < Base
+    self.component_class = :toggle
+
     def initialize(*, as: :input, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Drawer < Base
+    self.component_class = :drawer
+
     def initialize(*, id:, as: :section, **)
-      super(*, **)
-      @as = as
+      super
       @id = id
     end
 
@@ -13,20 +14,20 @@ module PhlexyUI
     end
 
     def toggle(**opts, &)
-      toggle_classes = component_classes("drawer-toggle", from: opts)
+      toggle_classes = component_classes("drawer-toggle", options: opts)
       input(id:, type: :checkbox, class: toggle_classes, **opts, &)
     end
 
     def content(as: :div, **options, &)
-      public_send(as, class: component_classes("drawer-content", from: options), **options, &)
+      public_send(as, class: component_classes("drawer-content", options: options), **options, &)
     end
 
     def side(as: :div, **options, &)
-      public_send(as, class: component_classes("drawer-side", from: options), **options, &)
+      public_send(as, class: component_classes("drawer-side", options: options), **options, &)
     end
 
     def overlay(**options, &)
-      overlay_classes = component_classes("drawer-overlay", from: options)
+      overlay_classes = component_classes("drawer-overlay", options: options)
       label(for: id, class: overlay_classes, **options, &)
     end
 

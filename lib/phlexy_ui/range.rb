@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="range"
   class Range < Base
+    self.component_class = :range
+
     def initialize(*, as: :input, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

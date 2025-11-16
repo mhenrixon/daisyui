@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Badge < Base
+    self.component_class = :badge
+
     def initialize(*, as: :span, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

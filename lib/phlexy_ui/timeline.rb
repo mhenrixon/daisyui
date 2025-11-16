@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="timeline"
   class Timeline < Base
+    self.component_class = :timeline
+
     def initialize(*, as: :ul, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,15 +14,15 @@ module PhlexyUI
     end
 
     def start(**opts, &)
-      div(class: component_classes("timeline-start", from: opts), **opts, &)
+      div(class: component_classes("timeline-start", options: opts), **opts, &)
     end
 
     def middle(**opts, &)
-      div(class: component_classes("timeline-middle", from: opts), **opts, &)
+      div(class: component_classes("timeline-middle", options: opts), **opts, &)
     end
 
     def end(**opts, &)
-      div(class: component_classes("timeline-end", from: opts), **opts, &)
+      div(class: component_classes("timeline-end", options: opts), **opts, &)
     end
 
     register_modifiers(

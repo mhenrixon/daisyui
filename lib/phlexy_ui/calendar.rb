@@ -4,6 +4,8 @@ module PhlexyUI
   # @component html class="cally" or class="pika-single"
   # Supports Cally web component and Pikaday date picker
   class Calendar < Base
+    self.component_class = :calendar
+
     # Register custom web component elements
     register_element :calendar_date
     register_element :calendar_month

@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="kbd"
   class Kbd < Base
+    self.component_class = :kbd
+
     def initialize(*, as: :kbd, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

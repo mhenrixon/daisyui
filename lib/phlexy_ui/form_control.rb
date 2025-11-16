@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class FormControl < Base
+    self.component_class = "form-control"
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

@@ -10,7 +10,7 @@ module PhlexyUI
     end
 
     def view_template(&block)
-      block.call(self) if block
+      block&.call(self)
 
       if @content
         render TabWithContent.new(
@@ -32,7 +32,7 @@ module PhlexyUI
       end
 
       @content = -> do
-        content_classes = component_classes("tab-content", from: opts)
+        content_classes = component_classes("tab-content", options: opts)
         div role: :tabpanel, class: content_classes, **opts, &block
       end
     end

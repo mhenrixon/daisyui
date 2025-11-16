@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Dropdown < Base
+    self.component_class = :dropdown
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -24,7 +25,7 @@ module PhlexyUI
     end
 
     def content(*, as: :div, **opts, &)
-      content_classes = component_classes("dropdown-content", from: opts)
+      content_classes = component_classes("dropdown-content", options: opts)
 
       if modifiers.include?(:tap_to_close)
         render_as(*, as:, class: content_classes, **opts, &)
@@ -34,7 +35,7 @@ module PhlexyUI
     end
 
     def menu(*, **opts, &)
-      menu_classes = component_classes("dropdown-content", from: opts)
+      menu_classes = component_classes("dropdown-content", options: opts)
 
       if modifiers.include?(:tap_to_close)
         render Menu.new(*, class: menu_classes, **opts, &)

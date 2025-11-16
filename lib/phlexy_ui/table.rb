@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Table < Base
+    self.component_class = :table
+
     def view_template(&)
       table(class: classes, **attributes, &)
     end

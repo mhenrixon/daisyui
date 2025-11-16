@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Breadcrumbs < Base
+    self.component_class = :breadcrumbs
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -14,7 +15,7 @@ module PhlexyUI
     end
 
     def crumb(**opts, &)
-      li(class: component_classes(from: opts), **opts, &)
+      li(class: component_classes(options: opts), **opts, &)
     end
     alias_method :breadcrumb, :crumb
     alias_method :item, :crumb

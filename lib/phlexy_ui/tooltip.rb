@@ -2,10 +2,11 @@
 
 module PhlexyUI
   class Tooltip < Base
+    self.component_class = :tooltip
+
     def initialize(*, tip:, as: :div, **)
-      super(*, **)
+      super(*, as:, **)
       @tip = tip
-      @as = as
     end
 
     def view_template(&)

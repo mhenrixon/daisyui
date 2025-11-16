@@ -3,22 +3,23 @@
 module PhlexyUI
   # @component html class="validator"
   class Validator < Base
+    self.component_class = :validator
+
     def initialize(*, as: :input, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&block)
-      block.call(self) if block
+      block&.call(self)
 
       public_send(as, class: classes, **attributes)
 
       # Render hint if it was set
-      @hint.call if @hint
+      @hint&.call
     end
 
     def hint(**options, &block)
-      @hint = -> { p(class: component_classes("validator-hint", from: options), **options, &block) }
+      @hint = -> { p(class: component_classes("validator-hint", options: options), **options, &block) }
     end
   end
 end

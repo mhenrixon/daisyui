@@ -10,7 +10,7 @@ module PhlexyUI
     end
 
     def title(*, **options, &block)
-      h2(class: component_classes("menu-title", from: options), **options, &block)
+      h2(class: component_classes("menu-title", options: options), **options, &block)
     end
 
     def submenu(*modifiers, **opts, &)

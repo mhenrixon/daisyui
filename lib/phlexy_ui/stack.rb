@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="stack"
   class Stack < Base
+    self.component_class = :stack
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

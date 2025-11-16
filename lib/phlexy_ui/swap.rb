@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="swap"
   class Swap < Base
+    self.component_class = :swap
+
     def initialize(*, as: :label, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,15 +14,15 @@ module PhlexyUI
     end
 
     def on(**opts, &)
-      div(class: component_classes("swap-on", from: opts), **opts, &)
+      div(class: component_classes("swap-on", options: opts), **opts, &)
     end
 
     def off(**opts, &)
-      div(class: component_classes("swap-off", from: opts), **opts, &)
+      div(class: component_classes("swap-off", options: opts), **opts, &)
     end
 
     def indeterminate(**opts, &)
-      div(class: component_classes("swap-indeterminate", from: opts), **opts, &)
+      div(class: component_classes("swap-indeterminate", options: opts), **opts, &)
     end
 
     register_modifiers(

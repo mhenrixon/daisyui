@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class AvatarGroup < Base
+    self.component_class = "avatar-group"
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

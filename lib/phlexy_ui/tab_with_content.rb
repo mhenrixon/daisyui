@@ -47,7 +47,7 @@ module PhlexyUI
       input(**tab_attrs)
 
       # Render the content
-      @content.call if @content
+      @content&.call
     end
 
     private

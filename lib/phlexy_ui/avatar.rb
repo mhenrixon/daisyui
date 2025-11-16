@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Avatar < Base
+    self.component_class = :avatar
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

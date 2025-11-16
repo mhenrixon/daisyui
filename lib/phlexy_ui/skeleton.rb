@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Skeleton < Base
+    self.component_class = :skeleton
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

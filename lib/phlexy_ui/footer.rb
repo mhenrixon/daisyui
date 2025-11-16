@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="footer"
   class Footer < Base
+    self.component_class = :footer
+
     def initialize(*, as: :footer, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,7 +14,7 @@ module PhlexyUI
     end
 
     def title(**opts, &)
-      div(class: component_classes("footer-title", from: opts), **opts, &)
+      div(class: component_classes("footer-title", options: opts), **opts, &)
     end
 
     register_modifiers(

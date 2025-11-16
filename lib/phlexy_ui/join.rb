@@ -4,8 +4,7 @@ module PhlexyUI
   # @component html class="join"
   class Join < Base
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,7 +12,7 @@ module PhlexyUI
     end
 
     def item(**opts, &)
-      div(class: component_classes("join-item", from: opts), **opts, &)
+      div(class: component_classes("join-item", options: opts), **opts, &)
     end
 
     register_modifiers(

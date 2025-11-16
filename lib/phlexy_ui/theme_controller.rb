@@ -5,6 +5,8 @@ module PhlexyUI
   # Theme controller changes the theme when checkbox/radio is checked
   # Supports common patterns: swap, toggle, dropdown, radio buttons
   class ThemeController < Base
+    self.component_class = "theme-controller"
+
     register_modifiers(
       # "sm:swap"
       # "md:swap"
@@ -25,10 +27,9 @@ module PhlexyUI
     )
 
     def initialize(*, theme_value: nil, checked: false, as: :input, **)
-      super(*, **)
+      super(*, as:, **)
       @theme_value = theme_value
       @checked = checked
-      @as = as
     end
 
     def view_template(&block)

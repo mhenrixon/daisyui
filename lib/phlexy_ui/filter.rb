@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="filter"
   class Filter < Base
+    self.component_class = :filter
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,7 +14,7 @@ module PhlexyUI
     end
 
     def reset(**opts, &)
-      reset_classes = component_classes("filter-reset", from: opts)
+      reset_classes = component_classes("filter-reset", options: opts)
       input(type: :radio, class: reset_classes, **opts, &)
     end
   end

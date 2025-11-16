@@ -6,8 +6,7 @@ module PhlexyUI
     self.component_class = "stats"
 
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -15,27 +14,27 @@ module PhlexyUI
     end
 
     def item(**opts, &)
-      div(class: component_classes("stat", from: opts), **opts, &)
+      div(class: component_classes("stat", options: opts), **opts, &)
     end
 
     def title(**opts, &)
-      div(class: component_classes("stat-title", from: opts), **opts, &)
+      div(class: component_classes("stat-title", options: opts), **opts, &)
     end
 
     def value(**opts, &)
-      div(class: component_classes("stat-value", from: opts), **opts, &)
+      div(class: component_classes("stat-value", options: opts), **opts, &)
     end
 
     def desc(**opts, &)
-      div(class: component_classes("stat-desc", from: opts), **opts, &)
+      div(class: component_classes("stat-desc", options: opts), **opts, &)
     end
 
     def figure(**opts, &)
-      div(class: component_classes("stat-figure", from: opts), **opts, &)
+      div(class: component_classes("stat-figure", options: opts), **opts, &)
     end
 
     def actions(**opts, &)
-      div(class: component_classes("stat-actions", from: opts), **opts, &)
+      div(class: component_classes("stat-actions", options: opts), **opts, &)
     end
 
     register_modifiers(

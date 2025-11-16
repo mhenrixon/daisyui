@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Mask < Base
+    self.component_class = :mask
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

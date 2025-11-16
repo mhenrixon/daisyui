@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="list"
   class List < Base
+    self.component_class = :list
+
     def initialize(*, as: :ul, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,7 +14,7 @@ module PhlexyUI
     end
 
     def row(**opts, &)
-      li(class: component_classes("list-row", from: opts), **opts, &)
+      li(class: component_classes("list-row", options: opts), **opts, &)
     end
 
     register_modifiers(

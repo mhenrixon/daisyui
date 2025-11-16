@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="mockup-browser"
   class MockupBrowser < Base
+    self.component_class = "mockup-browser"
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,7 +14,7 @@ module PhlexyUI
     end
 
     def toolbar(**opts, &)
-      div(class: component_classes("mockup-browser-toolbar", from: opts), **opts, &)
+      div(class: component_classes("mockup-browser-toolbar", options: opts), **opts, &)
     end
   end
 end

@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="fab"
   class Fab < Base
+    self.component_class = :fab
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,11 +14,11 @@ module PhlexyUI
     end
 
     def close(**opts, &)
-      div(class: component_classes("fab-close", from: opts), **opts, &)
+      div(class: component_classes("fab-close", options: opts), **opts, &)
     end
 
     def main_action(**opts, &)
-      div(class: component_classes("fab-main-action", from: opts), **opts, &)
+      div(class: component_classes("fab-main-action", options: opts), **opts, &)
     end
 
     register_modifiers(

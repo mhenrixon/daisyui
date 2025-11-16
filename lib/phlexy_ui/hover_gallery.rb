@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="hover-gallery"
   class HoverGallery < Base
+    self.component_class = "hover-gallery"
+
     def initialize(*, as: :figure, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

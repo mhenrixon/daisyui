@@ -29,41 +29,6 @@ module PhlexyUI
 
     attr_reader :modal
 
-    # TODO: Remove this once Phlex 2.0 is released.
-    #
-    # The cleanest way to do this is with a single:
-    #
-    # onclick: "#{Phlex::Escape.html_escape(modal)}.showModal()"
-    #
-    # However, currently, Phlex does not allow you to use the "onclick"
-    # attribute.
-    #
-    # Once Phlex 2.0 is released, it will add a #safe method
-    # that will allow us to replace this with a single line:
-    #
-    # onclick: safe("#{Phlex::Escape.html_escape(modal)}.showModal()")
-    def build_button_via_unsafe_raw(classes, &)
-      classes = Phlex::Escape.html_escape(classes.join(" "))
-      @options = options
-        .merge(onclick: "#{modal}.showModal()")
-        .reduce("") do |acc, (k, v)|
-        if k == :data
-          v.each do |k, v|
-            k = Phlex::Escape.html_escape(k)
-            v = Phlex::Escape.html_escape(v)
-            acc += " data-#{k}=\"#{v}\""
-          end
-          acc
-        else
-          k = Phlex::Escape.html_escape(k)
-          v = Phlex::Escape.html_escape(v)
-          "#{acc} #{k}=\"#{v}\""
-        end
-      end.strip
-
-      unsafe_raw %(<button class="#{classes}" #{options}>#{capture(&)}</button>)
-    end
-
     register_modifiers(
       # "sm:no-animation"
       # "@sm:no-animation"

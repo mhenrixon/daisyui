@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="mockup-window"
   class MockupWindow < Base
+    self.component_class = "mockup-window"
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

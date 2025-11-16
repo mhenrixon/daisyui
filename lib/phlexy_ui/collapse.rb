@@ -4,8 +4,7 @@ module PhlexyUI
   # @component html class="collapse"
   class Collapse < Base
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,11 +12,11 @@ module PhlexyUI
     end
 
     def title(**opts, &)
-      div(class: component_classes("collapse-title", from: opts), **opts, &)
+      div(class: component_classes("collapse-title", options: opts), **opts, &)
     end
 
     def content(**opts, &)
-      div(class: component_classes("collapse-content", from: opts), **opts, &)
+      div(class: component_classes("collapse-content", options: opts), **opts, &)
     end
 
     register_modifiers(

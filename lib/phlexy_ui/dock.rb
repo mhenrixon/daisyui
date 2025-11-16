@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="dock"
   class Dock < Base
+    self.component_class = :dock
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,7 +14,7 @@ module PhlexyUI
     end
 
     def label(**opts, &)
-      span(class: component_classes("dock-label", from: opts), **opts, &)
+      span(class: component_classes("dock-label", options: opts), **opts, &)
     end
 
     register_modifiers(

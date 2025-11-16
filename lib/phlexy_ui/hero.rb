@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="hero"
   class Hero < Base
+    self.component_class = :hero
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,11 +14,11 @@ module PhlexyUI
     end
 
     def content(**opts, &)
-      div(class: component_classes("hero-content", from: opts), **opts, &)
+      div(class: component_classes("hero-content", options: opts), **opts, &)
     end
 
     def overlay(**opts, &)
-      div(class: component_classes("hero-overlay", from: opts), **opts, &)
+      div(class: component_classes("hero-overlay", options: opts), **opts, &)
     end
   end
 end

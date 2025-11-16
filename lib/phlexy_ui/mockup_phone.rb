@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="mockup-phone"
   class MockupPhone < Base
+    self.component_class = "mockup-phone"
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,11 +14,11 @@ module PhlexyUI
     end
 
     def camera(**opts, &)
-      div(class: component_classes("mockup-phone-camera", from: opts), **opts, &)
+      div(class: component_classes("mockup-phone-camera", options: opts), **opts, &)
     end
 
     def display(**opts, &)
-      div(class: component_classes("mockup-phone-display", from: opts), **opts, &)
+      div(class: component_classes("mockup-phone-display", options: opts), **opts, &)
     end
   end
 end

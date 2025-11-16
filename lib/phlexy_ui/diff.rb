@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="diff"
   class Diff < Base
+    self.component_class = :diff
+
     def initialize(*, as: :figure, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,15 +14,15 @@ module PhlexyUI
     end
 
     def item_1(**opts, &)
-      div(class: component_classes("diff-item-1", from: opts), **opts, &)
+      div(class: component_classes("diff-item-1", options: opts), **opts, &)
     end
 
     def item_2(**opts, &)
-      div(class: component_classes("diff-item-2", from: opts), **opts, &)
+      div(class: component_classes("diff-item-2", options: opts), **opts, &)
     end
 
     def resizer(**opts, &)
-      div(class: component_classes("diff-resizer", from: opts), **opts, &)
+      div(class: component_classes("diff-resizer", options: opts), **opts, &)
     end
   end
 end

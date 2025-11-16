@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Alert < Base
+    self.component_class = :alert
+
     def initialize(*, as: :div, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)

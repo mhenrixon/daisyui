@@ -2,9 +2,10 @@
 
 module PhlexyUI
   class Tabs < Base
+    self.component_class = :tabs
+
     def initialize(*, id: nil, as: :div, **)
-      super(*, **)
-      @as = as
+      super(*, id: nil, as:, **)
       @id = id
     end
 

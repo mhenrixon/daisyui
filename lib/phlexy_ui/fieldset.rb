@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="fieldset"
   class Fieldset < Base
+    self.component_class = :fieldset
+
     def initialize(*, as: :fieldset, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
@@ -13,7 +14,7 @@ module PhlexyUI
     end
 
     def legend(**opts, &)
-      super(class: component_classes("fieldset-legend", from: opts), **opts, &)
+      super(class: component_classes("fieldset-legend", options: opts), **opts, &)
     end
   end
 end

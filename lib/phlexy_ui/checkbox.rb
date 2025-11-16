@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Checkbox < Base
+    self.component_class = :checkbox
+
     def view_template(&)
       input(
         type: :checkbox,

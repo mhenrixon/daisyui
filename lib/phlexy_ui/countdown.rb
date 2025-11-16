@@ -3,9 +3,10 @@
 module PhlexyUI
   # @component html class="countdown"
   class Countdown < Base
+    self.component_class = :countdown
+
     def initialize(*, as: :span, **)
-      super(*, **)
-      @as = as
+      super
     end
 
     def view_template(&)
