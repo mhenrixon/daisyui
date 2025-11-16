@@ -3,6 +3,8 @@
 module PhlexyUI
   # @component html class="stats"
   class Stat < Base
+    self.component_class = "stats"
+
     def initialize(*, as: :div, **)
       super(*, **)
       @as = as
@@ -13,6 +15,10 @@ module PhlexyUI
     end
 
     def item(**opts, &)
+      div(class: component_classes("stat", from: opts), **opts, &)
+    end
+
+    def title(**opts, &)
       div(class: component_classes("stat-title", from: opts), **opts, &)
     end
 

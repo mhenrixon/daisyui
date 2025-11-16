@@ -13,31 +13,21 @@ module PhlexyUI
     end
 
     def toggle(**opts, &)
-      generate_classes!(
-        # "drawer-toggle"
-        component_html_class: :"drawer-toggle",
-        options:
-      ).then do |classes|
-        input(id:, type: :checkbox, class: classes, **options, &)
-      end
+      toggle_classes = component_classes("drawer-toggle", from: opts)
+      input(id:, type: :checkbox, class: toggle_classes, **opts, &)
     end
 
     def content(as: :div, **options, &)
-      public_send(as, class: component_classes("drawer-content", from: opts), **opts, &)
+      public_send(as, class: component_classes("drawer-content", from: options), **options, &)
     end
 
     def side(as: :div, **options, &)
-      public_send(as, class: component_classes("drawer-side", from: opts), **opts, &)
+      public_send(as, class: component_classes("drawer-side", from: options), **options, &)
     end
 
     def overlay(**options, &)
-      generate_classes!(
-        # "drawer-overlay"
-        component_html_class: :"drawer-overlay",
-        options:
-      ).then do |classes|
-        label(for: id, class: classes, **options, &)
-      end
+      overlay_classes = component_classes("drawer-overlay", from: options)
+      label(for: id, class: overlay_classes, **options, &)
     end
 
     def button(*, **, &)

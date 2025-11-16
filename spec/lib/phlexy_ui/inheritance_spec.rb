@@ -3,15 +3,10 @@ require "spec_helper"
 describe "modifiers inheritance" do
   let(:phlexy_ui_class) do
     Class.new(PhlexyUI::Base) do
+      self.component_class = "base-component"
+
       def view_template(&)
-        generate_classes!(
-          component_html_class: "base-component",
-          modifiers_map: modifiers,
-          base_modifiers:,
-          options:
-        ).then do |classes|
-          div(class: classes, **options, &)
-        end
+        div(class: classes, **attributes, &)
       end
 
       register_modifiers(
@@ -65,15 +60,10 @@ describe "modifiers inheritance" do
   describe "sibling classes don't interfere with each other" do
     let(:parent_class) do
       Class.new(PhlexyUI::Base) do
+        self.component_class = "parent-component"
+
         def view_template(&)
-          generate_classes!(
-            component_html_class: "parent-component",
-            modifiers_map: modifiers,
-            base_modifiers:,
-            options:
-          ).then do |classes|
-            div(class: classes, **options, &)
-          end
+          div(class: classes, **attributes, &)
         end
 
         register_modifiers(
@@ -84,15 +74,10 @@ describe "modifiers inheritance" do
 
     let(:sibling_a_class) do
       Class.new(parent_class) do
+        self.component_class = "sibling-a"
+
         def view_template(&)
-          generate_classes!(
-            component_html_class: "sibling-a",
-            modifiers_map: modifiers,
-            base_modifiers:,
-            options:
-          ).then do |classes|
-            div(class: classes, **options, &)
-          end
+          div(class: classes, **attributes, &)
         end
 
         register_modifiers(
@@ -104,15 +89,10 @@ describe "modifiers inheritance" do
 
     let(:sibling_b_class) do
       Class.new(parent_class) do
+        self.component_class = "sibling-b"
+
         def view_template(&)
-          generate_classes!(
-            component_html_class: "sibling-b",
-            modifiers_map: modifiers,
-            base_modifiers:,
-            options:
-          ).then do |classes|
-            div(class: classes, **options, &)
-          end
+          div(class: classes, **attributes, &)
         end
 
         register_modifiers(

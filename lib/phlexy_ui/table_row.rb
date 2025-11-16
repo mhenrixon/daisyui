@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class TableRow < Base
+    self.component_class = nil
+
     def view_template(&)
       tr(class: classes, **attributes, &)
     end

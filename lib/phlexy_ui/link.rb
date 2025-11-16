@@ -2,6 +2,8 @@
 
 module PhlexyUI
   class Link < Base
+    self.component_class = nil
+
     def view_template(&)
       a(class: classes, **attributes, &)
     end

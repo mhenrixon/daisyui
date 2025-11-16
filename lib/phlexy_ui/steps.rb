@@ -13,6 +13,10 @@ module PhlexyUI
     end
 
     def step(**opts, &)
+      li(class: component_classes("step", from: opts), **opts, &)
+    end
+
+    def icon(**opts, &)
       div(class: component_classes("step-icon", from: opts), **opts, &)
     end
 

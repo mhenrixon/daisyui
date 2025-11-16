@@ -3,35 +3,33 @@
 module PhlexyUI
   # @private
   class CollapsibleSubMenu < Base
+    self.component_class = nil
+
     def initialize(*, **)
       super
       @items ||= []
     end
 
-    def view_template(&)
-      yield(self) if block_given?
+    def view_template(&block)
+      block.call(self) if block
 
-      attributes = generate_attributes(base_modifiers, options, ATTRIBUTES_MAP)
+      # Extract 'open' attribute for the details element
+      details_attrs = {}
+      details_attrs[:open] = true if modifiers.include?(:open) || options.delete(:open) == true
 
-      generate_classes!(
-        base_modifiers:,
-        modifiers_map: modifiers,
-        options:
-      ).then do |classes|
-        details(**attributes) do
-          if @title
-            summary do
-              render @title
-            end
-          else
-            raise ArgumentError, "A collapsible submenu requires a title"
+      details(**details_attrs) do
+        if @title
+          summary do
+            render @title
           end
+        else
+          raise ArgumentError, "A collapsible submenu requires a title"
+        end
 
-          if @items.any?
-            ul class: classes, **options do
-              @items.each do |item|
-                render item
-              end
+        if @items.any?
+          ul class: classes, **attributes do
+            @items.each do |item|
+              render item
             end
           end
         end
@@ -51,10 +49,6 @@ module PhlexyUI
     end
 
     private
-
-    ATTRIBUTES_MAP = {
-      open: true
-    }.freeze
 
     register_modifiers(
       # "sm:bg-primary sm:text-primary-content"

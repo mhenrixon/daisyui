@@ -3,13 +3,22 @@
 module PhlexyUI
   # @private
   class TabWithoutContent < Base
+    self.component_class = "tab"
+
+    def initialize(*, label: nil, **)
+      super(*, **)
+      @label = label
+    end
+
     def view_template(&)
-      div role: :tab, class: classes, &
+      attrs = attributes.dup
+      # Remove label from attributes if it was passed as a keyword arg
+      attrs.delete(:label)
+
+      div role: :tab, class: classes, **attrs, &
     end
 
     private
-
-    attr_reader :title
 
     register_modifiers(
       # "sm:tab-active"

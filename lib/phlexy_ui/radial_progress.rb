@@ -13,29 +13,14 @@ module PhlexyUI
     def view_template(&)
       style = options.delete(:style)
 
-      if style.nil?
-        style = "--value: #{value};"
+      # Build style string
+      style_parts = []
+      style_parts << style if style && !style.empty?
+      style_parts << "--value: #{value};"
+      style_parts << "--size: #{size};" if size && !size.empty?
+      style_parts << "--thickness: #{thickness};" if thickness && !thickness.empty?
 
-        if size && !size.empty?
-          style += " --size: #{size};"
-        end
-
-        if thickness && !thickness.empty?
-          style + " --thickness: #{thickness};"
-        end
-      elsif style.is_a?(String)
-        style = "#{style} --value: #{value};"
-
-        if size && !size.empty?
-          style += " --size: #{size};"
-        end
-
-        if thickness && !thickness.empty?
-          style += " --thickness: #{thickness};"
-        end
-
-        public_send(as, role: :progressbar, class: classes, style:, **options, &)
-      end
+      public_send(as, role: :progressbar, class: classes, style: style_parts.join(" "), **attributes, &)
     end
 
     private

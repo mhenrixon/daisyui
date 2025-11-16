@@ -3,6 +3,8 @@
 module PhlexyUI
   # @component html class="join"
   class Pagination < Base
+    self.component_class = "join"
+
     def initialize(*, as: :div, **)
       super(*, **)
       @as = as

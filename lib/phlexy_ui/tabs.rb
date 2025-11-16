@@ -12,8 +12,14 @@ module PhlexyUI
       public_send(as, role: :tablist, class: classes, **attributes, &)
     end
 
-    def tab(*, **, &)
-      render Tab.new(*, id:, **, &)
+    def tab(*args, label: nil, **, &)
+      # If first arg is a string, it's the label, rest are modifiers
+      # Otherwise all args are modifiers
+      if args.first.is_a?(String)
+        label = args.shift
+      end
+
+      render Tab.new(*args, label:, id:, **, &)
     end
 
     private

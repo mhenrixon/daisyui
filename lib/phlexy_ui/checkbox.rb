@@ -3,23 +3,29 @@
 module PhlexyUI
   class Checkbox < Base
     def view_template(&)
-      attrs = generate_attributes(base_modifiers, options, ATTRIBUTES_MAP)
-
       input(
         type: :checkbox,
         class: classes,
-        **options.except(*ATTRIBUTES_MAP.keys),
-        **attrs,
+        **attributes,
         &
       )
     end
 
     private
 
-    ATTRIBUTES_MAP = {
-      checked: true,
-      disabled: true
-    }.freeze
+    def attributes
+      attrs = super
+
+      # Remove checkbox-specific boolean attributes from base attrs
+      checked = modifiers.include?(:checked) || attrs.delete(:checked) == true
+      disabled = modifiers.include?(:disabled) || attrs.delete(:disabled) == true
+
+      # Add them back in the correct order: checked first, then disabled
+      attrs[:checked] = true if checked
+      attrs[:disabled] = true if disabled
+
+      attrs
+    end
 
     register_modifiers(
       # "sm:checkbox-primary"

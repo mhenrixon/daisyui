@@ -13,13 +13,8 @@ module PhlexyUI
     end
 
     def reset(**opts, &)
-      generate_classes!(
-        # "filter-reset"
-        component_html_class: :"filter-reset",
-        options:
-      ).then do |classes|
-        input(type: :radio, class: classes, **options, &)
-      end
+      reset_classes = component_classes("filter-reset", from: opts)
+      input(type: :radio, class: reset_classes, **opts, &)
     end
   end
 end

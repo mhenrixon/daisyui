@@ -3,6 +3,7 @@ Bundler.setup
 
 require "date"
 require "phlexy_ui"
+require "super_diff/rspec"
 
 Dir["./spec/support/**/*.rb"].each do |f|
   require f

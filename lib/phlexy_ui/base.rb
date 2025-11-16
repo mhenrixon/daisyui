@@ -7,7 +7,9 @@ module PhlexyUI
       attr_accessor :modifiers
 
       def component_class
-        @component_class ||= begin
+        return @component_class if instance_variable_defined?(:@component_class)
+
+        @component_class = begin
           # Convert "PhlexyUI::Button" -> "button"
           class_name = name.split("::").last # demodulize
           class_name.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
@@ -20,6 +22,10 @@ module PhlexyUI
       def inherited(subclass)
         super
         subclass.modifiers = (modifiers || {}).dup
+        # Inherit component_class if it was explicitly set
+        if instance_variable_defined?(:@component_class)
+          subclass.component_class = @component_class
+        end
       end
 
       def register_modifiers(mods)
@@ -67,6 +73,11 @@ module PhlexyUI
 
     # Core functionality
     def base_class
+      # If responsive option includes `true`, base class should only appear with responsive prefix
+      if options[:responsive]&.values&.any? { |mods| Array(mods).include?(true) }
+        return nil
+      end
+
       apply_prefix(self.class.component_class&.to_s)
     end
 
@@ -78,12 +89,34 @@ module PhlexyUI
       return [] unless (resp = options.delete(:responsive))
 
       resp.flat_map do |breakpoint, mods|
-        Array(mods).map { |mod| "#{breakpoint}:#{apply_prefix(modifier_map[mod])}" }
-      end
+        Array(mods).flat_map do |mod|
+          # Handle `true` as a special value to apply responsive to base class
+          if mod == true
+            base_class_value = self.class.component_class
+            next unless base_class_value
+
+            "#{breakpoint}:#{apply_prefix(base_class_value)}"
+          else
+            # Get the modifier classes (may be multiple like "bg-primary text-primary-content")
+            modifier_classes = modifier_map[mod]
+            next unless modifier_classes
+
+            # Split and apply breakpoint prefix to each class
+            modifier_classes.split.map do |css_class|
+              "#{breakpoint}:#{apply_prefix(css_class)}"
+            end
+          end
+        end
+      end.compact
     end
 
     def modifier_map
-      self.class.modifiers || {}
+      {
+        skeleton: "skeleton",
+        **(self.class.modifiers || {}),
+        **PhlexyUI.configuration.modifiers.for(component: self.class),
+        **PhlexyUI.configuration.modifiers.for(component: nil)
+      }
     end
 
     def extract_boolean_modifiers(options)
@@ -110,6 +143,14 @@ module PhlexyUI
     def component_classes(*base_classes, from: options)
       prefixed_classes = base_classes.map { |c| apply_prefix(c) }
       merge_classes(*prefixed_classes, from.delete(:class))
+    end
+
+    def render_as(*, as:, **, &)
+      if as.is_a?(Symbol)
+        public_send(as, *, **, &)
+      else
+        render as.new(*, **, &)
+      end
     end
 
     # Deprecated methods for backward compatibility during migration

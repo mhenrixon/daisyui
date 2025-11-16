@@ -3,19 +3,21 @@
 module PhlexyUI
   # @private
   class MenuItem < Base
+    self.component_class = nil
+
     def view_template(&)
       li(class: classes, **attributes, &)
     end
 
     def title(*, **options, &block)
-      h2(class: component_classes("menu-title", from: opts), **opts, &block)
+      h2(class: component_classes("menu-title", from: options), **options, &block)
     end
 
-    def submenu(*base_modifiers, **, &)
-      if base_modifiers.include?(:collapsible)
-        render CollapsibleSubMenu.new(*base_modifiers, **, &)
+    def submenu(*modifiers, **opts, &)
+      if modifiers.include?(:collapsible)
+        render CollapsibleSubMenu.new(*modifiers, **opts, &)
       else
-        render SubMenu.new(*base_modifiers, **, &)
+        render SubMenu.new(*modifiers, **opts, &)
       end
     end
 

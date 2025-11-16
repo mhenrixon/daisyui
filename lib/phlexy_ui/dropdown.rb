@@ -8,7 +8,7 @@ module PhlexyUI
     end
 
     def view_template(&)
-      if base_modifiers.include?(:tap_to_close)
+      if modifiers.include?(:tap_to_close)
         details(class: classes, **attributes, &)
       else
         public_send(as, class: classes, **attributes, &)
@@ -16,7 +16,7 @@ module PhlexyUI
     end
 
     def button(*, **, &)
-      if base_modifiers.include?(:tap_to_close)
+      if modifiers.include?(:tap_to_close)
         render Button.new(*, as: :summary, **, &)
       else
         render Button.new(*, as: :div, role: :button, tabindex: 0, **, &)
@@ -24,30 +24,22 @@ module PhlexyUI
     end
 
     def content(*, as: :div, **opts, &)
-      generate_classes!(
-        # "dropdown-content"
-        component_html_class: :"dropdown-content",
-        options:
-      ).then do |classes|
-        if base_modifiers.include?(:tap_to_close)
-          render_as(*, as:, class: classes, **options, &)
-        else
-          render_as(*, as:, tabindex: 0, class: classes, **options, &)
-        end
+      content_classes = component_classes("dropdown-content", from: opts)
+
+      if modifiers.include?(:tap_to_close)
+        render_as(*, as:, class: content_classes, **opts, &)
+      else
+        render_as(*, as:, tabindex: 0, class: content_classes, **opts, &)
       end
     end
 
-    def menu(*, **options, &)
-      generate_classes!(
-        # "dropdown-content"
-        component_html_class: :"dropdown-content",
-        options:
-      ).then do |classes|
-        if base_modifiers.include?(:tap_to_close)
-          render Menu.new(*, class: classes, **options, &)
-        else
-          render Menu.new(*, tabindex: 0, class: classes, **options, &)
-        end
+    def menu(*, **opts, &)
+      menu_classes = component_classes("dropdown-content", from: opts)
+
+      if modifiers.include?(:tap_to_close)
+        render Menu.new(*, class: menu_classes, **opts, &)
+      else
+        render Menu.new(*, tabindex: 0, class: menu_classes, **opts, &)
       end
     end
 

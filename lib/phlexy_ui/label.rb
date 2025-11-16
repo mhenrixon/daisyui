@@ -7,7 +7,7 @@ module PhlexyUI
     end
 
     def text(as: :span, **options, &)
-      public_send(as, class: component_classes("label-text", from: opts), **opts, &)
+      public_send(as, class: component_classes("label-text", from: options), **options, &)
     end
   end
 end

@@ -14,14 +14,14 @@ module PhlexyUI
       render MenuItem.new(*, **, &)
     end
 
-    def submenu(*base_modifiers, **, &)
-      if base_modifiers.include?(:collapsible)
+    def submenu(*modifiers, **, &)
+      if modifiers.include?(:collapsible)
         li do
-          render CollapsibleSubMenu.new(*base_modifiers, **, &)
+          render CollapsibleSubMenu.new(*modifiers, **, &)
         end
       else
         li do
-          render SubMenu.new(*base_modifiers, **, &)
+          render SubMenu.new(*modifiers, **, &)
         end
       end
     end
