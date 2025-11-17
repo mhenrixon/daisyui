@@ -140,17 +140,13 @@ module DaisyUI
     end
 
     def attributes
-      merge_attributes(**options)
+      options
     end
 
     # Simple defaults - easy to override
     def merge_classes(*parts)
       result = parts.compact.join(" ")
       result.empty? ? nil : result
-    end
-
-    def merge_attributes(**attrs)
-      attrs
     end
 
     # Core functionality
