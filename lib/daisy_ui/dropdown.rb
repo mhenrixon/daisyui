@@ -4,7 +4,7 @@ module DaisyUI
   class Dropdown < Base
     self.component_class = :dropdown
 
-    def initialize(*modifiers, as: :detail, id: nil, **options)
+    def initialize(*modifiers, as: :div, id: nil, **options)
       super
     end
 
@@ -47,8 +47,6 @@ module DaisyUI
     def tap_to_close?
       modifiers.include?(:tap_to_close)
     end
-
-    private
 
     register_modifiers(
         # "sm:dropdown-end"

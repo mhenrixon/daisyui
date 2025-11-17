@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Filter do
@@ -8,7 +10,7 @@ describe DaisyUI::Filter do
       <div class="filter"></div>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "with reset method" do
@@ -31,7 +33,7 @@ describe DaisyUI::Filter do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do

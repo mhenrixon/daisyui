@@ -1,7 +1,41 @@
 # frozen_string_literal: true
 
 module DaisyUI
+  # Base class for all DaisyUI components.
+  #
+  # ## Architecture Overview
+  #
+  # Components accept three types of arguments:
+  # 1. **Modifiers** - Positional symbol arguments that map to DaisyUI CSS classes
+  #    Example: Dropdown.new(:top, :hover) → "dropdown-top dropdown-hover"
+  #
+  # 2. **Options** - Keyword arguments for the component (as:, id:)
+  #    Example: Dropdown.new(as: :div, id: "my-dropdown")
+  #
+  # 3. **Attributes** - Additional keyword arguments for HTML attributes (data:, aria:, class:)
+  #    Example: Dropdown.new(data: {controller: "dropdown"}, class: "my-custom-class")
+  #
+  # ## Key Methods
+  #
+  # - `classes` - Builds the final CSS class string by combining base class,
+  #   modifiers, responsive classes, and user-provided classes. DESTRUCTIVELY
+  #   removes :class from options.
+  #
+  # - `attributes` - Returns the hash of HTML attributes to splat into the element.
+  #   By default includes all remaining options (after :class was removed) plus :id.
+  #   Override in subclasses if different behavior is needed.
+  #
+  # ## Typical Usage Pattern
+  #
+  # In a component's view_template:
+  #   def view_template(&)
+  #     div(class: classes, **attributes, &)
+  #   end
+  #
+  # This renders: <div class="[generated classes]" id="..." data-...="..." ...>
+  #
   class Base < Phlex::HTML
+    BOOLS = [true, false].freeze
     # Shared color modifiers used across multiple components
     # Maps color names to their DaisyUI background/text class combinations
     COLOR_MODIFIERS = {
@@ -105,9 +139,9 @@ module DaisyUI
         super
         subclass.modifiers = (modifiers || {}).dup
         # Inherit component_class if it was explicitly set
-        if instance_variable_defined?(:@component_class)
-          subclass.component_class = @component_class
-        end
+        return unless instance_variable_defined?(:@component_class)
+
+        subclass.component_class = @component_class
       end
 
       def register_modifiers(mods)
@@ -122,7 +156,10 @@ module DaisyUI
       @modifiers = modifiers + boolean_modifiers
       @as = as
       @id = id
+      # Store all keyword arguments (class, data, aria, etc.)
+      # This will be processed by `classes` and `attributes` methods
       @options = options
+      super()
     end
 
     private
@@ -130,6 +167,15 @@ module DaisyUI
     attr_reader :modifiers, :options, :as, :id
 
     # Main extension points - override these in your project!
+
+    # Builds the final CSS class string from:
+    # 1. Component base class (e.g., "dropdown")
+    # 2. Modifier classes (e.g., "dropdown-top")
+    # 3. Responsive classes (e.g., "sm:dropdown-hover")
+    # 4. User-provided classes via `class:` option
+    #
+    # Note: This method DESTRUCTIVELY removes :class from options
+    # so it won't appear again in attributes
     def classes
       merge_classes(
         base_class,
@@ -139,8 +185,15 @@ module DaisyUI
       )
     end
 
+    # Returns the hash of HTML attributes to splat into the element.
+    # By default, includes all options (except :class which was removed by `classes`)
+    # and adds :id if provided.
+    #
+    # Override this method in subclasses if you need different behavior.
+    # For example, Drawer overrides this to exclude :id because it uses
+    # id internally for toggle/overlay elements.
     def attributes
-      options
+      options.dup.merge(id: id).compact
     end
 
     # Simple defaults - easy to override
@@ -152,9 +205,7 @@ module DaisyUI
     # Core functionality
     def base_class
       # If responsive option includes `true`, base class should only appear with responsive prefix
-      if options[:responsive]&.values&.any? { |mods| Array(mods).include?(true) }
-        return nil
-      end
+      return nil if options[:responsive]&.values&.any? { |mods| Array(mods).include?(true) }
 
       apply_prefix(self.class.component_class&.to_s)
     end
@@ -202,9 +253,7 @@ module DaisyUI
       boolean_mods = []
 
       modifier_keys.each do |key|
-        if options.key?(key) && (options[key] == true || options[key] == false)
-          boolean_mods << key if options.delete(key) == true
-        end
+        boolean_mods << key if options.key?(key) && BOOLS.include?(options[key]) && (options.delete(key) == true)
       end
 
       boolean_mods

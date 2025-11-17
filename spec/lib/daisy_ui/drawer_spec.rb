@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Drawer do
@@ -43,7 +45,7 @@ describe DaisyUI::Drawer do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(:open, id: :my_drawer, data: {foo: "bar"})
+      render described_class.new(:open, id: :my_drawer, data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -56,6 +58,10 @@ describe DaisyUI::Drawer do
   end
 
   describe "prefix" do
+    subject(:output) do
+      render described_class.new(:open, id: :my_drawer)
+    end
+
     around do |example|
       original_prefix = DaisyUI.configuration.prefix
 
@@ -68,10 +74,6 @@ describe DaisyUI::Drawer do
       DaisyUI.configure do |config|
         config.prefix = original_prefix
       end
-    end
-
-    subject(:output) do
-      render described_class.new(:open, id: :my_drawer)
     end
 
     it "renders it correctly" do
@@ -87,7 +89,7 @@ describe DaisyUI::Drawer do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:open, responsive: {viewport => :end}, id: :my_drawer)
+          render described_class.new(:open, responsive: { viewport => :end }, id: :my_drawer)
         end
 
         it "renders it separately with a responsive prefix" do
@@ -102,15 +104,15 @@ describe DaisyUI::Drawer do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:open, responsive: {viewport => [:open, :end]}, id: :my_drawer)
+          render described_class.new(:open, responsive: { viewport => %i[open end] }, id: :my_drawer)
         end
 
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <section class="
-              drawer 
-              drawer-open 
-              #{viewport}:drawer-open 
+              drawer#{' '}
+              drawer-open#{' '}
+              #{viewport}:drawer-open#{' '}
               #{viewport}:drawer-end">
             </section>
           HTML
@@ -120,6 +122,10 @@ describe DaisyUI::Drawer do
       end
 
       context "when it's prefixed" do
+        subject(:output) do
+          render described_class.new(:open, responsive: { viewport => %i[open end] }, id: :my_drawer)
+        end
+
         around do |example|
           original_prefix = DaisyUI.configuration.prefix
 
@@ -134,16 +140,12 @@ describe DaisyUI::Drawer do
           end
         end
 
-        subject(:output) do
-          render described_class.new(:open, responsive: {viewport => [:open, :end]}, id: :my_drawer)
-        end
-
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <section class="
-              foo-drawer 
-              foo-drawer-open 
-              #{viewport}:foo-drawer-open 
+              foo-drawer#{' '}
+              foo-drawer-open#{' '}
+              #{viewport}:foo-drawer-open#{' '}
               #{viewport}:foo-drawer-end">
             </section>
           HTML
@@ -181,13 +183,17 @@ describe DaisyUI::Drawer do
   end
 
   describe "rendering a full drawer" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Drawer.new(:end, id: "my_drawer") do |drawer|
-            drawer.toggle(class: "my-toggle", data: {my: "toggles"})
-            drawer.content(class: "my-content", data: {my: "contents"}) do
-              drawer.button(:primary, class: "my-button", data: {my: "buttons"}) do
+            drawer.toggle(class: "my-toggle", data: { my: "toggles" })
+            drawer.content(class: "my-content", data: { my: "contents" }) do
+              drawer.button(:primary, class: "my-button", data: { my: "buttons" }) do
                 "Open Drawer"
               end
 
@@ -195,7 +201,7 @@ describe DaisyUI::Drawer do
                 "Content"
               end
             end
-            drawer.side(class: "my-side", data: {my: "sides"}) do |side|
+            drawer.side(class: "my-side", data: { my: "sides" }) do |side|
               side.overlay
 
               ul do
@@ -209,10 +215,6 @@ describe DaisyUI::Drawer do
           end
         end
       end
-    end
-
-    subject(:output) do
-      render component.new
     end
 
     it "is expected to match the formatted HTML" do
@@ -235,7 +237,7 @@ describe DaisyUI::Drawer do
         </section>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

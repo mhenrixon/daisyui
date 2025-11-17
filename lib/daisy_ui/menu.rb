@@ -12,8 +12,8 @@ module DaisyUI
       public_send(as, class: component_classes("menu-title", options:), **options, &)
     end
 
-    def item(*, **, &)
-      render MenuItem.new(*, **, &)
+    def item(...)
+      render MenuItem.new(...)
     end
 
     def submenu(*modifiers, **, &)
@@ -27,8 +27,6 @@ module DaisyUI
         end
       end
     end
-
-    private
 
     register_modifiers(
       # "sm:menu-xs"

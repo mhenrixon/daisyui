@@ -28,8 +28,8 @@ module DaisyUI
 
     attr_reader :type
 
-    def render_cally(&block)
-      calendar_date(class: classes, **attributes, &block)
+    def render_cally(&)
+      calendar_date(class: classes, **attributes, &)
     end
 
     def render_pikaday

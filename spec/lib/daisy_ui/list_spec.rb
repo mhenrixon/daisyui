@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::List do
@@ -8,7 +10,7 @@ describe DaisyUI::List do
       <ul class="list"></ul>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "with row method" do
@@ -64,7 +66,7 @@ describe DaisyUI::List do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -80,7 +82,7 @@ describe DaisyUI::List do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option" do
         subject(:output) do
-          render described_class.new(:col_wrap, responsive: {viewport => :col_grow})
+          render described_class.new(:col_wrap, responsive: { viewport => :col_grow })
         end
 
         it "renders it separately with a responsive prefix" do

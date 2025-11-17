@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Diff do
@@ -8,7 +10,7 @@ describe DaisyUI::Diff do
       <figure class="diff"></figure>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "with part methods" do
@@ -35,7 +37,7 @@ describe DaisyUI::Diff do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do

@@ -17,11 +17,11 @@ module DaisyUI
         end
       end
 
-      if @items.any?
-        ul do
-          @items.each do |item|
-            render item
-          end
+      return unless @items.any?
+
+      ul do
+        @items.each do |item|
+          render item
         end
       end
     end
@@ -30,8 +30,8 @@ module DaisyUI
       @title = block
     end
 
-    def item(*, **, &)
-      @items << MenuItem.new(*, **, &)
+    def item(...)
+      @items << MenuItem.new(...)
     end
   end
 end

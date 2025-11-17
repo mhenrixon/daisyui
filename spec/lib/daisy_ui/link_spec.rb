@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Link do
@@ -8,7 +10,7 @@ describe DaisyUI::Link do
       <a></a>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "modifiers" do
@@ -55,7 +57,7 @@ describe DaisyUI::Link do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:neutral, responsive: {viewport => :primary})
+          render described_class.new(:neutral, responsive: { viewport => :primary })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -69,7 +71,7 @@ describe DaisyUI::Link do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:neutral, responsive: {viewport => [:primary, :hover]})
+          render described_class.new(:neutral, responsive: { viewport => %i[primary hover] })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -84,6 +86,10 @@ describe DaisyUI::Link do
   end
 
   describe "rendering a full link" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -91,7 +97,7 @@ describe DaisyUI::Link do
             :active,
             href: "/test",
             class: "test",
-            data: {my: "data"}
+            data: { my: "data" }
           ) do
             span do
               "Link text"
@@ -101,10 +107,6 @@ describe DaisyUI::Link do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <a class="active test" href="/test" data-my="data">
@@ -112,7 +114,7 @@ describe DaisyUI::Link do
         </a>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Toast do
@@ -8,7 +10,7 @@ describe DaisyUI::Toast do
       <div class="toast"></div>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "conditions" do
@@ -48,7 +50,7 @@ describe DaisyUI::Toast do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -64,7 +66,7 @@ describe DaisyUI::Toast do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option" do
         subject(:output) do
-          render described_class.new(:top, responsive: {viewport => :bottom})
+          render described_class.new(:top, responsive: { viewport => :bottom })
         end
 
         it "renders it separately with a responsive prefix" do

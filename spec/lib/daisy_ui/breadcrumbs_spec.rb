@@ -1,17 +1,23 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Breadcrumbs do
   subject(:output) { render described_class.new }
 
   describe "rendering full breadcrumbs" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Breadcrumbs.new(
             class: "my-breadcrumb",
-            data: {my: "breadcrumbs"}
+            data: { my: "breadcrumbs" }
           ) do |breadcrumbs|
-            breadcrumbs.crumb class: "my-crumb", data: {my: "crumb"} do
+            breadcrumbs.crumb class: "my-crumb", data: { my: "crumb" } do
               a do
                 "Home"
               end
@@ -31,10 +37,6 @@ describe DaisyUI::Breadcrumbs do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <div class="breadcrumbs my-breadcrumb" data-my="breadcrumbs">
@@ -46,7 +48,7 @@ describe DaisyUI::Breadcrumbs do
         </div>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

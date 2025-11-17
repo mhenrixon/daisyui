@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Table do
@@ -48,7 +50,7 @@ describe DaisyUI::Table do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(:zebra, data: {foo: "bar"})
+      render described_class.new(:zebra, data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -61,6 +63,10 @@ describe DaisyUI::Table do
   end
 
   describe "prefix" do
+    subject(:output) do
+      render described_class.new(:zebra)
+    end
+
     around do |example|
       original_prefix = DaisyUI.configuration.prefix
 
@@ -75,10 +81,6 @@ describe DaisyUI::Table do
       end
     end
 
-    subject(:output) do
-      render described_class.new(:zebra)
-    end
-
     it "renders it correctly" do
       expected_html = html <<~HTML
         <table class="foo-table foo-table-zebra"></table>
@@ -90,11 +92,15 @@ describe DaisyUI::Table do
 
   describe "custom modifiers" do
     context "when there's a custom modifier for the component" do
+      subject(:output) do
+        render described_class.new(:my_modifier)
+      end
+
       around do |example|
         DaisyUI.configure do |config|
           config.modifiers.add(
             :my_modifier,
-            component: DaisyUI::Table,
+            component: described_class,
             classes: "w-96 shadow-xl"
           )
         end
@@ -102,12 +108,8 @@ describe DaisyUI::Table do
         example.run
 
         DaisyUI.configure do |config|
-          config.modifiers.remove(:my_modifier, component: DaisyUI::Table)
+          config.modifiers.remove(:my_modifier, component: described_class)
         end
-      end
-
-      subject(:output) do
-        render described_class.new(:my_modifier)
       end
 
       it "renders it correctly" do
@@ -120,6 +122,10 @@ describe DaisyUI::Table do
     end
 
     context "when there's a custom modifier without a specific component" do
+      subject(:output) do
+        render described_class.new(:my_modifier)
+      end
+
       around do |example|
         DaisyUI.configure do |config|
           config.modifiers.add(
@@ -133,10 +139,6 @@ describe DaisyUI::Table do
         DaisyUI.configure do |config|
           config.modifiers.remove(:my_modifier)
         end
-      end
-
-      subject(:output) do
-        render described_class.new(:my_modifier)
       end
 
       it "renders it correctly" do
@@ -167,14 +169,14 @@ describe DaisyUI::Table do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:zebra, responsive: {viewport => :pin_cols})
+          render described_class.new(:zebra, responsive: { viewport => :pin_cols })
         end
 
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <table class="
-              table 
-              table-zebra 
+              table#{' '}
+              table-zebra#{' '}
               #{viewport}:table-pin-cols">
             </table>
           HTML
@@ -185,15 +187,15 @@ describe DaisyUI::Table do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:zebra, responsive: {viewport => [:pin_cols, :xs]})
+          render described_class.new(:zebra, responsive: { viewport => %i[pin_cols xs] })
         end
 
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <table class="
-              table 
-              table-zebra 
-              #{viewport}:table-pin-cols 
+              table#{' '}
+              table-zebra#{' '}
+              #{viewport}:table-pin-cols#{' '}
               #{viewport}:table-xs">
             </table>
           HTML
@@ -203,6 +205,10 @@ describe DaisyUI::Table do
       end
 
       context "when it's prefixed" do
+        subject(:output) do
+          render described_class.new(:zebra, responsive: { viewport => %i[pin_cols xs] })
+        end
+
         around do |example|
           original_prefix = DaisyUI.configuration.prefix
 
@@ -217,14 +223,10 @@ describe DaisyUI::Table do
           end
         end
 
-        subject(:output) do
-          render described_class.new(:zebra, responsive: {viewport => [:pin_cols, :xs]})
-        end
-
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <table class="
-              foo-table 
+              foo-table#{' '}
               foo-table-zebra
               #{viewport}:foo-table-pin-cols
               #{viewport}:foo-table-xs">
@@ -236,11 +238,18 @@ describe DaisyUI::Table do
       end
 
       context "when there are custom modifiers" do
+        subject(:output) do
+          render described_class.new(
+            :my_modifier,
+            responsive: { viewport => :my_other_modifier }
+          )
+        end
+
         around do |example|
           DaisyUI.configure do |config|
             config.modifiers.add(
               :my_modifier,
-              component: DaisyUI::Table,
+              component: described_class,
               classes: "w-96 shadow-xl"
             )
 
@@ -253,16 +262,9 @@ describe DaisyUI::Table do
           example.run
 
           DaisyUI.configure do |config|
-            config.modifiers.remove(:my_modifier, component: DaisyUI::Table)
+            config.modifiers.remove(:my_modifier, component: described_class)
             config.modifiers.remove(:my_other_modifier)
           end
-        end
-
-        subject(:output) do
-          render described_class.new(
-            :my_modifier,
-            responsive: {viewport => :my_other_modifier}
-          )
         end
 
         it "renders it separately with a responsive prefix" do
@@ -297,18 +299,18 @@ describe DaisyUI::Table do
 
   describe "conditional modifiers" do
     subject(:output) do
-      render DaisyUI::Table.new(
+      render described_class.new(
         :zebra,
         xs: false,
         sm: true,
         pin_cols: true,
-        responsive: {sm: :pin_cols}
+        responsive: { sm: :pin_cols }
       )
     end
 
     it "renders it correctly" do
       expected_html = html <<~HTML
-        <table 
+        <table#{' '}
           class="table table-zebra table-pin-cols table-sm sm:table-pin-cols">
         </table>
       HTML
@@ -318,6 +320,10 @@ describe DaisyUI::Table do
   end
 
   describe "rendering a full table" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -325,7 +331,7 @@ describe DaisyUI::Table do
             table.header do |header|
               header.row do |row|
                 row.head { "" }
-                row.head class: "my-head", data: {my: "heads"} do
+                row.head class: "my-head", data: { my: "heads" } do
                   "Name"
                 end
                 row.head { "Job" }
@@ -336,10 +342,10 @@ describe DaisyUI::Table do
             table.body do |body|
               body.row :base_200, :hover do |row|
                 row.head { "1" }
-                row.cell class: "my-cell", data: {my: "cells"} do
+                row.cell class: "my-cell", data: { my: "cells" } do
                   "Ada Lovelace"
                 end
-                row.column class: "my-column", data: {my: "columns"} do
+                row.column class: "my-column", data: { my: "columns" } do
                   "Engineer"
                 end
                 row.cell { "Indigo" }
@@ -349,7 +355,7 @@ describe DaisyUI::Table do
             table.footer do |footer|
               footer.row do |row|
                 row.head { "" }
-                row.head class: "my-head", data: {my: "heads"} do
+                row.head class: "my-head", data: { my: "heads" } do
                   "Name"
                 end
                 row.head { "Job" }
@@ -359,10 +365,6 @@ describe DaisyUI::Table do
           end
         end
       end
-    end
-
-    subject(:output) do
-      render component.new
     end
 
     it "is expected to match the formatted HTML" do
@@ -395,7 +397,7 @@ describe DaisyUI::Table do
         </table>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

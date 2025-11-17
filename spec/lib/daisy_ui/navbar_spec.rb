@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Navbar do
@@ -7,7 +9,7 @@ describe DaisyUI::Navbar do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:neutral, responsive: {viewport => :primary})
+          render described_class.new(:neutral, responsive: { viewport => :primary })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -21,7 +23,7 @@ describe DaisyUI::Navbar do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:neutral, responsive: {viewport => [:primary, :info]})
+          render described_class.new(:neutral, responsive: { viewport => %i[primary info] })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -83,25 +85,25 @@ describe DaisyUI::Navbar do
   end
 
   describe "rendering a full navbar" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Navbar.new do |navbar|
-            navbar.start class: "start", data: {my: :start} do
+            navbar.start class: "start", data: { my: :start } do # rubocop:disable Lint/EmptyBlock
             end
 
-            navbar.center class: "center", data: {my: :center} do
+            navbar.center class: "center", data: { my: :center } do # rubocop:disable Lint/EmptyBlock
             end
 
-            navbar.end class: "end", data: {my: :end} do
+            navbar.end class: "end", data: { my: :end } do # rubocop:disable Lint/EmptyBlock
             end
           end
         end
       end
-    end
-
-    subject(:output) do
-      render component.new
     end
 
     it "is expected to match the formatted HTML" do
@@ -113,7 +115,7 @@ describe DaisyUI::Navbar do
         </nav>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::MockupBrowser do
@@ -8,7 +10,7 @@ describe DaisyUI::MockupBrowser do
       <div class="mockup-browser"></div>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "with toolbar method" do
@@ -31,7 +33,7 @@ describe DaisyUI::MockupBrowser do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do

@@ -37,6 +37,14 @@ module DaisyUI
 
     private
 
+    # Override Base#attributes to exclude :id from the main drawer element.
+    # The Drawer component requires an :id parameter, but it's used internally
+    # to wire up the toggle checkbox, overlay, and button elements - NOT for
+    # the main drawer container.
+    def attributes
+      options
+    end
+
     register_modifiers(
         # "sm:drawer-end"
         # "@sm:drawer-end"

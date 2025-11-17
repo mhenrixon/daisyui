@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Card do
@@ -8,7 +10,7 @@ describe DaisyUI::Card do
       <section class="card"></section>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "modifiers" do
@@ -67,7 +69,7 @@ describe DaisyUI::Card do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(:compact, data: {foo: "bar"})
+      render described_class.new(:compact, data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -80,6 +82,10 @@ describe DaisyUI::Card do
   end
 
   describe "prefix" do
+    subject(:output) do
+      render described_class.new(:compact)
+    end
+
     around do |example|
       original_prefix = DaisyUI.configuration.prefix
 
@@ -94,10 +100,6 @@ describe DaisyUI::Card do
       end
     end
 
-    subject(:output) do
-      render described_class.new(:compact)
-    end
-
     it "renders it correctly" do
       expected_html = html <<~HTML
         <section class="foo-card foo-card-compact"></section>
@@ -109,11 +111,15 @@ describe DaisyUI::Card do
 
   describe "custom modifiers" do
     context "when there's a custom modifier for the component" do
+      subject(:output) do
+        render described_class.new(:my_modifier)
+      end
+
       around do |example|
         DaisyUI.configure do |config|
           config.modifiers.add(
             :my_modifier,
-            component: DaisyUI::Card,
+            component: described_class,
             classes: "w-96 shadow-xl"
           )
         end
@@ -121,12 +127,8 @@ describe DaisyUI::Card do
         example.run
 
         DaisyUI.configure do |config|
-          config.modifiers.remove(:my_modifier, component: DaisyUI::Card)
+          config.modifiers.remove(:my_modifier, component: described_class)
         end
-      end
-
-      subject(:output) do
-        render described_class.new(:my_modifier)
       end
 
       it "renders it correctly" do
@@ -139,6 +141,10 @@ describe DaisyUI::Card do
     end
 
     context "when there's a custom modifier without a specific component" do
+      subject(:output) do
+        render described_class.new(:my_modifier)
+      end
+
       around do |example|
         DaisyUI.configure do |config|
           config.modifiers.add(
@@ -152,10 +158,6 @@ describe DaisyUI::Card do
         DaisyUI.configure do |config|
           config.modifiers.remove(:my_modifier)
         end
-      end
-
-      subject(:output) do
-        render described_class.new(:my_modifier)
       end
 
       it "renders it correctly" do
@@ -186,15 +188,15 @@ describe DaisyUI::Card do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:compact, responsive: {viewport => :primary})
+          render described_class.new(:compact, responsive: { viewport => :primary })
         end
 
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <section class="
-              card 
-              card-compact 
-              #{viewport}:bg-primary 
+              card#{' '}
+              card-compact#{' '}
+              #{viewport}:bg-primary#{' '}
               #{viewport}:text-primary-content">
             </section>
           HTML
@@ -205,15 +207,15 @@ describe DaisyUI::Card do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:compact, responsive: {viewport => [:normal, :primary]})
+          render described_class.new(:compact, responsive: { viewport => %i[normal primary] })
         end
 
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <section class="
-              card 
-              card-compact 
-              #{viewport}:card-normal 
+              card#{' '}
+              card-compact#{' '}
+              #{viewport}:card-normal#{' '}
               #{viewport}:bg-primary
               #{viewport}:text-primary-content">
             </section>
@@ -224,6 +226,10 @@ describe DaisyUI::Card do
       end
 
       context "when it's prefixed" do
+        subject(:output) do
+          render described_class.new(:compact, responsive: { viewport => %i[normal primary] })
+        end
+
         around do |example|
           original_prefix = DaisyUI.configuration.prefix
 
@@ -238,14 +244,10 @@ describe DaisyUI::Card do
           end
         end
 
-        subject(:output) do
-          render described_class.new(:compact, responsive: {viewport => [:normal, :primary]})
-        end
-
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <section class="
-              foo-card 
+              foo-card#{' '}
               foo-card-compact
               #{viewport}:foo-card-normal
               #{viewport}:foo-bg-primary
@@ -258,11 +260,18 @@ describe DaisyUI::Card do
       end
 
       context "when there are custom modifiers" do
+        subject(:output) do
+          render described_class.new(
+            :my_modifier,
+            responsive: { viewport => :my_other_modifier }
+          )
+        end
+
         around do |example|
           DaisyUI.configure do |config|
             config.modifiers.add(
               :my_modifier,
-              component: DaisyUI::Card,
+              component: described_class,
               classes: "w-96 shadow-xl"
             )
 
@@ -275,16 +284,9 @@ describe DaisyUI::Card do
           example.run
 
           DaisyUI.configure do |config|
-            config.modifiers.remove(:my_modifier, component: DaisyUI::Card)
+            config.modifiers.remove(:my_modifier, component: described_class)
             config.modifiers.remove(:my_other_modifier)
           end
-        end
-
-        subject(:output) do
-          render described_class.new(
-            :my_modifier,
-            responsive: {viewport => :my_other_modifier}
-          )
         end
 
         it "renders it separately with a responsive prefix" do
@@ -331,30 +333,30 @@ describe DaisyUI::Card do
   end
 
   describe "rendering a full card" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Card.new(:compact) do |card|
-            card.body class: "my-body", data: {my: "bodies"}, style: "color: red;" do
-              card.figure class: "my-figure", data: {my: "figures"} do
+            card.body class: "my-body", data: { my: "bodies" }, style: "color: red;" do
+              card.figure class: "my-figure", data: { my: "figures" } do
                 card.img src: "image.jpg"
               end
 
-              card.title class: "my-title", data: {my: "titles"} do
+              card.title class: "my-title", data: { my: "titles" } do
                 h1 { "My title" }
               end
 
-              card.actions class: "my-actions", data: {my: "actions"} do
+              card.actions class: "my-actions", data: { my: "actions" } do
                 div { "My actions" }
               end
             end
           end
         end
       end
-    end
-
-    subject(:output) do
-      render component.new
     end
 
     it "is expected to match the formatted HTML" do
@@ -374,7 +376,7 @@ describe DaisyUI::Card do
         </section>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

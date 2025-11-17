@@ -41,8 +41,6 @@ module DaisyUI
       end
     end
 
-    private
-
     register_modifiers(
       # "sm:modal-open"
       # "@sm:modal-open"

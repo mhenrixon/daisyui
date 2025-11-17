@@ -8,16 +8,14 @@ module DaisyUI
       tr(class: classes, **attributes, &)
     end
 
-    def head(*, **, &)
-      th(*, **, &)
+    def head(...)
+      th(...)
     end
 
-    def column(*, **, &)
-      td(*, **, &)
+    def column(...)
+      td(...)
     end
-    alias_method :cell, :column
-
-    private
+    alias cell column
 
     register_modifiers(
       # "sm:table-row-hover"

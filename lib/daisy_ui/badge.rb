@@ -12,8 +12,6 @@ module DaisyUI
       public_send(as, class: classes, **attributes, &)
     end
 
-    private
-
     register_modifiers(
       # "sm:badge-neutral"
       # "@sm:badge-neutral"

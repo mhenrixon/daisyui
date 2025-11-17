@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Alert do
@@ -7,7 +9,7 @@ describe DaisyUI::Alert do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:neutral, responsive: {viewport => :primary})
+          render described_class.new(:neutral, responsive: { viewport => :primary })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -21,7 +23,7 @@ describe DaisyUI::Alert do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:neutral, responsive: {viewport => [:primary, :info]})
+          render described_class.new(:neutral, responsive: { viewport => %i[primary info] })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -36,6 +38,10 @@ describe DaisyUI::Alert do
   end
 
   describe "rendering a full alert" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -54,16 +60,12 @@ describe DaisyUI::Alert do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <div role="alert" class="alert alert-neutral alert-secondary" data-my="alert">Alert</div>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

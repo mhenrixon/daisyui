@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Footer do
@@ -8,7 +10,7 @@ describe DaisyUI::Footer do
       <footer class="footer"></footer>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "with title method" do
@@ -63,7 +65,7 @@ describe DaisyUI::Footer do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -79,7 +81,7 @@ describe DaisyUI::Footer do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option" do
         subject(:output) do
-          render described_class.new(:horizontal, responsive: {viewport => :vertical})
+          render described_class.new(:horizontal, responsive: { viewport => :vertical })
         end
 
         it "renders it separately with a responsive prefix" do

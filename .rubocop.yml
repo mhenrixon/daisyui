@@ -1,0 +1,199 @@
+plugins:
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 3.2
+  DisabledByDefault: false
+  DisplayCopNames: true
+  NewCops: enable
+
+#===============
+#=== LAYOUT ===
+#===============
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/ArrayAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/BlockAlignment:
+  EnforcedStyleAlignWith: start_of_line
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: start_of_line
+
+Layout/FirstArgumentIndentation:
+  Enabled: false
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstMethodParameterLineBreak:
+  AllowMultilineFinalElement: true
+
+Layout/FirstParameterIndentation:
+  EnforcedStyle: consistent 
+
+Layout/HashAlignment:
+  EnforcedColonStyle: key
+  EnforcedHashRocketStyle: key
+  EnforcedLastArgumentHashStyle: always_inspect
+
+Layout/LineContinuationLeadingSpace:
+  Enabled: false
+
+Layout/LineLength:
+  AllowHeredoc: true
+  AllowURI: true
+  Enabled: false
+  IgnoreCopDirectives: true
+  Max: 125
+  AllowedPatterns:
+    - '\A\s*#\s*'
+
+Layout/MultilineHashBraceLayout:
+  EnforcedStyle: symmetrical
+
+Layout/MultilineHashKeyLineBreaks:
+  Enabled: false
+  AllowMultilineFinalElement: true
+
+Layout/MultilineMethodArgumentLineBreaks:
+  Enabled: false
+  AllowMultilineFinalElement: true
+
+Layout/MultilineArrayBraceLayout:
+  EnforcedStyle: symmetrical
+
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+
+#===============
+#=== LINT ===
+#===============
+
+Lint/EmptyFile:
+  Exclude:
+    - '**/.keep'
+
+#===============
+#=== METRICS ===
+#===============
+
+Metrics:
+  Enabled: false
+
+#===============
+#===  NAMING ===
+#===============
+
+Naming/BlockForwarding:
+  Enabled: false
+
+Naming/VariableNumber:
+  CheckMethodNames: true
+  CheckSymbols: true
+  EnforcedStyle: snake_case
+  Exclude:
+    - app/views/**/*.rb
+    - app/components/**/*.rb
+    - spec/**/*.rb
+
+Naming/MethodParameterName:
+  Exclude:
+    - app/views/**/*.rb
+    - app/components/**/*.rb
+
+
+#===================
+#=== PERFORMANCE ===
+#===================
+
+Performance/FlatMap:
+  Enabled: true
+  EnabledForFlattenWithoutParams: true
+
+#=============
+#=== RSpec ===
+#=============
+
+RSpec/AlignLeftLetBrace:
+  Enabled: true
+
+RSpec/ContextWording:
+  Enabled: true
+  Prefixes:
+    - and
+    - as
+    - for
+    - if
+    - in
+    - or
+    - unless
+    - when
+    - with
+    - without
+
+RSpec/EmptyExampleGroup:
+  Enabled: true
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/ExpectChange:
+  Enabled: false
+  EnforcedStyle: block
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/PendingWithoutReason:
+  Enabled: false
+
+#=============
+#=== STYLE ===
+#=============
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: no_comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: no_comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: no_comma

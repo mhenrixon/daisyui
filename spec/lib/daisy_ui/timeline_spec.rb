@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Timeline do
@@ -8,7 +10,7 @@ describe DaisyUI::Timeline do
       <ul class="timeline"></ul>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "with part methods" do
@@ -69,7 +71,7 @@ describe DaisyUI::Timeline do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -85,7 +87,7 @@ describe DaisyUI::Timeline do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option" do
         subject(:output) do
-          render described_class.new(:vertical, responsive: {viewport => :horizontal})
+          render described_class.new(:vertical, responsive: { viewport => :horizontal })
         end
 
         it "renders it separately with a responsive prefix" do

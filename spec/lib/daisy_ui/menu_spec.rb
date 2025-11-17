@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Menu do
@@ -78,7 +80,7 @@ describe DaisyUI::Menu do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(:xs, data: {foo: "bar"})
+      render described_class.new(:xs, data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -91,6 +93,10 @@ describe DaisyUI::Menu do
   end
 
   describe "prefix" do
+    subject(:output) do
+      render described_class.new(:xs)
+    end
+
     around do |example|
       original_prefix = DaisyUI.configuration.prefix
 
@@ -103,10 +109,6 @@ describe DaisyUI::Menu do
       DaisyUI.configure do |config|
         config.prefix = original_prefix
       end
-    end
-
-    subject(:output) do
-      render described_class.new(:xs)
     end
 
     it "renders it correctly" do
@@ -122,7 +124,7 @@ describe DaisyUI::Menu do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:xs, responsive: {viewport => :vertical})
+          render described_class.new(:xs, responsive: { viewport => :vertical })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -137,15 +139,15 @@ describe DaisyUI::Menu do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:xs, responsive: {viewport => [:horizontal, :vertical]})
+          render described_class.new(:xs, responsive: { viewport => %i[horizontal vertical] })
         end
 
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <ul class="
-              menu 
-              menu-xs 
-              #{viewport}:menu-horizontal 
+              menu#{' '}
+              menu-xs#{' '}
+              #{viewport}:menu-horizontal#{' '}
               #{viewport}:menu-vertical">
             </ul>
           HTML
@@ -155,6 +157,10 @@ describe DaisyUI::Menu do
       end
 
       context "when it's prefixed" do
+        subject(:output) do
+          render described_class.new(:xs, responsive: { viewport => %i[horizontal vertical] })
+        end
+
         around do |example|
           original_prefix = DaisyUI.configuration.prefix
 
@@ -169,16 +175,12 @@ describe DaisyUI::Menu do
           end
         end
 
-        subject(:output) do
-          render described_class.new(:xs, responsive: {viewport => [:horizontal, :vertical]})
-        end
-
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <ul class="
-              foo-menu 
-              foo-menu-xs 
-              #{viewport}:foo-menu-horizontal 
+              foo-menu#{' '}
+              foo-menu-xs#{' '}
+              #{viewport}:foo-menu-horizontal#{' '}
               #{viewport}:foo-menu-vertical">
             </ul>
           HTML
@@ -264,6 +266,10 @@ describe DaisyUI::Menu do
   end
 
   describe "rendering a full menu" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -278,19 +284,20 @@ describe DaisyUI::Menu do
               end
             end
 
-            menu.item data: {my: "item_menus"} do |item|
-              item.submenu :collapsible, :open, :primary, class: "rounded-t-none", data: {my: "collapsible_menus"} do |submenu|
+            menu.item data: { my: "item_menus" } do |item|
+              item.submenu :collapsible, :open, :primary, class: "rounded-t-none",
+                data: { my: "collapsible_menus" } do |submenu|
                 submenu.title do
                   "Parent 1"
                 end
 
-                submenu.item data: {my: "submenu_item"} do |submenu_item|
+                submenu.item data: { my: "submenu_item" } do |_submenu_item|
                   a do
                     "Child 1"
                   end
                 end
 
-                submenu.item data: {my: "another_submenu_item"} do |submenu_item|
+                submenu.item data: { my: "another_submenu_item" } do |submenu_item|
                   submenu_item.submenu :collapsible do |submenu_2|
                     submenu_2.title do
                       "Parent 2"
@@ -352,10 +359,6 @@ describe DaisyUI::Menu do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <ul class="menu bg-base-200 w-52">
@@ -398,11 +401,15 @@ describe DaisyUI::Menu do
         </ul>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering a components sidebar" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -426,16 +433,16 @@ describe DaisyUI::Menu do
                 [
                   {
                     name: "Actions",
-                    components: [
-                      "Button",
-                      "Dropdown"
+                    components: %w[
+                      Button
+                      Dropdown
                     ]
                   },
                   {
                     name: "Data display",
-                    components: [
-                      "Badge",
-                      "Card"
+                    components: %w[
+                      Badge
+                      Card
                     ]
                   }
                 ].each do |category|
@@ -460,10 +467,6 @@ describe DaisyUI::Menu do
           end
         end
       end
-    end
-
-    subject(:output) do
-      render component.new
     end
 
     it "is expected to match the formatted HTML" do
@@ -499,14 +502,18 @@ describe DaisyUI::Menu do
             </details>
           </li>
         </ul>
-        
+
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering with title as parent" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -541,10 +548,6 @@ describe DaisyUI::Menu do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <ul class="menu bg-base-200 text-base-content rounded-box w-56">
@@ -559,7 +562,7 @@ describe DaisyUI::Menu do
         </ul>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

@@ -8,8 +8,6 @@ module DaisyUI
       public_send(as, class: classes, **attributes, &)
     end
 
-    private
-
     register_modifiers({})
   end
 end

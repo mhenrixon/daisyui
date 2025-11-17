@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Modal do
@@ -7,7 +9,7 @@ describe DaisyUI::Modal do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:open, id: "test_modal", responsive: {viewport => :top})
+          render described_class.new(:open, id: "test_modal", responsive: { viewport => :top })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -21,7 +23,7 @@ describe DaisyUI::Modal do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:open, id: "test_modal", responsive: {viewport => [:top, :middle]})
+          render described_class.new(:open, id: "test_modal", responsive: { viewport => %i[top middle] })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -36,6 +38,10 @@ describe DaisyUI::Modal do
   end
 
   describe "rendering a full modal" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -64,10 +70,6 @@ describe DaisyUI::Modal do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <button class="btn">Open Modal</button>
@@ -84,11 +86,15 @@ describe DaisyUI::Modal do
         </dialog>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering a full modal that closes when clicking the backdrop" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -111,10 +117,6 @@ describe DaisyUI::Modal do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <button class="btn">Open Modal</button>
@@ -129,11 +131,15 @@ describe DaisyUI::Modal do
         </dialog>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering a full modal with a button to close on the corner" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -160,10 +166,6 @@ describe DaisyUI::Modal do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <button class="btn">Open Modal</button>
@@ -178,7 +180,7 @@ describe DaisyUI::Modal do
         </dialog>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

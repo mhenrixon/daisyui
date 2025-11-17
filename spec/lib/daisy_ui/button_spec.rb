@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Button do
@@ -8,7 +10,7 @@ describe DaisyUI::Button do
       <button class="btn"></button>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "conditions" do
@@ -74,7 +76,7 @@ describe DaisyUI::Button do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(:neutral, data: {foo: "bar"})
+      render described_class.new(:neutral, data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -87,6 +89,10 @@ describe DaisyUI::Button do
   end
 
   describe "prefix" do
+    subject(:output) do
+      render described_class.new(:neutral)
+    end
+
     around do |example|
       original_prefix = DaisyUI.configuration.prefix
 
@@ -99,10 +105,6 @@ describe DaisyUI::Button do
       DaisyUI.configure do |config|
         config.prefix = original_prefix
       end
-    end
-
-    subject(:output) do
-      render described_class.new(:neutral)
     end
 
     it "renders it correctly" do
@@ -118,7 +120,7 @@ describe DaisyUI::Button do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:neutral, responsive: {viewport => :primary})
+          render described_class.new(:neutral, responsive: { viewport => :primary })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -132,7 +134,7 @@ describe DaisyUI::Button do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:neutral, responsive: {viewport => [:primary, :active]})
+          render described_class.new(:neutral, responsive: { viewport => %i[primary active] })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -150,6 +152,10 @@ describe DaisyUI::Button do
       end
 
       context "when it's prefixed" do
+        subject(:output) do
+          render described_class.new(:neutral, responsive: { viewport => %i[primary active] })
+        end
+
         around do |example|
           original_prefix = DaisyUI.configuration.prefix
 
@@ -164,16 +170,12 @@ describe DaisyUI::Button do
           end
         end
 
-        subject(:output) do
-          render described_class.new(:neutral, responsive: {viewport => [:primary, :active]})
-        end
-
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
             <button class="
-              foo-btn 
-              foo-btn-neutral 
-              #{viewport}:foo-btn-primary 
+              foo-btn#{' '}
+              foo-btn-neutral#{' '}
+              #{viewport}:foo-btn-primary#{' '}
               #{viewport}:foo-btn-active">
             </button>
           HTML
@@ -216,7 +218,7 @@ describe DaisyUI::Button do
         :neutral,
         class: "my-class",
         modal: "my_modal_1",
-        data: {my: "modals"}
+        data: { my: "modals" }
       ) do
         "Click me"
       end
@@ -224,8 +226,8 @@ describe DaisyUI::Button do
 
     it "renders it correctly" do
       expected_html = html <<~HTML
-        <button 
-          class="btn btn-neutral my-class" 
+        <button#{' '}
+          class="btn btn-neutral my-class"#{' '}
           onclick="my_modal_1.showModal()"
           data-my="modals">Click me</button>
       HTML
@@ -254,8 +256,8 @@ describe DaisyUI::Button do
 
       it "escapes the code" do
         expected_html = html <<~HTML
-          <button 
-            class="btn btn-neutral" 
+          <button#{' '}
+            class="btn btn-neutral"#{' '}
             onclick="&quot; onclick=&quot;alert(&#39;XSS&#39;) //;.showModal()">
           </button>
         HTML

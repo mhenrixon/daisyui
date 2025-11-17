@@ -8,23 +8,21 @@ module DaisyUI
       table(class: classes, **attributes, &)
     end
 
-    def header(*, **, &)
-      thead(*, **, &)
+    def header(...)
+      thead(...)
     end
 
-    def row(*, **, &)
-      render TableRow.new(*, **, &)
+    def row(...)
+      render TableRow.new(...)
     end
 
-    def body(*, **, &)
-      tbody(*, **, &)
+    def body(...)
+      tbody(...)
     end
 
-    def footer(*, **, &)
-      tfoot(*, **, &)
+    def footer(...)
+      tfoot(...)
     end
-
-    private
 
     register_modifiers(
       # "sm:table-zebra"

@@ -8,8 +8,6 @@ module DaisyUI
       public_send(as, role: :alert, class: classes, **attributes, &)
     end
 
-    private
-
     register_modifiers(
       # "sm:alert-info"
       # "@sm:alert-info"

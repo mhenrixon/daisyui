@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Label do
   describe "floating label" do
+    subject(:output) { render component.new }
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -13,8 +17,6 @@ describe DaisyUI::Label do
       end
     end
 
-    subject(:output) { render component.new }
-
     it "renders a floating label with input" do
       expected_html = html <<~HTML
         <label class="floating-label">
@@ -23,11 +25,13 @@ describe DaisyUI::Label do
         </label>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "input wrapper label" do
+    subject(:output) { render component.new }
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -39,8 +43,6 @@ describe DaisyUI::Label do
       end
     end
 
-    subject(:output) { render component.new }
-
     it "renders an input wrapper with label text" do
       expected_html = html <<~HTML
         <label class="input">
@@ -49,11 +51,13 @@ describe DaisyUI::Label do
         </label>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "input wrapper with label at the end" do
+    subject(:output) { render component.new }
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -65,8 +69,6 @@ describe DaisyUI::Label do
       end
     end
 
-    subject(:output) { render component.new }
-
     it "renders an input wrapper with label text at the end" do
       expected_html = html <<~HTML
         <label class="input">
@@ -75,11 +77,13 @@ describe DaisyUI::Label do
         </label>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "select wrapper label" do
+    subject(:output) { render component.new }
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -94,8 +98,6 @@ describe DaisyUI::Label do
       end
     end
 
-    subject(:output) { render component.new }
-
     it "renders a select wrapper with label text" do
       expected_html = html <<~HTML
         <label class="select">
@@ -107,11 +109,13 @@ describe DaisyUI::Label do
         </label>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "floating label with different sizes" do
+    subject(:output) { render component.new }
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -131,8 +135,6 @@ describe DaisyUI::Label do
       end
     end
 
-    subject(:output) { render component.new }
-
     it "renders floating labels with different input sizes" do
       expected_html = html <<~HTML
         <label class="floating-label">
@@ -149,11 +151,13 @@ describe DaisyUI::Label do
         </label>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "text helper with block" do
+    subject(:output) { render component.new }
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -165,8 +169,6 @@ describe DaisyUI::Label do
       end
     end
 
-    subject(:output) { render component.new }
-
     it "renders label text using a block" do
       expected_html = html <<~HTML
         <label class="input">
@@ -175,23 +177,23 @@ describe DaisyUI::Label do
         </label>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "text helper with custom attributes" do
+    subject(:output) { render component.new }
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Label.new(:input) do |label|
-            label.text("https://", class: "custom-class", data: {test: "value"})
+            label.text("https://", class: "custom-class", data: { test: "value" })
             input(type: "text", placeholder: "URL")
           end
         end
       end
     end
-
-    subject(:output) { render component.new }
 
     it "renders label text with custom attributes" do
       expected_html = html <<~HTML
@@ -201,7 +203,7 @@ describe DaisyUI::Label do
         </label>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

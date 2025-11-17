@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Accordion do
@@ -10,7 +12,7 @@ describe DaisyUI::Accordion do
       </div>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "with title block" do
@@ -90,7 +92,7 @@ describe DaisyUI::Accordion do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(name: "accordion-1", data: {foo: "bar"})
+      render described_class.new(name: "accordion-1", data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -108,7 +110,7 @@ describe DaisyUI::Accordion do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option" do
         subject(:output) do
-          render described_class.new(:arrow, name: "accordion-1", responsive: {viewport => :plus})
+          render described_class.new(:arrow, name: "accordion-1", responsive: { viewport => :plus })
         end
 
         it "renders it separately with a responsive prefix" do

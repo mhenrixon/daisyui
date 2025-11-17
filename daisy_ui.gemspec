@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "lib/daisy_ui/version"
 
 Gem::Specification.new do |s|
@@ -14,7 +16,8 @@ Gem::Specification.new do |s|
     "homepage_uri" => "https://github.com/mhenrixon/daisy_ui",
     "source_code_uri" => "https://github.com/mhenrixon/daisy_ui",
     "changelog_uri" => "https://github.com/mhenrixon/daisy_ui/blob/main/CHANGELOG.md",
-    "bug_tracker_uri" => "https://github.com/mhenrixon/daisy_ui/issues"
+    "bug_tracker_uri" => "https://github.com/mhenrixon/daisy_ui/issues",
+    "rubygems_mfa_required" => "true"
   }
 
   s.required_ruby_version = ">= 3.2"

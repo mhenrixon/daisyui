@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Dropdown do
@@ -7,7 +9,7 @@ describe DaisyUI::Dropdown do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:top, responsive: {viewport => :hover})
+          render described_class.new(:top, responsive: { viewport => :hover })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -21,7 +23,7 @@ describe DaisyUI::Dropdown do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:top, responsive: {viewport => [:hover, :open]})
+          render described_class.new(:top, responsive: { viewport => %i[hover open] })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -73,7 +75,7 @@ describe DaisyUI::Dropdown do
     context "when using details as the :as option" do
       subject(:output) do
         render described_class.new(:tap_to_close) do |dropdown|
-          dropdown.button(:active, class: "my-button", data: {my: "buttons"}) do
+          dropdown.button(:active, class: "my-button", data: { my: "buttons" }) do
             "Click"
           end
         end
@@ -92,6 +94,8 @@ describe DaisyUI::Dropdown do
   end
 
   describe "passing modifiers to the menu" do
+    subject(:output) { render component.new }
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -108,8 +112,6 @@ describe DaisyUI::Dropdown do
       end
     end
 
-    subject(:output) { render component.new }
-
     it "renders the menu with the given modifiers" do
       expected_html = html <<~HTML
         <div class="dropdown">
@@ -121,16 +123,20 @@ describe DaisyUI::Dropdown do
         </div>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering a full dropdown that closes when tapping outside" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Dropdown.new(:top) do |dropdown|
-            dropdown.button(:active, class: "my-button", data: {my: "buttons"}) do
+            dropdown.button(:active, class: "my-button", data: { my: "buttons" }) do
               "Click"
             end
 
@@ -146,16 +152,12 @@ describe DaisyUI::Dropdown do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <div class="dropdown dropdown-top">
-          <div class="btn btn-active my-button" 
-               role="button" 
-               tabindex="0" 
+          <div class="btn btn-active my-button"#{' '}
+               role="button"#{' '}
+               tabindex="0"#{' '}
                data-my="buttons">Click</div>
           <ul class="menu dropdown-content" tabindex="0">
             <li>
@@ -165,16 +167,20 @@ describe DaisyUI::Dropdown do
         </div>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering a full dropdown that closes when tapping the button" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Dropdown.new(:tap_to_close, :top) do |dropdown|
-            dropdown.button(:active, class: "my-button", data: {my: "buttons"}) do
+            dropdown.button(:active, class: "my-button", data: { my: "buttons" }) do
               "Click"
             end
 
@@ -190,15 +196,11 @@ describe DaisyUI::Dropdown do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <details class="dropdown dropdown-top">
-          <summary 
-            class="btn btn-active my-button" 
+          <summary#{' '}
+            class="btn btn-active my-button"#{' '}
             data-my="buttons">Click</summary>
           <ul class="menu dropdown-content">
             <li>
@@ -208,16 +210,20 @@ describe DaisyUI::Dropdown do
         </details>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering a full dropdown with card content that closes when tapping outside" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Dropdown.new(:top) do |dropdown|
-            dropdown.button(:active, class: "my-button", data: {my: "buttons"}) do
+            dropdown.button(:active, class: "my-button", data: { my: "buttons" }) do
               "Click"
             end
 
@@ -237,16 +243,12 @@ describe DaisyUI::Dropdown do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <div class="dropdown dropdown-top">
-          <div class="btn btn-active my-button" 
-               role="button" 
-               tabindex="0" 
+          <div class="btn btn-active my-button"#{' '}
+               role="button"#{' '}
+               tabindex="0"#{' '}
                data-my="buttons">Click</div>
           <section class="card dropdown-content" tabindex="0">
             <div class="card-body">
@@ -257,16 +259,20 @@ describe DaisyUI::Dropdown do
         </div>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering a full dropdown with card content that closes when tapping the button" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Dropdown.new(:tap_to_close, :top) do |dropdown|
-            dropdown.button(:active, class: "my-button", data: {my: "buttons"}) do
+            dropdown.button(:active, class: "my-button", data: { my: "buttons" }) do
               "Click"
             end
 
@@ -286,15 +292,11 @@ describe DaisyUI::Dropdown do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <details class="dropdown dropdown-top">
-          <summary 
-            class="btn btn-active my-button" 
+          <summary
+            class="btn btn-active my-button"
             data-my="buttons">Click</summary>
           <section class="card dropdown-content bg-base-100">
             <div class="card-body">
@@ -305,7 +307,159 @@ describe DaisyUI::Dropdown do
         </details>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
+    end
+  end
+
+  describe "passing HTML attributes" do
+    context "when passing id and data attributes to the dropdown" do
+      subject(:output) do
+        render described_class.new(:top, id: "my-dropdown", data: { controller: "dropdown", action: "click" })
+      end
+
+      it "renders with the specified attributes" do
+        expected_html = html <<~HTML
+          <div class="dropdown dropdown-top" data-controller="dropdown" data-action="click" id="my-dropdown"></div>
+        HTML
+
+        expect(output).to eq(expected_html)
+      end
+    end
+
+    context "when using tap_to_close with id and aria attributes" do
+      subject(:output) do
+        render described_class.new(:tap_to_close, id: "my-details", aria: { label: "Menu" })
+      end
+
+      it "renders details element with the specified attributes" do
+        expected_html = html <<~HTML
+          <details class="dropdown" aria-label="Menu" id="my-details"></details>
+        HTML
+
+        expect(output).to eq(expected_html)
+      end
+    end
+
+    context "when passing attributes to sub-components" do
+      subject(:output) { render component.new }
+
+      let(:component) do
+        Class.new(Phlex::HTML) do
+          def view_template(&)
+            render DaisyUI::Dropdown.new(:top, id: "dropdown-1", data: { test: "main" }) do |dropdown|
+              dropdown.button(:primary, id: "btn-1", aria: { label: "Open menu" }) do
+                "Menu"
+              end
+
+              dropdown.menu(id: "menu-1", data: { items: "3" }) do |menu|
+                menu.item do
+                  a do
+                    "Item 1"
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+
+      it "passes attributes to all components correctly" do
+        expected_html = html <<~HTML
+          <div class="dropdown dropdown-top" data-test="main" id="dropdown-1">
+            <div class="btn btn-primary"
+                 role="button"
+                 tabindex="0"
+                 aria-label="Open menu"
+                 id="btn-1">Menu</div>
+            <ul class="menu dropdown-content"
+                tabindex="0"
+                data-items="3"
+                id="menu-1">
+              <li>
+                <a>Item 1</a>
+              </li>
+            </ul>
+          </div>
+        HTML
+
+        expect(output).to eq(expected_html)
+      end
+    end
+
+    context "when passing attributes to content sub-component" do
+      subject(:output) { render component.new }
+
+      let(:component) do
+        Class.new(Phlex::HTML) do
+          def view_template(&)
+            render DaisyUI::Dropdown.new(:top) do |dropdown|
+              dropdown.button(:ghost) do
+                "Click"
+              end
+
+              dropdown.content(id: "content-1", data: { status: "active" }, aria: { live: "polite" }) do
+                div do
+                  "Dropdown content"
+                end
+              end
+            end
+          end
+        end
+      end
+
+      it "passes attributes to the content element" do
+        expected_html = html <<~HTML
+          <div class="dropdown dropdown-top">
+            <div class="btn btn-ghost" role="button" tabindex="0">Click</div>
+            <div tabindex="0"
+                 class="dropdown-content"
+                 id="content-1"
+                 data-status="active"
+                 aria-live="polite">
+              <div>Dropdown content</div>
+            </div>
+          </div>
+        HTML
+
+        expect(output).to eq(expected_html)
+      end
+    end
+
+    context "when using tap_to_close with attributes on sub-components" do
+      subject(:output) { render component.new }
+
+      let(:component) do
+        Class.new(Phlex::HTML) do
+          def view_template(&)
+            render DaisyUI::Dropdown.new(:tap_to_close, id: "details-dropdown") do |dropdown|
+              dropdown.button(:warning, id: "summary-btn", data: { analytics: "click" }) do
+                "Toggle"
+              end
+
+              dropdown.content(id: "details-content", class: "w-52") do
+                p do
+                  "Content here"
+                end
+              end
+            end
+          end
+        end
+      end
+
+      it "passes attributes correctly in tap_to_close mode" do
+        expected_html = html <<~HTML
+          <details class="dropdown" id="details-dropdown">
+            <summary class="btn btn-warning"
+                     data-analytics="click"
+                     id="summary-btn">Toggle</summary>
+            <div class="dropdown-content w-52" id="details-content">
+              <p>Content here</p>
+            </div>
+          </details>
+        HTML
+
+        expect(output).to eq(expected_html)
+      end
     end
   end
 end

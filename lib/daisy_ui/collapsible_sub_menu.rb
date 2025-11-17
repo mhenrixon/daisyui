@@ -18,12 +18,10 @@ module DaisyUI
       details_attrs[:open] = true if modifiers.include?(:open) || options.delete(:open) == true
 
       details(**details_attrs) do
-        if @title
-          summary do
-            render @title
-          end
-        else
-          raise ArgumentError, "A collapsible submenu requires a title"
+        raise ArgumentError, "A collapsible submenu requires a title" unless @title
+
+        summary do
+          render @title
         end
 
         if @items.any?
@@ -37,18 +35,14 @@ module DaisyUI
     end
 
     def title(&block)
-      if @title
-        raise ArgumentError, "A collapsible submenu can only have one title"
-      else
-        @title = block
-      end
+      raise ArgumentError, "A collapsible submenu can only have one title" if @title
+
+      @title = block
     end
 
-    def item(*, **, &)
-      @items << MenuItem.new(*, **, &)
+    def item(...)
+      @items << MenuItem.new(...)
     end
-
-    private
 
     register_modifiers(COLOR_MODIFIERS)
   end

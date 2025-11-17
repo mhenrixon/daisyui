@@ -1,9 +1,15 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::AvatarGroup do
   subject(:output) { render described_class.new }
 
   describe "rendering a full avatar group" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -17,10 +23,6 @@ describe DaisyUI::AvatarGroup do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <span class="avatar-group">
@@ -29,7 +31,7 @@ describe DaisyUI::AvatarGroup do
         </span>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

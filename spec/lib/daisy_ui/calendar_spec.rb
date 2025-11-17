@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Calendar do
@@ -9,14 +11,12 @@ describe DaisyUI::Calendar do
         <calendar-date class="cally"></calendar-date>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
 
     context "with block content" do
       subject(:output) do
-        render described_class.new do |c|
-          c.calendar_month
-        end
+        render described_class.new, &:calendar_month
       end
 
       it "renders with content" do
@@ -45,7 +45,7 @@ describe DaisyUI::Calendar do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do

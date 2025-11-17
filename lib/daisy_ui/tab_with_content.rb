@@ -17,9 +17,9 @@ module DaisyUI
       tab_attrs = {
         type: :radio,
         name: id,
-        class: classes,  # This deletes :class from options
+        class: classes, # This deletes :class from options
         role: :tab,
-        aria: {label: @label}
+        aria: { label: @label }
       }
 
       # Now get remaining attributes (class has been deleted by classes method)
@@ -51,6 +51,13 @@ module DaisyUI
     end
 
     private
+
+    # Override Base#attributes to exclude :id from the tab input.
+    # The TabWithContent component uses :id for the `name` attribute
+    # to group radio inputs together - NOT for the id attribute.
+    def attributes
+      options
+    end
 
     register_modifiers(
       # "sm:tab-active"

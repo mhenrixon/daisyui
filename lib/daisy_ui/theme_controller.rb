@@ -36,7 +36,7 @@ module DaisyUI
       # Input always has just the theme-controller class
       input_classes = self.class.component_class.to_s
 
-      attrs = {type: :checkbox, class: input_classes}
+      attrs = { type: :checkbox, class: input_classes }
       attrs[:value] = theme_value if theme_value
       attrs[:checked] = true if checked
       attrs.merge!(options)
@@ -48,7 +48,7 @@ module DaisyUI
         label(class: wrapper_classes) do
           public_send(as, **attrs)
           whitespace
-          block.call
+          yield
           whitespace
         end
       else

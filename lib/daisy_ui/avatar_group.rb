@@ -8,8 +8,8 @@ module DaisyUI
       public_send(as, class: classes, **attributes, &)
     end
 
-    def avatar(*, **, &)
-      render DaisyUI::Avatar.new(*, **, &)
+    def avatar(...)
+      render DaisyUI::Avatar.new(...)
     end
   end
 end

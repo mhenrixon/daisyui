@@ -18,8 +18,6 @@ module DaisyUI
       div role: :tab, class: classes, **attrs, &
     end
 
-    private
-
     register_modifiers(
       # "sm:tab-active"
       # "@sm:tab-active"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "bundler/setup"
 Bundler.setup
 
@@ -11,8 +13,8 @@ end
 
 # Helper to render Phlex components for testing
 module ComponentHelpers
-  def render(component, &block)
-    component.call(&block)
+  def render(component, &)
+    component.call(&)
   end
 end
 

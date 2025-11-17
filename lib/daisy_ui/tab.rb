@@ -3,8 +3,8 @@
 module DaisyUI
   # @private
   class Tab < Base
-    def initialize(*modifiers, label: nil, id: nil, **options)
-      super(*modifiers, **options)
+    def initialize(*modifiers, label: nil, id: nil, **)
+      super(*modifiers, **)
       @label = label
       @id = id
     end
@@ -31,7 +31,7 @@ module DaisyUI
           "You must pass an id to Tabs#new if you want to add content"
       end
 
-      @content = -> do
+      @content = lambda do
         content_classes = component_classes("tab-content", options:)
         div role: :tabpanel, class: content_classes, **options, &block
       end

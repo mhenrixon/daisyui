@@ -54,7 +54,7 @@ module DaisyUI
     #   label.text("Username")
     #   label.text { "Email Address" }
     #   label.text("https://", class: "custom-class")
-    def text(content = nil, **options, &block)
+    def text(content = nil, **options)
       span(class: component_classes("label", options:), **options) do
         content || yield
       end

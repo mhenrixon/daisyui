@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Checkbox do
@@ -7,7 +9,7 @@ describe DaisyUI::Checkbox do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:primary, responsive: {viewport => :lg})
+          render described_class.new(:primary, responsive: { viewport => :lg })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -21,7 +23,7 @@ describe DaisyUI::Checkbox do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:primary, responsive: {viewport => [:lg, :secondary]})
+          render described_class.new(:primary, responsive: { viewport => %i[lg secondary] })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -36,6 +38,10 @@ describe DaisyUI::Checkbox do
   end
 
   describe "conditional attributes" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -49,10 +55,6 @@ describe DaisyUI::Checkbox do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <input type="checkbox" class="checkbox" checked disabled>
@@ -63,11 +65,15 @@ describe DaisyUI::Checkbox do
         <input type="checkbox" class="checkbox">
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering a full checkbox" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -81,16 +87,12 @@ describe DaisyUI::Checkbox do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <input type="checkbox" class="checkbox checkbox-primary checkbox-lg" checked disabled>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

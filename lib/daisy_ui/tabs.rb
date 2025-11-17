@@ -16,14 +16,19 @@ module DaisyUI
     def tab(*args, label: nil, **, &)
       # If first arg is a string, it's the label, rest are modifiers
       # Otherwise all args are modifiers
-      if args.first.is_a?(String)
-        label = args.shift
-      end
+      label = args.shift if args.first.is_a?(String)
 
       render Tab.new(*args, label:, id:, **, &)
     end
 
     private
+
+    # Override Base#attributes to exclude :id from the main tabs container.
+    # The Tabs component uses :id internally to wire up the radio inputs
+    # and their associated content panels - NOT for the main container.
+    def attributes
+      options
+    end
 
     register_modifiers(
       # "sm:tabs-boxed"

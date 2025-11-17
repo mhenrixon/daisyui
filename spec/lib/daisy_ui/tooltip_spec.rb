@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Tooltip do
@@ -6,7 +8,7 @@ describe DaisyUI::Tooltip do
   describe "responsiveness" do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
-        subject(:output) { render described_class.new(responsive: {viewport => true}, tip: "tip") }
+        subject(:output) { render described_class.new(responsive: { viewport => true }, tip: "tip") }
 
         it "renders the component class responsively" do
           expected_html = html <<~HTML
@@ -18,7 +20,7 @@ describe DaisyUI::Tooltip do
       end
 
       context "when given an :#{viewport} responsive option with a boolean and a modifier" do
-        subject(:output) { render described_class.new(responsive: {viewport => [true, :top]}, tip: "tip") }
+        subject(:output) { render described_class.new(responsive: { viewport => [true, :top] }, tip: "tip") }
 
         it "renders the component class and the modifier class responsively" do
           expected_html = html <<~HTML
@@ -58,6 +60,10 @@ describe DaisyUI::Tooltip do
   end
 
   describe "rendering a full tooltip" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -66,16 +72,12 @@ describe DaisyUI::Tooltip do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <div class="tooltip tooltip-top" data-tip="My tooltip"></div>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

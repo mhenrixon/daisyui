@@ -9,19 +9,17 @@ module DaisyUI
       li(class: classes, **attributes, &)
     end
 
-    def title(*, **options, &block)
-      h2(class: component_classes("menu-title", options:), **options, &block)
+    def title(*, **options, &)
+      h2(class: component_classes("menu-title", options:), **options, &)
     end
 
-    def submenu(*modifiers, **options, &)
+    def submenu(*modifiers, **, &)
       if modifiers.include?(:collapsible)
-        render CollapsibleSubMenu.new(*modifiers, **options, &)
+        render CollapsibleSubMenu.new(*modifiers, **, &)
       else
-        render SubMenu.new(*modifiers, **options, &)
+        render SubMenu.new(*modifiers, **, &)
       end
     end
-
-    private
 
     register_modifiers(
       # "sm:disabled"

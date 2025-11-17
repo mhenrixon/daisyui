@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module HTMLHelpers
   def html(string)
     string
@@ -6,7 +8,7 @@ module HTMLHelpers
       # Collapse multiple newlines between attributes into a single space.
       .gsub(/(\S)\s*\n\s*(\S)/, '\1 \2')
       # Remove extra spaces within attribute values.
-      .gsub(/(\w+)="\s*(.+?)\s*"/) { |m| "#{$1}=\"#{$2.split.join(" ")}\"" }
+      .gsub(/(\w+)="\s*(.+?)\s*"/) { |_m| "#{::Regexp.last_match(1)}=\"#{::Regexp.last_match(2).split.join(' ')}\"" }
       # Ensure there's a single space after each attribute.
       .gsub(/(\S+="[^"]*")\s*/, '\1 ')
       # Remove space before closing bracket.

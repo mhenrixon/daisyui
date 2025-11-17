@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Pagination do
@@ -8,7 +10,7 @@ describe DaisyUI::Pagination do
       <div class="join"></div>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "with item method" do
@@ -54,7 +56,7 @@ describe DaisyUI::Pagination do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do
@@ -70,7 +72,7 @@ describe DaisyUI::Pagination do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option" do
         subject(:output) do
-          render described_class.new(:vertical, responsive: {viewport => :horizontal})
+          render described_class.new(:vertical, responsive: { viewport => :horizontal })
         end
 
         it "renders it separately with a responsive prefix" do

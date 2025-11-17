@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::Tabs do
@@ -51,7 +53,7 @@ describe DaisyUI::Tabs do
 
     describe "data" do
       subject(:output) do
-        render described_class.new(:boxed, data: {foo: "bar"})
+        render described_class.new(:boxed, data: { foo: "bar" })
       end
 
       it "renders it correctly" do
@@ -64,6 +66,10 @@ describe DaisyUI::Tabs do
     end
 
     describe "prefix" do
+      subject(:output) do
+        render described_class.new(:boxed)
+      end
+
       around do |example|
         original_prefix = DaisyUI.configuration.prefix
 
@@ -76,10 +82,6 @@ describe DaisyUI::Tabs do
         DaisyUI.configure do |config|
           config.prefix = original_prefix
         end
-      end
-
-      subject(:output) do
-        render described_class.new(:boxed)
       end
 
       it "renders it correctly" do
@@ -115,7 +117,7 @@ describe DaisyUI::Tabs do
     %i[sm md lg xl @sm @md @lg @xl].each do |viewport|
       context "when given an :#{viewport} responsive option as a single argument" do
         subject(:output) do
-          render described_class.new(:boxed, responsive: {viewport => :bordered})
+          render described_class.new(:boxed, responsive: { viewport => :bordered })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -130,7 +132,7 @@ describe DaisyUI::Tabs do
 
       context "when given multiple responsive options as an array" do
         subject(:output) do
-          render described_class.new(:boxed, responsive: {viewport => [:boxed, :bordered]})
+          render described_class.new(:boxed, responsive: { viewport => %i[boxed bordered] })
         end
 
         it "renders it separately with a responsive prefix" do
@@ -148,6 +150,10 @@ describe DaisyUI::Tabs do
       end
 
       context "when it's prefixed" do
+        subject(:output) do
+          render described_class.new(:boxed, responsive: { viewport => %i[boxed bordered] })
+        end
+
         around do |example|
           original_prefix = DaisyUI.configuration.prefix
 
@@ -160,10 +166,6 @@ describe DaisyUI::Tabs do
           DaisyUI.configure do |config|
             config.prefix = original_prefix
           end
-        end
-
-        subject(:output) do
-          render described_class.new(:boxed, responsive: {viewport => [:boxed, :bordered]})
         end
 
         it "renders it separately with a responsive prefix" do
@@ -209,6 +211,10 @@ describe DaisyUI::Tabs do
   end
 
   describe "conditional attributes" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
@@ -241,10 +247,6 @@ describe DaisyUI::Tabs do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <div role="tablist" class="tabs">
@@ -262,23 +264,27 @@ describe DaisyUI::Tabs do
         </div>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 
   describe "rendering full tabs with content" do
+    subject(:output) do
+      render component.new
+    end
+
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Tabs.new :lifted, boxed: false, id: "my_tabs_2" do |tabs|
-            tabs.tab "Tab 1", :active, :closed, data: {my: :tabs} do |tab|
+            tabs.tab "Tab 1", :active, :closed, data: { my: :tabs } do |tab|
               tab.content class: "bg-base-100 border-base-300 rounded-box p-6" do
                 "Tab content 1"
               end
             end
 
             tabs.tab "Tab 2", :open, class: "text-primary" do |tab|
-              tab.content class: "bg-base-100 border-base-300 rounded-box p-6", data: {my: :contents} do
+              tab.content class: "bg-base-100 border-base-300 rounded-box p-6", data: { my: :contents } do
                 "Tab content 2"
               end
             end
@@ -287,45 +293,41 @@ describe DaisyUI::Tabs do
       end
     end
 
-    subject(:output) do
-      render component.new
-    end
-
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
         <div role="tablist" class="tabs tabs-lifted">
-          <input 
-            type="radio" 
-            name="my_tabs_2" 
-            class="tab tab-active" 
-            role="tab" 
+          <input#{' '}
+            type="radio"#{' '}
+            name="my_tabs_2"#{' '}
+            class="tab tab-active"#{' '}
+            role="tab"#{' '}
             aria-label="Tab 1"
             closed
             data-my="tabs">
-          <div role="tabpanel" 
-               class="tab-content 
-                      bg-base-100 
-                      border-base-300 
-                      rounded-box 
+          <div role="tabpanel"#{' '}
+               class="tab-content#{' '}
+                      bg-base-100#{' '}
+                      border-base-300#{' '}
+                      rounded-box#{' '}
                       p-6">Tab content 1</div>
 
-          <input 
-            type="radio" 
-            name="my_tabs_2" 
-            class="tab text-primary" 
-            role="tab" 
+          <input#{' '}
+            type="radio"#{' '}
+            name="my_tabs_2"#{' '}
+            class="tab text-primary"#{' '}
+            role="tab"#{' '}
             aria-label="Tab 2" checked>
-          <div role="tabpanel" 
-               class="tab-content 
-                      bg-base-100 
-                      border-base-300 
-                      rounded-box 
+          <div role="tabpanel"#{' '}
+               class="tab-content#{' '}
+                      bg-base-100#{' '}
+                      border-base-300#{' '}
+                      rounded-box#{' '}
                       p-6"
               data-my="contents">Tab content 2</div>
         </div>
       HTML
 
-      is_expected.to eq(expected_html)
+      expect(output).to eq(expected_html)
     end
   end
 end

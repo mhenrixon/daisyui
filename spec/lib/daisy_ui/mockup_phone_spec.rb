@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe DaisyUI::MockupPhone do
@@ -8,7 +10,7 @@ describe DaisyUI::MockupPhone do
       <div class="mockup-phone"></div>
     HTML
 
-    is_expected.to eq(expected_html)
+    expect(output).to eq(expected_html)
   end
 
   describe "with part methods" do
@@ -33,7 +35,7 @@ describe DaisyUI::MockupPhone do
 
   describe "data" do
     subject(:output) do
-      render described_class.new(data: {foo: "bar"})
+      render described_class.new(data: { foo: "bar" })
     end
 
     it "renders it correctly" do

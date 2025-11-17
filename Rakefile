@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require "bundler/gem_tasks"
 require "time"
 
 namespace :release do
   desc "Bump version (specify VERSION=x.x.x)"
   task :bump_version do
-    new_version = ENV["VERSION"]
+    new_version = ENV.fetch("VERSION", nil)
     raise "Please specify VERSION=x.x.x" unless new_version
 
     # Update version.rb
@@ -36,7 +38,7 @@ namespace :release do
   end
 
   desc "Build, tag, and push gem without creating GitHub release"
-  task publish: [:bump_version, :update_timestamp] do
+  task publish: %i[bump_version update_timestamp] do
     # Read version directly from the file
     version_content = File.read("lib/phlexy_ui/version.rb")
     version = version_content.match(/VERSION = "([^"]+)"/)[1]
@@ -54,7 +56,7 @@ namespace :release do
 
     # Create and push git tag
     sh "git tag -s #{tag} -m 'Version #{version}'"
-    sh "git push origin main"  # Push the commits
+    sh "git push origin main" # Push the commits
     sh "git push origin #{tag}" # Push the tag
 
     # Prompt for OTP

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PhlexHelpers
   class TestContext < Phlex::HTML
     def view_template(&)
