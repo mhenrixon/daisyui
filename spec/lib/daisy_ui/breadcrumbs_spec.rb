@@ -51,4 +51,36 @@ describe DaisyUI::Breadcrumbs do
       expect(output).to eq(expected_html)
     end
   end
+
+  describe "rendering breadcrumbs with add method" do
+    subject(:output) do
+      render component.new
+    end
+
+    let(:component) do
+      Class.new(Phlex::HTML) do
+        def view_template(&)
+          render DaisyUI::Breadcrumbs.new(class: "text-sm") do |bc|
+            bc.add(href: "/admin") { "Dashboard" }
+            bc.add(href: "/admin/transactions") { "Transactions" }
+            bc.add(class: "opacity-80") { "Details" }
+          end
+        end
+      end
+    end
+
+    it "is expected to match the formatted HTML" do
+      expected_html = html <<~HTML
+        <div class="breadcrumbs text-sm">
+          <ul>
+            <li><a href="/admin">Dashboard</a></li>
+            <li><a href="/admin/transactions">Transactions</a></li>
+            <li class="opacity-80">Details</li>
+          </ul>
+        </div>
+      HTML
+
+      expect(output).to eq(expected_html)
+    end
+  end
 end
