@@ -18,6 +18,7 @@ describe DaisyUI::Card do
       # Modifiers
       image_full: "image-full",
       border: "card-border",
+      bordered: "card-border",
       dash: "card-dash",
       side: "card-side",
       # Sizes

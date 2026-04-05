@@ -39,6 +39,10 @@ module DaisyUI
       # "lg:card-border"
       # "@lg:card-border"
       border: "card-border",
+      # "sm:card-border" "@sm:card-border"
+      # "md:card-border" "@md:card-border"
+      # "lg:card-border" "@lg:card-border"
+      bordered: "card-border",
       # "sm:card-dash"
       # "@sm:card-dash"
       # "md:card-dash"
