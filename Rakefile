@@ -110,10 +110,14 @@ task :release, %i[version force] do |_t, args|
   RUBY
   success "Updated #{updated_at_file} to #{timestamp}"
 
-  # Step 3: Update lockfile and verify gem builds cleanly
+  # Step 3: Update lockfiles and verify gem builds cleanly
   header "Build verification"
   sh("bundle install --quiet")
   success "Gemfile.lock updated"
+  if File.exist?("docs/Gemfile.lock")
+    sh("cd docs && bundle install --quiet")
+    success "docs/Gemfile.lock updated"
+  end
   sh("gem build daisyui.gemspec --strict")
   sh("rm -f daisyui-*.gem")
   success "Gem builds cleanly"
@@ -121,6 +125,7 @@ task :release, %i[version force] do |_t, args|
   # Step 4: Commit version bump
   header "Git commit"
   files_to_stage = [version_file, updated_at_file, "Gemfile.lock"]
+  files_to_stage << "docs/Gemfile.lock" if File.exist?("docs/Gemfile.lock")
   version_changed = files_to_stage.any? do |f|
     !`git diff #{f}`.strip.empty? || !`git diff --cached #{f}`.strip.empty?
   end
