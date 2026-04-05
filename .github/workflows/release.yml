@@ -129,16 +129,22 @@ jobs:
           ruby-version: "3.4"
 
       - name: Configure RubyGems trusted publishing credentials
-        uses: rubygems/configure-rubygems-credentials@v1.0.0
+        uses: rubygems/configure-rubygems-credentials@bc6dd217f8a4f919d6835fcfefd470ef821f5c44 # v1.0.0
 
       - name: Push to RubyGems with Sigstore attestation
         run: |
           GEM_NAME=$(ls daisyui-*.gem)
+          VERSION="${GEM_NAME%.gem}"
+          VERSION="${VERSION#daisyui-}"
 
-          gem exec sigstore-cli sign "$GEM_NAME" \
-            --bundle "$GEM_NAME.sigstore.json"
+          if gem info daisyui --exact --remote 2>/dev/null | grep -q "daisyui ($VERSION)"; then
+            echo "::warning::Version $VERSION already published to RubyGems, skipping push"
+          else
+            gem exec sigstore-cli sign "$GEM_NAME" \
+              --bundle "$GEM_NAME.sigstore.json"
 
-          gem push "$GEM_NAME" --attestation "$GEM_NAME.sigstore.json"
+            gem push "$GEM_NAME" --attestation "$GEM_NAME.sigstore.json"
+          fi
 
       - name: Upload Sigstore bundle
         uses: actions/upload-artifact@v4
@@ -172,4 +178,5 @@ jobs:
             "$GEM_NAME.sha256" \
             "$GEM_NAME.sha512" \
             "$GEM_NAME.sigstore.json" \
-            --repo "${{ github.repository }}"
+            --repo "${{ github.repository }}" \
+            --clobber

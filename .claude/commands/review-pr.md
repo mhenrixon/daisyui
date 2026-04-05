@@ -32,7 +32,7 @@ Tests without responsive coverage    -> Test at least one responsive modifier
 
 ## Output Format
 
-```
+```markdown
 ## Files Requiring Manual Review
 
 | File | Reason |
@@ -54,7 +54,7 @@ Tests without responsive coverage    -> Test at least one responsive modifier
 
 ## Tools
 
-```
+```text
 mcp__github__pull_request_read
   method: "get"        -> PR details
   method: "get_diff"   -> Changes

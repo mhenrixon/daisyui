@@ -42,6 +42,9 @@ task :release, %i[version force] do |_t, args|
 
   force = args[:force]&.to_s&.downcase == "force"
 
+  current_branch = `git branch --show-current`.strip
+  abort "\e[31mAborting: must be on main branch to release (currently on #{current_branch})\e[0m" unless current_branch == "main"
+
   dirty = `git status --porcelain`.strip
   abort "\e[31mAborting: working directory is not clean.\e[0m\n#{dirty}" unless dirty.empty?
 
