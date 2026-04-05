@@ -40,6 +40,22 @@ describe DaisyUI::Link do
       end
     end
 
+    context "when given stale card modifiers" do
+      %i[bordered normal compact side glass image_full].each do |stale_modifier|
+        context "when given :#{stale_modifier}" do
+          subject(:output) { render described_class.new(stale_modifier) }
+
+          it "ignores the unknown modifier" do
+            expected_html = html <<~HTML
+              <a></a>
+            HTML
+
+            expect(output).to eq(expected_html)
+          end
+        end
+      end
+    end
+
     context "when given multiple modifiers" do
       subject(:output) { render described_class.new(:primary, :hover) }
 
