@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.4.8
+ARG RUBY_VERSION=4.0.2
 FROM ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
@@ -27,7 +27,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential curl git libvips pkg-config unzip
 
 # Install Bun
-ARG BUN_VERSION=1.3.2
+ARG BUN_VERSION=1.3.11
 ENV BUN_INSTALL=/usr/local/bun
 ENV PATH=/usr/local/bun/bin:$PATH
 RUN curl -fsSL https://bun.sh/install | bash -s -- "bun-v${BUN_VERSION}"
