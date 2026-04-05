@@ -34,4 +34,18 @@ describe DaisyUI::Skeleton do
       expect(output).to eq(expected_html)
     end
   end
+
+  describe "modifiers" do
+    context "when given :text modifier" do
+      subject(:output) { render described_class.new(:text) }
+
+      it "renders skeleton-text class" do
+        expected_html = html <<~HTML
+          <div class="skeleton skeleton-text"></div>
+        HTML
+
+        expect(output).to eq(expected_html)
+      end
+    end
+  end
 end

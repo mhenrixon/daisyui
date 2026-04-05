@@ -8,6 +8,11 @@ module DaisyUI
       public_send(as, class: classes, **attributes, &)
     end
 
-    register_modifiers({})
+    register_modifiers(
+      # "sm:skeleton-text" "@sm:skeleton-text"
+      # "md:skeleton-text" "@md:skeleton-text"
+      # "lg:skeleton-text" "@lg:skeleton-text"
+      text: "skeleton-text"
+    )
   end
 end
