@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.executables = ["daisyui-mcp"]
   s.homepage = "https://github.com/mhenrixon/daisyui"
   s.metadata = {
-    "homepage_uri" => "https://github.com/mhenrixon/daisyui",
     "source_code_uri" => "https://github.com/mhenrixon/daisyui",
     "changelog_uri" => "https://github.com/mhenrixon/daisyui/blob/main/CHANGELOG.md",
     "bug_tracker_uri" => "https://github.com/mhenrixon/daisyui/issues",
