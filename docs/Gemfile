@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "turbo-rails"
 
 # Views
-gem "daisyui", path: "..", require: "daisy_ui"
+gem "daisyui", path: ".."
 gem "method_source"
 gem "phlex-rails"
 gem "rouge"

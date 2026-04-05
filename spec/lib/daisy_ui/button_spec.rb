@@ -15,9 +15,7 @@ describe DaisyUI::Button do
 
   describe "conditions" do
     {
-      # Modifiers
-      no_animation: "no-animation",
-      glass: "glass",
+      # Styles
       ghost: "btn-ghost",
       link: "btn-link",
       outline: "btn-outline",

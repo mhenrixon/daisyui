@@ -81,8 +81,7 @@ module DaisyUI
       # "@md:menu-horizontal"
       # "lg:menu-horizontal"
       # "@lg:menu-horizontal"
-      horizontal: "menu-horizontal",
-      **COLOR_MODIFIERS
+      horizontal: "menu-horizontal"
     )
   end
 end

@@ -12,14 +12,7 @@ describe DaisyUI::Menu do
       md: "menu-md",
       lg: "menu-lg",
       vertical: "menu-vertical",
-      horizontal: "menu-horizontal",
-      base_100: "bg-base-100 text-base-content",
-      base_200: "bg-base-200 text-base-content",
-      base_300: "bg-base-300 text-base-content",
-      info: "bg-info text-info-content",
-      success: "bg-success text-success-content",
-      warning: "bg-warning text-warning-content",
-      error: "bg-error text-error-content"
+      horizontal: "menu-horizontal"
     }.each do |condition, class_name|
       context "when given :#{condition} condition" do
         subject(:output) { render described_class.new(condition) }
@@ -35,9 +28,9 @@ describe DaisyUI::Menu do
     end
 
     {
-      disabled: "disabled",
-      active: "active",
-      focus: "focus"
+      disabled: "menu-disabled",
+      active: "menu-active",
+      focus: "menu-focus"
     }.each do |condition, css|
       context "when given :#{condition} condition on an item" do
         subject(:output) do
@@ -363,7 +356,7 @@ describe DaisyUI::Menu do
       expected_html = html <<~HTML
         <ul class="menu bg-base-200 w-52">
           <li class="menu-title">My Menu</li>
-          <li class="disabled"><a>Item 1</a></li>
+          <li class="menu-disabled"><a>Item 1</a></li>
           <li data-my="item_menus">
             <details open>
               <summary>Parent 1</summary>
@@ -517,7 +510,7 @@ describe DaisyUI::Menu do
     let(:component) do
       Class.new(Phlex::HTML) do
         def view_template(&)
-          render DaisyUI::Menu.new :base_200, class: "rounded-box w-56" do |menu|
+          render DaisyUI::Menu.new class: "rounded-box w-56" do |menu|
             menu.item do |item|
               item.title do
                 "Title"
@@ -550,7 +543,7 @@ describe DaisyUI::Menu do
 
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
-        <ul class="menu bg-base-200 text-base-content rounded-box w-56">
+        <ul class="menu rounded-box w-56">
           <li>
             <h2 class="menu-title">Title</h2>
             <ul>

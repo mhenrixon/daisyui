@@ -22,27 +22,12 @@ module DaisyUI
     end
 
     register_modifiers(
-      # "sm:disabled"
-      # "@sm:disabled"
-      # "md:disabled"
-      # "@md:disabled"
-      # "lg:disabled"
-      # "@lg:disabled"
-      disabled: "disabled",
-      # "sm:active"
-      # "@sm:active"
-      # "md:active"
-      # "@md:active"
-      # "lg:active"
-      # "@lg:active"
-      active: "active",
-      # "sm:focus"
-      # "@sm:focus"
-      # "md:focus"
-      # "@md:focus"
-      # "lg:focus"
-      # "@lg:focus"
-      focus: "focus"
+      # "sm:menu-disabled" "md:menu-disabled" "lg:menu-disabled"
+      disabled: "menu-disabled",
+      # "sm:menu-active" "md:menu-active" "lg:menu-active"
+      active: "menu-active",
+      # "sm:menu-focus" "md:menu-focus" "lg:menu-focus"
+      focus: "menu-focus"
     )
   end
 end

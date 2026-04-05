@@ -4,7 +4,7 @@ require "bundler/setup"
 Bundler.setup
 
 require "date"
-require "daisy_ui"
+require "daisyui"
 require "super_diff/rspec"
 
 Dir["./spec/support/**/*.rb"].each do |f|
