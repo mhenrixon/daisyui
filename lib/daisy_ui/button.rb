@@ -30,26 +30,8 @@ module DaisyUI
     attr_reader :modal
 
     register_modifiers(
-      # "sm:no-animation"
-      # "@sm:no-animation"
-      # "md:no-animation"
-      # "@md:no-animation"
-      # "lg:no-animation"
-      # "@lg:no-animation"
-      no_animation: "no-animation",
-      # "sm:glass"
-      # "@sm:glass"
-      # "md:glass"
-      # "@md:glass"
-      # "lg:glass"
-      # "@lg:glass"
-      glass: "glass",
-      # "sm:btn-ghost"
-      # "@sm:btn-ghost"
-      # "md:btn-ghost"
-      # "@md:btn-ghost"
-      # "lg:btn-ghost"
-      # "@lg:btn-ghost"
+      # Styles
+      # "sm:btn-ghost" "md:btn-ghost" "lg:btn-ghost"
       ghost: "btn-ghost",
       # "sm:btn-link"
       # "@sm:btn-link"

@@ -18,7 +18,6 @@ module Examples
           SizesComponent,
           ResponsiveComponent,
           WideComponent,
-          GlassComponent,
           WithDifferentHtmlTagsComponent,
           DisabledComponent,
           SquareComponent,
@@ -28,7 +27,6 @@ module Examples
           BlockComponent,
           WithLoadingSpinnerComponent,
           WithLoadingSpinnerAndTextComponent,
-          NoAnimationComponent,
         ]
       end
     end

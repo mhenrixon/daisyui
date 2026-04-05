@@ -7,7 +7,7 @@ describe DaisyUI::Link do
 
   it "is expected to match the formatted HTML" do
     expected_html = html <<~HTML
-      <a></a>
+      <a class="link"></a>
     HTML
 
     expect(output).to eq(expected_html)
@@ -15,9 +15,7 @@ describe DaisyUI::Link do
 
   describe "modifiers" do
     {
-      underlined: "link",
       hover: "link-hover",
-      active: "active",
       primary: "link-primary",
       secondary: "link-secondary",
       accent: "link-accent",
@@ -32,10 +30,26 @@ describe DaisyUI::Link do
 
         it "renders it apart from the main class" do
           expected_html = html <<~HTML
-            <a class="#{css}"></a>
+            <a class="link #{css}"></a>
           HTML
 
           expect(output).to eq(expected_html)
+        end
+      end
+    end
+
+    context "when given stale card modifiers" do
+      %i[bordered normal compact side glass image_full].each do |stale_modifier|
+        context "when given :#{stale_modifier}" do
+          subject(:output) { render described_class.new(stale_modifier) }
+
+          it "ignores the unknown modifier" do
+            expected_html = html <<~HTML
+              <a class="link"></a>
+            HTML
+
+            expect(output).to eq(expected_html)
+          end
         end
       end
     end
@@ -45,7 +59,7 @@ describe DaisyUI::Link do
 
       it "renders them separately" do
         expected_html = html <<~HTML
-          <a class="link-primary link-hover"></a>
+          <a class="link link-primary link-hover"></a>
         HTML
 
         expect(output).to eq(expected_html)
@@ -62,7 +76,7 @@ describe DaisyUI::Link do
 
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
-            <a class="link-neutral #{viewport}:link-primary"></a>
+            <a class="link link-neutral #{viewport}:link-primary"></a>
           HTML
 
           expect(output).to eq(expected_html)
@@ -76,7 +90,7 @@ describe DaisyUI::Link do
 
         it "renders it separately with a responsive prefix" do
           expected_html = html <<~HTML
-            <a class="link-neutral #{viewport}:link-primary #{viewport}:link-hover"></a>
+            <a class="link link-neutral #{viewport}:link-primary #{viewport}:link-hover"></a>
           HTML
 
           expect(output).to eq(expected_html)
@@ -94,7 +108,7 @@ describe DaisyUI::Link do
       Class.new(Phlex::HTML) do
         def view_template(&)
           render DaisyUI::Link.new(
-            :active,
+            :primary,
             href: "/test",
             class: "test",
             data: { my: "data" }
@@ -109,7 +123,7 @@ describe DaisyUI::Link do
 
     it "is expected to match the formatted HTML" do
       expected_html = html <<~HTML
-        <a class="active test" href="/test" data-my="data">
+        <a class="link link-primary test" href="/test" data-my="data">
           <span>Link text</span>
         </a>
       HTML
