@@ -45,11 +45,10 @@ env:
     RAILS_LOG_TO_STDOUT: "true"
   secret:
     - RAILS_MASTER_KEY
-    - DATABASE_URL
 
 # Persist SQLite database.
 volumes:
-  - "daisyui_docs_data:/rails/data"
+  - "daisyui_docs_data:/data"
 
 # Configure health check.
 healthcheck:
@@ -63,4 +62,4 @@ boot:
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # temporary errors during deploy.
-asset_path: /rails/public/assets
+asset_path: /gem/docs/public/assets
