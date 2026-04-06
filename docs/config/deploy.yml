@@ -28,10 +28,12 @@ registry:
   password:
     - KAMAL_REGISTRY_PASSWORD
 
-# Configure builder for multi-arch builds.
+# Builder uses repo root as context so path gem dependency resolves.
 builder:
   arch: amd64
   remote: false
+  context: ..
+  dockerfile: docs/Dockerfile
   cache:
     type: registry
     options: mode=max,image-manifest=true,oci-mediatypes=true

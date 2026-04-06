@@ -1,0 +1,35 @@
+# Git
+/.git/
+/.gitignore
+/.gitattributes
+
+# CI/IDE/Editor
+/.github/
+/.claude/
+/.flow/
+.DS_Store
+
+# Gem development files (not needed in Docker)
+/spec/
+/bin/
+/Rakefile
+/.rubocop.yml
+/.rspec
+/CLAUDE.md
+/codedb.snapshot
+
+# Docs development files
+/docs/.bundle
+/docs/node_modules/
+/docs/app/assets/builds/*
+!/docs/app/assets/builds/.keep
+/docs/public/assets
+/docs/log/*
+/docs/tmp/*
+/docs/storage/*
+/docs/spec/
+/docs/.dockerignore
+/docs/.kamal/
+/docs/config/master.key
+/docs/config/credentials/*.key
+/docs/.env*
