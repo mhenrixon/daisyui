@@ -69,6 +69,9 @@ jobs:
           bundler-cache: true
           working-directory: docs
 
+      - name: Install 1Password CLI
+        uses: 1password/install-cli-action@v1
+
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.1
         with:
@@ -85,7 +88,7 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_DOMAIN: ${{ secrets.DEPLOY_DOMAIN }}
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
         run: |
           bundle exec kamal deploy \
             --skip-push \

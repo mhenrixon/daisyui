@@ -4,22 +4,23 @@ service: daisyui-docs
 # Name of the container image.
 image: mhenrixon/daisyui-docs
 
-# Deploy to these servers.
+# Deploy to the OSS docs server.
 servers:
   web:
     hosts:
       - <%= ENV["DEPLOY_HOST"] %>
-    labels:
-      traefik.http.routers.daisyui-docs.rule: Host(`<%= ENV["DEPLOY_DOMAIN"] %>`)
-      traefik.http.routers.daisyui-docs.entrypoints: websecure
-      traefik.http.routers.daisyui-docs.tls.certresolver: letsencrypt
-    options:
-      network: traefik
 
-# Enable SSL auto certification via Let's Encrypt and target port 443.
+# kamal-proxy handles routing by Host header.
+# Cloudflare Tunnel terminates TLS at the edge, then forwards
+# http://localhost:80 -> kamal-proxy -> this container.
 proxy:
-  ssl: true
+  ssl: false
   host: <%= ENV["DEPLOY_DOMAIN"] %>
+  app_port: 3000
+  healthcheck:
+    path: /up
+    interval: 5
+    timeout: 60
 
 # Credentials for your image host.
 registry:
@@ -49,11 +50,6 @@ env:
 # Persist SQLite database.
 volumes:
   - "daisyui_docs_data:/data"
-
-# Configure health check.
-healthcheck:
-  path: /up
-  port: 3000
 
 # Configure boot options.
 boot:

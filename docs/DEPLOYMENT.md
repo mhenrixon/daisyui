@@ -11,19 +11,39 @@ rake release[X.Y.Z]
               ├─> builds Docker image (repo root context)
               ├─> pushes to ghcr.io/mhenrixon/daisyui-docs:vX.Y.Z
               └─> Kamal deploys to the docs server via SSH
+                    └─> kamal-proxy routes by Host header
+                          └─> Cloudflare Tunnel surfaces it publicly
 ```
+
+## Architecture
+
+```
+Internet
+   │  HTTPS (TLS at edge)
+   ▼
+Cloudflare edge
+   │  Tunnel
+   ▼
+[oss-docs server]
+   ├─ cloudflared (systemd) ─► localhost:80
+   │                              │
+   ├─ kamal-proxy ◄───────────────┘
+   │     │  Host: daisyui.zoolutions.llc
+   │     ▼
+   └─ daisyui-docs container
+```
+
+The server is provisioned by [`mhenrixon/oss-infrastructure`](https://github.com/mhenrixon/oss-infrastructure) (private). See that repo for the Terraform setup. The same server hosts docs for multiple gems (daisyui, pgbus, etc.) — each one is added by creating a Cloudflare Tunnel public hostname pointing at `localhost:80`.
 
 ## Prerequisites
 
 A docs server must exist with:
 
 - **Docker** installed
-- A **Traefik** container running on a Docker network named `traefik`
-- The **deploy SSH user** configured with the public key matching `SSH_PRIVATE_KEY` GitHub secret
-- **Open ports**: 22 (SSH), 80 (HTTP), 443 (HTTPS)
-- **DNS**: an A record pointing to the server for the `DEPLOY_DOMAIN`
-
-The server provisioning is handled by the [`mhenrixon/oss-infrastructure`](https://github.com/mhenrixon/oss-infrastructure) repo (private). See that repo for the Terraform setup.
+- **cloudflared** running as a systemd service, connected to a Cloudflare Tunnel
+- **kamal-proxy** running on `:80` (started automatically by Kamal on first deploy)
+- The **deploy SSH user** configured with the public key matching `SSH_PRIVATE_KEY`
+- A **Cloudflare Tunnel public hostname** for `${DEPLOY_DOMAIN}` routing to `http://localhost:80`
 
 ## GitHub Setup
 
@@ -33,10 +53,27 @@ In the daisyui repo settings, create an environment named `docs` with these secr
 |--------|-------------|
 | `SSH_PRIVATE_KEY` | Private key for the deploy user on the docs server |
 | `DEPLOY_HOST` | Server IP or hostname |
-| `DEPLOY_DOMAIN` | Public domain (e.g., `daisyui.example.com`) |
-| `RAILS_MASTER_KEY` | Contents of `docs/config/master.key` |
+| `DEPLOY_DOMAIN` | Public domain (e.g., `daisyui.zoolutions.llc`) |
+| `OP_SERVICE_ACCOUNT_TOKEN` | 1Password service account token (read access to the `oss-infrastructure` vault) |
 
 The `GITHUB_TOKEN` is automatically available and used for ghcr.io authentication.
+
+`RAILS_MASTER_KEY` is **not** a GitHub secret — it's fetched from 1Password at deploy time via Kamal's adapter (see `docs/.kamal/secrets`).
+
+## 1Password setup
+
+The gem's secrets live in 1Password under:
+
+```
+op://oss-infrastructure/daisyui-docs/
+  └─ rails_master_key  (concealed)
+```
+
+To add or rotate:
+
+```bash
+op item edit daisyui-docs --vault oss-infrastructure rails_master_key='<new-value>'
+```
 
 ## Container Layout
 
@@ -56,6 +93,12 @@ gh workflow run deploy-docs.yml --repo mhenrixon/daisyui
 # Tail logs on the server
 ssh deploy@$DEPLOY_HOST "docker logs daisyui-docs-web -f"
 
+# Tail kamal-proxy logs
+ssh deploy@$DEPLOY_HOST "docker logs kamal-proxy -f"
+
+# Tail cloudflared logs
+ssh deploy@$DEPLOY_HOST "sudo journalctl -u cloudflared -f"
+
 # SSH into the running container
 ssh deploy@$DEPLOY_HOST "docker exec -it daisyui-docs-web bash"
 
@@ -68,7 +111,10 @@ cd docs && bundle exec kamal deploy --version=v1.0.6
 | Symptom | Likely cause | Fix |
 |---------|--------------|-----|
 | Workflow fails at "Login to GHCR" | Token missing `packages: write` | Already set in workflow `permissions:` |
+| Workflow fails fetching from 1Password | Missing or expired `OP_SERVICE_ACCOUNT_TOKEN` | Rotate in 1Password and update GitHub secret |
 | Kamal "host unreachable" | `DEPLOY_HOST` wrong or SSH key not authorized | Verify secret + `~/.ssh/authorized_keys` on server |
-| 502 from Traefik after deploy | App container crashed; check `docker logs` | Usually missing `RAILS_MASTER_KEY` or DB permission issue |
-| Asset 404s after deploy | Asset bridging didn't run | Verify `asset_path` in `deploy.yml` matches container layout (`/gem/docs/public/assets`) |
+| 502 from Cloudflare after deploy | App container crashed or kamal-proxy not running | `docker logs daisyui-docs-web`, `docker logs kamal-proxy` |
+| 404 from kamal-proxy | `proxy.host` doesn't match `DEPLOY_DOMAIN` | Check the `host:` value in `docs/config/deploy.yml` matches the GitHub secret |
+| Tunnel showing as DOWN in CF dashboard | cloudflared not running on server | `sudo systemctl status cloudflared` on the server |
+| Asset 404s after deploy | Asset bridging didn't run | Verify `asset_path` in `deploy.yml` is `/gem/docs/public/assets` |
 | SQLite data lost | Volume not mounted correctly | Verify `daisyui_docs_data:/data` in `deploy.yml` volumes |
