@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email = "mikael@zoolutions.llc"
   s.files = IO.popen(%w[git ls-files -z], chdir: __dir__, err: IO::NULL) do |ls|
     ls.readlines("\x0", chomp: true).select do |f|
-      f.start_with?("exe/", "lib/") ||
+      f.start_with?("exe/", "lib/", "app/", "config/") ||
         f == "CHANGELOG.md" || f == "LICENSE.txt" || f == "README.md"
     end
   end

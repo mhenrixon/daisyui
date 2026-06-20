@@ -10,9 +10,16 @@ module DaisyUI
     # element itself (DaisyUI's `position-area` rule is on `.dropdown`).
     PLACEMENT_MODIFIERS = %i[start center end top bottom left right].freeze
 
-    def initialize(*modifiers, as: :div, id: nil, popover_id: nil, **)
+    # Default Stimulus identifier for the opt-in popover controller. Namespaced
+    # so it never collides with a consumer app's own `dropdown` controller.
+    DEFAULT_STIMULUS_IDENTIFIER = "daisy-dropdown"
+
+    def initialize(*modifiers, as: :div, id: nil, popover_id: nil, stimulus: false, **)
       @popover = modifiers.include?(:popover)
       @popover_id = popover_id if @popover
+      # stimulus: true enables the controller; a String/Symbol enables AND
+      # overrides the identifier. Only meaningful in :popover mode.
+      @stimulus = stimulus
       super(*modifiers, as:, id:, **)
     end
 
@@ -22,7 +29,7 @@ module DaisyUI
         # the popover menu are siblings, and `dropdown` + the placement class
         # ride the popover element (that is what carries `position-area`). The
         # wrapper here is a plain, non-positioning container.
-        public_send(as, **attributes) do
+        public_send(as, **popover_root_attributes) do
           yield self if block_given?
         end
       elsif tap_to_close?
@@ -90,13 +97,38 @@ module DaisyUI
       "#{popover_id}_anchor"
     end
 
+    # Whether the opt-in Stimulus controller is enabled (popover mode only).
+    def stimulus?
+      @popover && @stimulus
+    end
+
+    # Resolved Stimulus identifier: the default, or a caller-supplied override.
+    def stimulus_identifier
+      return DEFAULT_STIMULUS_IDENTIFIER if @stimulus == true
+
+      @stimulus.to_s
+    end
+
+    # Wrapper attributes; in opt-in Stimulus mode add `data-controller`, merged
+    # with any caller-supplied controller token (space-joined, not clobbered).
+    def popover_root_attributes
+      attrs = attributes
+      return attrs unless stimulus?
+
+      data = (attrs[:data] || {}).dup
+      data[:controller] = [data[:controller], stimulus_identifier].compact.join(" ")
+      attrs.merge(data:)
+    end
+
     # Trigger wiring: a real <button> (required for the Popover API invoker),
     # `popovertarget` pointing at the menu, an `anchor-name` for CSS anchor
-    # positioning, and `aria-haspopup`. Caller `style`/`aria` are merged.
+    # positioning, and `aria-haspopup`. Caller `style`/`aria` are merged. In
+    # opt-in Stimulus mode, also add the `trigger` target.
     def popover_button_options(options)
       options[:popovertarget] = popover_id
       options[:style] = merge_style(options[:style], "anchor-name:--#{anchor_name}")
       options[:aria] = { haspopup: "menu" }.merge(options[:aria] || {})
+      merge_stimulus_data(options, target: "trigger") if stimulus?
       options
     end
 
@@ -112,6 +144,16 @@ module DaisyUI
       options[:id] = popover_id
       options[:popover] = "auto"
       options[:style] = merge_style(options[:style], "position-anchor:--#{anchor_name}")
+      merge_stimulus_data(options, target: "menu") if stimulus?
+      options
+    end
+
+    # Add a `data-<identifier>-target` to a child element's options without
+    # clobbering caller-supplied data.
+    def merge_stimulus_data(options, target:)
+      data = (options[:data] || {}).dup
+      data[:"#{stimulus_identifier}_target"] = target
+      options[:data] = data
       options
     end
 

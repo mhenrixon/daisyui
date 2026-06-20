@@ -194,6 +194,49 @@ Modern browsers fetch nothing extra; the polyfill loads only where it is needed.
 For WAI-ARIA roving keyboard navigation inside `role="menu"` menus (which a CSS
 polyfill cannot provide), see the optional Stimulus controller below.
 
+## Optional `daisy-dropdown` Stimulus controller
+
+The `:popover` dropdown needs **no JavaScript** on modern browsers. For two
+specific cases — a JS positioning fallback on browsers without CSS anchor
+positioning, and roving keyboard navigation over `role="menu"` items — the gem
+ships an **opt-in** Stimulus controller. It deliberately does **not** re-implement
+open/toggle, light-dismiss, or Escape; the native Popover API already handles
+those.
+
+Under Rails with importmap-rails, the gem auto-pins the controller (no manual
+pin). Register it once, lazily:
+
+```js
+// app/javascript/controllers/index.js
+import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading"
+lazyLoadControllersFrom("daisy_ui/controllers", application)
+```
+
+Then opt in per call site:
+
+```ruby
+Dropdown(:popover, :end, stimulus: true) do |dropdown|
+  dropdown.button(:ghost, :sm) { "Actions" }
+  dropdown.menu(:sm, class: "w-52") do |menu|
+    menu.item { a(href: "#", role: "menuitem") { "Edit" } }
+  end
+end
+```
+
+- `stimulus: true` wires the `daisy-dropdown` controller (namespaced to avoid
+  colliding with your own `dropdown` controller).
+- `stimulus: "your-id"` overrides the identifier.
+- The positioning fallback lazily imports `@floating-ui/dom` **only** when CSS
+  anchor positioning is unavailable, so modern browsers fetch nothing. Pin it
+  `preload: false` if you enable the controller:
+  `pin "@floating-ui/dom", preload: false`.
+- Enable keyboard navigation with
+  `data: { daisy_dropdown_keyboard_value: true }` on the dropdown.
+
+JS-bundler (esbuild/vite/webpack) consumers: import the controller from the
+gem's `app/javascript/daisy_ui/controllers/daisy_dropdown_controller.js` and
+register it manually.
+
 # MCP Server (Claude Code Integration)
 
 This gem includes an MCP (Model Context Protocol) server that provides component information to AI assistants like Claude Code.

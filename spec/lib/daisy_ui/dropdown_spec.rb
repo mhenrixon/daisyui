@@ -543,5 +543,45 @@ describe DaisyUI::Dropdown do
 
       expect(panel).to eq(expected_html)
     end
+
+    describe "stimulus: opt-in" do
+      it "emits NO stimulus attributes by default (zero-JS)" do
+        expect(output).not_to include("data-controller")
+        expect(output).not_to include("daisy-dropdown")
+      end
+
+      it "wires the daisy-dropdown controller + trigger/menu targets when stimulus: true" do
+        enhanced = render described_class.new(:popover, :end, popover_id: "m", stimulus: true) do |dropdown|
+          dropdown.button(:ghost, :sm) { "Trigger" }
+          dropdown.menu(:sm) { |menu| menu.item { "Edit" } }
+        end
+
+        expect(enhanced).to include('data-controller="daisy-dropdown"')
+        expect(enhanced).to match(/<button[^>]*data-daisy-dropdown-target="trigger"/)
+        expect(enhanced).to match(/<ul[^>]*data-daisy-dropdown-target="menu"/)
+      end
+
+      it "overrides the identifier when stimulus: is a String" do
+        enhanced = render described_class.new(:popover, popover_id: "m", stimulus: "vendor-dropdown") do |dropdown|
+          dropdown.button { "Trigger" }
+          dropdown.menu { |menu| menu.item { "Edit" } }
+        end
+
+        expect(enhanced).to include('data-controller="vendor-dropdown"')
+        expect(enhanced).to match(/data-vendor-dropdown-target="trigger"/)
+        expect(enhanced).not_to include("daisy-dropdown")
+      end
+
+      it "space-joins a caller-supplied controller instead of clobbering it" do
+        enhanced = render described_class.new(
+          :popover, popover_id: "m", stimulus: true, data: { controller: "analytics" }
+        ) do |dropdown|
+          dropdown.button { "Trigger" }
+          dropdown.menu { |menu| menu.item { "Edit" } }
+        end
+
+        expect(enhanced).to include('data-controller="analytics daisy-dropdown"')
+      end
+    end
   end
 end
