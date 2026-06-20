@@ -1,15 +1,31 @@
 # frozen_string_literal: true
 
+require "securerandom"
+
 module DaisyUI
   class Dropdown < Base
     self.component_class = :dropdown
 
-    def initialize(*modifiers, as: :div, id: nil, **options)
-      super
+    # Placement modifiers that, in :popover mode, must live on the popover
+    # element itself (DaisyUI's `position-area` rule is on `.dropdown`).
+    PLACEMENT_MODIFIERS = %i[start center end top bottom left right].freeze
+
+    def initialize(*modifiers, as: :div, id: nil, popover_id: nil, **)
+      @popover = modifiers.include?(:popover)
+      @popover_id = popover_id if @popover
+      super(*modifiers, as:, id:, **)
     end
 
     def view_template
-      if tap_to_close?
+      if popover?
+        # DaisyUI's popover variant is a FLAT structure: the trigger button and
+        # the popover menu are siblings, and `dropdown` + the placement class
+        # ride the popover element (that is what carries `position-area`). The
+        # wrapper here is a plain, non-positioning container.
+        public_send(as, **attributes) do
+          yield self if block_given?
+        end
+      elsif tap_to_close?
         details(class: classes, **attributes) do
           yield self if block_given?
         end
@@ -20,36 +36,87 @@ module DaisyUI
       end
     end
 
-    def button(*, **, &)
-      if tap_to_close?
-        render Button.new(*, as: :summary, **, &)
+    def button(*modifiers, **options, &)
+      if popover?
+        render Button.new(*modifiers, as: :button, **popover_button_options(options), &)
+      elsif tap_to_close?
+        render Button.new(*modifiers, as: :summary, **options, &)
       else
-        render Button.new(*, as: :div, role: :button, tabindex: 0, **, &)
+        render Button.new(*modifiers, as: :div, role: :button, tabindex: 0, **options, &)
       end
     end
 
-    def content(*, as: :div, **options, &)
+    def content(*modifiers, as: :div, **options, &)
+      return render_as(*modifiers, as:, **popover_menu_options(options), &) if popover?
+
       content_classes = component_classes("dropdown-content", options:)
 
       if tap_to_close?
-        render_as(*, as:, class: content_classes, **options, &)
+        render_as(*modifiers, as:, class: content_classes, **options, &)
       else
-        render_as(*, as:, tabindex: 0, class: content_classes, **options, &)
+        render_as(*modifiers, as:, tabindex: 0, class: content_classes, **options, &)
       end
     end
 
-    def menu(*, **options, &)
+    def menu(*modifiers, **options, &)
+      return render Menu.new(*modifiers, **popover_menu_options(options), &) if popover?
+
       menu_classes = component_classes("dropdown-content", options:)
 
       if tap_to_close?
-        render Menu.new(*, class: menu_classes, **options, &)
+        render Menu.new(*modifiers, class: menu_classes, **options, &)
       else
-        render Menu.new(*, tabindex: 0, class: menu_classes, **options, &)
+        render Menu.new(*modifiers, tabindex: 0, class: menu_classes, **options, &)
       end
+    end
+
+    def popover?
+      modifiers.include?(:popover)
     end
 
     def tap_to_close?
       modifiers.include?(:tap_to_close)
+    end
+
+    private
+
+    # Stable id shared by the trigger (`popovertarget`) and the popover element
+    # (`id`); the matching CSS anchor pairs `anchor-name` with `position-anchor`.
+    def popover_id
+      @popover_id ||= "dropdown_#{SecureRandom.hex(8)}"
+    end
+
+    def anchor_name
+      "#{popover_id}_anchor"
+    end
+
+    # Trigger wiring: a real <button> (required for the Popover API invoker),
+    # `popovertarget` pointing at the menu, an `anchor-name` for CSS anchor
+    # positioning, and `aria-haspopup`. Caller `style`/`aria` are merged.
+    def popover_button_options(options)
+      options[:popovertarget] = popover_id
+      options[:style] = merge_style(options[:style], "anchor-name:--#{anchor_name}")
+      options[:aria] = { haspopup: "menu" }.merge(options[:aria] || {})
+      options
+    end
+
+    # Popover element wiring: `dropdown` + placement classes (so `position-area`
+    # applies), `popover="auto"`, the shared id, and `position-anchor`. We strip
+    # any `dropdown-content` — that descendant rule forces `position: absolute`,
+    # which conflicts with the top-layer popover.
+    def popover_menu_options(options)
+      caller_classes = options.delete(:class).to_s.split.reject { |c| c == "dropdown-content" }
+      placement = PLACEMENT_MODIFIERS.select { |m| modifiers.include?(m) }.map { |m| apply_prefix("dropdown-#{m}") }
+
+      options[:class] = merge_classes(apply_prefix("dropdown"), *placement, *caller_classes)
+      options[:id] = popover_id
+      options[:popover] = "auto"
+      options[:style] = merge_style(options[:style], "position-anchor:--#{anchor_name}")
+      options
+    end
+
+    def merge_style(existing, added)
+      [existing, added].compact.join(";")
     end
 
     register_modifiers(

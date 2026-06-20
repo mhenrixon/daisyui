@@ -466,4 +466,82 @@ describe DaisyUI::Dropdown do
       end
     end
   end
+
+  describe ":popover modifier" do
+    subject(:output) do
+      render described_class.new(:popover, :end, popover_id: "actions_menu") do |dropdown|
+        dropdown.button(:ghost, :sm) { "Trigger" }
+        dropdown.menu(:sm, class: "w-56") do |menu|
+          menu.item { "Edit" }
+        end
+      end
+    end
+
+    it "renders DaisyUI's flat popover structure (button + menu as siblings)" do
+      expected_html = html <<~HTML
+        <div>
+          <button class="btn btn-ghost btn-sm"
+                  popovertarget="actions_menu"
+                  style="anchor-name:--actions_menu_anchor"
+                  aria-haspopup="menu">Trigger</button>
+          <ul class="menu menu-sm dropdown dropdown-end w-56"
+              popover="auto"
+              style="position-anchor:--actions_menu_anchor"
+              id="actions_menu">
+            <li>Edit</li>
+          </ul>
+        </div>
+      HTML
+
+      expect(output).to eq(expected_html)
+    end
+
+    it "puts dropdown + placement classes on the popover element, not the wrapper" do
+      # The popover <ul> carries `dropdown dropdown-end` (so `position-area`
+      # applies); the wrapper is a plain <div> with no positioning class.
+      expect(output).to match(/<ul class="[^"]*\bdropdown dropdown-end\b[^"]*"[^>]*popover="auto"/)
+      expect(output).to match(/\A<div><button/)
+    end
+
+    it "does not emit dropdown-content on the popover element" do
+      expect(output).not_to include("dropdown-content")
+    end
+
+    it "emits no stray dropdown-popover class for the unregistered modifier" do
+      expect(output).not_to include("dropdown-popover")
+    end
+
+    it "renders the trigger as a real <button> (required by the Popover API)" do
+      expect(output).to match(/<button[^>]*popovertarget="actions_menu"/)
+    end
+
+    it "auto-generates a popover id when none is supplied" do
+      generated = render described_class.new(:popover) do |dropdown|
+        dropdown.button { "Trigger" }
+        dropdown.menu { |menu| menu.item { "Edit" } }
+      end
+
+      expect(generated).to match(/popovertarget="dropdown_[0-9a-f]{16}"/)
+      expect(generated).to match(/id="dropdown_[0-9a-f]{16}"/)
+      expect(generated).to match(/popover="auto"/)
+    end
+
+    it "supports content (non-menu panel) with the same wiring" do
+      panel = render described_class.new(:popover, popover_id: "panel") do |dropdown|
+        dropdown.button { "Trigger" }
+        dropdown.content { "Card body" }
+      end
+
+      expected_html = html <<~HTML
+        <div>
+          <button class="btn" popovertarget="panel"
+                  style="anchor-name:--panel_anchor" aria-haspopup="menu">Trigger</button>
+          <div class="dropdown" id="panel" popover="auto"
+               style="position-anchor:--panel_anchor">Card body</div>
+        </div>
+      HTML
+
+      expect(panel).to eq(expected_html)
+    end
+  end
 end
