@@ -152,6 +152,48 @@ plugins: [
 ],
 ```
 
+## Dropdown `:popover` positioning on older browsers
+
+The `:popover` Dropdown modifier renders the menu in the browser top layer (so it
+escapes `overflow` clipping) and positions it next to the trigger using **CSS
+anchor positioning** (`anchor-name` / `position-anchor`). This works with **zero
+JavaScript** on Chrome/Edge 125+, Safari 26+, and Firefox 147+.
+
+```ruby
+Dropdown(:popover, :end) do |dropdown|
+  dropdown.button(:ghost, :sm) { "Actions" }
+  dropdown.menu(:sm, class: "w-52") do |menu|
+    menu.item { a(href: "#") { "Edit" } }
+    menu.item { a(href: "#") { "Delete" } }
+  end
+end
+```
+
+On **older engines (Safari < 26, Firefox < 147)** the popover still opens in the
+top layer, but without CSS anchor positioning it falls back to the viewport
+default (DaisyUI centers it via `@supports not (position-area)`), so it is not
+positioned next to the trigger.
+
+To position correctly on those browsers with no application code, pin the
+[OddBird CSS anchor positioning polyfill](https://github.com/oddbird/css-anchor-positioning)
+and load it lazily:
+
+```ruby
+# config/importmap.rb
+pin "@oddbird/css-anchor-positioning", to: "https://ga.jspm.io/npm:@oddbird/css-anchor-positioning@1/dist/css-anchor-positioning.fn.js", preload: false
+```
+
+```js
+// app/javascript/application.js — load only when the browser lacks native support
+if (!CSS.supports("anchor-name: --x")) {
+  import("@oddbird/css-anchor-positioning").then(({ default: polyfill }) => polyfill())
+}
+```
+
+Modern browsers fetch nothing extra; the polyfill loads only where it is needed.
+For WAI-ARIA roving keyboard navigation inside `role="menu"` menus (which a CSS
+polyfill cannot provide), see the optional Stimulus controller below.
+
 # MCP Server (Claude Code Integration)
 
 This gem includes an MCP (Model Context Protocol) server that provides component information to AI assistants like Claude Code.
