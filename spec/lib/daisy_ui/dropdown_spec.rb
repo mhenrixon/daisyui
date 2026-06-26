@@ -483,8 +483,11 @@ describe DaisyUI::Dropdown do
           <button class="btn btn-ghost btn-sm"
                   popovertarget="actions_menu"
                   style="anchor-name:--actions_menu_anchor"
-                  aria-haspopup="menu">Trigger</button>
+                  aria-haspopup="menu"
+                  aria-controls="actions_menu"
+                  aria-expanded="false">Trigger</button>
           <ul class="menu menu-sm dropdown dropdown-end w-56"
+              role="menu"
               popover="auto"
               style="position-anchor:--actions_menu_anchor"
               id="actions_menu">
@@ -515,6 +518,34 @@ describe DaisyUI::Dropdown do
       expect(output).to match(/<button[^>]*popovertarget="actions_menu"/)
     end
 
+    it "wires aria-controls and aria-expanded on the trigger" do
+      expect(output).to match(/<button[^>]*aria-controls="actions_menu"/)
+      expect(output).to match(/<button[^>]*aria-expanded="false"/)
+    end
+
+    it "marks the menu popover with role=\"menu\" for assistive tech" do
+      expect(output).to match(/<ul[^>]*role="menu"[^>]*popover="auto"/)
+    end
+
+    it "does not mark a non-menu content panel with role=\"menu\"" do
+      panel = render described_class.new(:popover, popover_id: "panel") do |dropdown|
+        dropdown.button { "Trigger" }
+        dropdown.content { "Card body" }
+      end
+
+      expect(panel).not_to match(/<div[^>]*class="dropdown"[^>]*role="menu"/)
+    end
+
+    it "lets a caller override the menu role" do
+      custom = render described_class.new(:popover, popover_id: "m") do |dropdown|
+        dropdown.button { "Trigger" }
+        dropdown.menu(role: "listbox") { |menu| menu.item { "Edit" } }
+      end
+
+      expect(custom).to match(/<ul[^>]*role="listbox"/)
+      expect(custom).not_to match(/role="menu"/)
+    end
+
     it "auto-generates a popover id when none is supplied" do
       generated = render described_class.new(:popover) do |dropdown|
         dropdown.button { "Trigger" }
@@ -535,7 +566,8 @@ describe DaisyUI::Dropdown do
       expected_html = html <<~HTML
         <div>
           <button class="btn" popovertarget="panel"
-                  style="anchor-name:--panel_anchor" aria-haspopup="menu">Trigger</button>
+                  style="anchor-name:--panel_anchor" aria-haspopup="menu"
+                  aria-controls="panel" aria-expanded="false">Trigger</button>
           <div class="dropdown" id="panel" popover="auto"
                style="position-anchor:--panel_anchor">Card body</div>
         </div>

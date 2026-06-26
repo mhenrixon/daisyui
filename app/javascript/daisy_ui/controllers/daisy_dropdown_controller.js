@@ -8,13 +8,20 @@ import { Controller } from "@hotwired/stimulus"
 //
 //   1. A positioning fallback for browsers WITHOUT CSS anchor positioning
 //      (Safari < 26, Firefox < 147). On modern browsers it does nothing and
-//      fetches no extra JavaScript.
-//   2. Optional roving keyboard navigation over [role="menuitem"] in the menu
+//      fetches no extra JavaScript. The fallback lazily imports @floating-ui/dom,
+//      which the HOST app must pin (see README) — if it is missing the menu still
+//      opens (native popover), just unpositioned, and a console warning is logged.
+//   2. Optional roving keyboard navigation over the menu's focusable items
 //      (enable with data-daisy-dropdown-keyboard-value="true").
 //
 // State is driven entirely by the popover's native `toggle` event; there is no
 // internal open flag, no document-level listeners, and no display toggling.
 const OFFSET = 4
+
+// Focusable, interactive menu items. Prefers explicit role="menuitem", but falls
+// back to the links/buttons DaisyUI menus actually render (<li><a>…</a></li>), so
+// keyboard nav works on stock markup without forcing roles onto caller content.
+const ITEM_SELECTOR = '[role="menuitem"]:not([aria-disabled="true"]), a[href]:not([aria-disabled="true"]), button:not([disabled])'
 
 export default class extends Controller {
   static targets = ["trigger", "menu"]
@@ -41,13 +48,21 @@ export default class extends Controller {
   }
 
   async #onOpen() {
+    // The native Popover API does not mirror open state onto the invoker, so
+    // sync aria-expanded ourselves for assistive tech.
+    this.triggerEl?.setAttribute("aria-expanded", "true")
     if (this.needsJsPositioning) await this.#position()
     if (this.keyboardValue) this.#bindKeyboard()
   }
 
   #onClose() {
+    this.triggerEl?.setAttribute("aria-expanded", "false")
     this.#teardownOpen()
     // Do NOT restore focus — the native popover already returns focus to the trigger.
+  }
+
+  #isOpen() {
+    return this.menuEl?.matches(":popover-open") ?? false
   }
 
   #teardownOpen() {
@@ -65,7 +80,25 @@ export default class extends Controller {
     if (!this.triggerEl) return
 
     // Lazy + feature-gated, so modern browsers never fetch the positioning lib.
-    const { computePosition, autoUpdate, flip, shift, offset } = await import("@floating-ui/dom")
+    // The host app is responsible for pinning @floating-ui/dom; if it is absent
+    // we degrade gracefully (native popover still opens, just unpositioned).
+    let floatingUi
+    try {
+      floatingUi = await import("@floating-ui/dom")
+    } catch (error) {
+      console.warn(
+        "[daisy-dropdown] @floating-ui/dom is not available; the popover will open unpositioned. " +
+          "Pin it in your import map to enable the legacy-browser positioning fallback.",
+        error,
+      )
+      return
+    }
+
+    // A fast open→close during the dynamic import may have already closed us;
+    // bail rather than position (and leak an autoUpdate on) a closed menu.
+    if (!this.#isOpen()) return
+
+    const { computePosition, autoUpdate, flip, shift, offset } = floatingUi
 
     this.menuEl.style.position = "fixed"
     this.menuEl.style.margin = "0"
@@ -128,7 +161,7 @@ export default class extends Controller {
   }
 
   #items() {
-    return Array.from(this.menuEl.querySelectorAll('[role="menuitem"]'))
+    return Array.from(this.menuEl.querySelectorAll(ITEM_SELECTOR))
   }
 
   #supportsAnchorPositioning() {

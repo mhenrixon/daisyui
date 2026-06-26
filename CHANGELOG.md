@@ -8,8 +8,10 @@
 - `Dropdown` `:popover` modifier — renders the menu via the native Popover API
   and CSS anchor positioning, so it opens in the top layer and escapes
   `overflow` clipping (e.g. inside a table's `overflow-x-auto`). Accepts a
-  `popover_id:` for a stable id. Default and `:tap_to_close` dropdowns are
-  unchanged. See the README "Dropdown `:popover` positioning" note for the
+  `popover_id:` for a stable id. Wires `aria-controls`/`aria-expanded` on the
+  trigger and `role="menu"` on the menu popover (the latter overridable, and
+  omitted for non-menu `content` panels). Default and `:tap_to_close` dropdowns
+  are unchanged. See the README "Dropdown `:popover` positioning" note for the
   optional older-browser polyfill.
 - Opt-in `daisy-dropdown` Stimulus controller for `:popover` dropdowns
   (`Dropdown(:popover, stimulus: true)`), delivered to importmap-rails apps via

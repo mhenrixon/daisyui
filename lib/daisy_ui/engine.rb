@@ -14,9 +14,10 @@ module DaisyUI
   #
   # The controller is opt-in at the markup level (`Dropdown(:popover, stimulus:
   # true)`), so apps that never opt in ship no extra behavior.
+  # Asset-only engine: no isolate_namespace, since it exposes no routes, models,
+  # or helpers — only static JavaScript — and namespacing would risk surprises in
+  # the host app for no benefit.
   class Engine < ::Rails::Engine
-    isolate_namespace DaisyUI
-
     JAVASCRIPT_PATH = root.join("app/javascript")
 
     initializer "daisy_ui.assets" do |app|
@@ -24,11 +25,12 @@ module DaisyUI
     end
 
     initializer "daisy_ui.importmap", before: "importmap" do |app|
-      if app.config.respond_to?(:importmap)
-        app.config.importmap.paths << root.join("config/importmap.rb")
-        # Reload the gem's controller in development when it changes.
-        app.config.importmap.cache_sweepers << JAVASCRIPT_PATH
-      end
+      next unless app.config.respond_to?(:importmap)
+
+      importmap = app.config.importmap
+      importmap.paths << root.join("config/importmap.rb") if importmap.respond_to?(:paths)
+      # Reload the gem's controller in development when it changes.
+      importmap.cache_sweepers << JAVASCRIPT_PATH if importmap.respond_to?(:cache_sweepers)
     end
   end
 end

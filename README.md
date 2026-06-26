@@ -218,7 +218,7 @@ Then opt in per call site:
 Dropdown(:popover, :end, stimulus: true) do |dropdown|
   dropdown.button(:ghost, :sm) { "Actions" }
   dropdown.menu(:sm, class: "w-52") do |menu|
-    menu.item { a(href: "#", role: "menuitem") { "Edit" } }
+    menu.item { a(href: "#", role: "menuitem", tabindex: "-1") { "Edit" } }
   end
 end
 ```
@@ -227,11 +227,22 @@ end
   colliding with your own `dropdown` controller).
 - `stimulus: "your-id"` overrides the identifier.
 - The positioning fallback lazily imports `@floating-ui/dom` **only** when CSS
-  anchor positioning is unavailable, so modern browsers fetch nothing. Pin it
-  `preload: false` if you enable the controller:
-  `pin "@floating-ui/dom", preload: false`.
+  anchor positioning is unavailable (Safari < 26, Firefox < 147), so modern
+  browsers fetch nothing. The gem does **not** bundle it — if you enable the
+  controller **and** need to support those browsers, pin it yourself (lazy, so
+  modern browsers still skip it):
+
+  ```ruby
+  # config/importmap.rb
+  pin "@floating-ui/dom", to: "https://ga.jspm.io/npm:@floating-ui/dom@1.7.6/dist/floating-ui.dom.mjs", preload: false
+  ```
+
+  If the pin is missing the menu still opens (native popover) — it just won't be
+  repositioned on those legacy browsers, and the controller logs a console
+  warning. Evergreen-only apps can skip the pin entirely.
 - Enable keyboard navigation with
-  `data: { daisy_dropdown_keyboard_value: true }` on the dropdown.
+  `data: { daisy_dropdown_keyboard_value: true }` on the dropdown. Roving focus
+  targets `role="menuitem"` items, falling back to links/buttons in the menu.
 
 JS-bundler (esbuild/vite/webpack) consumers: import the controller from the
 gem's `app/javascript/daisy_ui/controllers/daisy_dropdown_controller.js` and

@@ -66,7 +66,10 @@ module DaisyUI
     end
 
     def menu(*modifiers, **options, &)
-      return render Menu.new(*modifiers, **popover_menu_options(options), &) if popover?
+      if popover?
+        options[:role] ||= "menu"
+        return render Menu.new(*modifiers, **popover_menu_options(options), &)
+      end
 
       menu_classes = component_classes("dropdown-content", options:)
 
@@ -122,12 +125,14 @@ module DaisyUI
 
     # Trigger wiring: a real <button> (required for the Popover API invoker),
     # `popovertarget` pointing at the menu, an `anchor-name` for CSS anchor
-    # positioning, and `aria-haspopup`. Caller `style`/`aria` are merged. In
-    # opt-in Stimulus mode, also add the `trigger` target.
+    # positioning, and ARIA wiring. `aria-controls`/`aria-expanded` give assistive
+    # tech the trigger<->menu relationship and open state (the native Popover API
+    # does not mirror open state onto the invoker; the Stimulus controller keeps
+    # `aria-expanded` in sync when enabled). Caller `style`/`aria` are merged.
     def popover_button_options(options)
       options[:popovertarget] = popover_id
       options[:style] = merge_style(options[:style], "anchor-name:--#{anchor_name}")
-      options[:aria] = { haspopup: "menu" }.merge(options[:aria] || {})
+      options[:aria] = { haspopup: "menu", controls: popover_id, expanded: "false" }.merge(options[:aria] || {})
       merge_stimulus_data(options, target: "trigger") if stimulus?
       options
     end
@@ -135,7 +140,8 @@ module DaisyUI
     # Popover element wiring: `dropdown` + placement classes (so `position-area`
     # applies), `popover="auto"`, the shared id, and `position-anchor`. We strip
     # any `dropdown-content` — that descendant rule forces `position: absolute`,
-    # which conflicts with the top-layer popover.
+    # which conflicts with the top-layer popover. (`role="menu"` is added by
+    # `menu`, not here, so a non-menu `content` panel is not mislabeled.)
     def popover_menu_options(options)
       caller_classes = Array(options.delete(:class)).flat_map { |v| v.to_s.split }.reject { |c| c.empty? || c == "dropdown-content" }
       placement = PLACEMENT_MODIFIERS.select { |m| modifiers.include?(m) }.map { |m| apply_prefix("dropdown-#{m}") }
@@ -160,7 +166,7 @@ module DaisyUI
     end
 
     def merge_style(existing, added)
-      [existing, added].compact.join(";")
+      [existing&.chomp(";"), added].compact.join(";")
     end
 
     register_modifiers(
