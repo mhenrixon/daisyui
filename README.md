@@ -152,6 +152,102 @@ plugins: [
 ],
 ```
 
+## Dropdown `:popover` positioning on older browsers
+
+The `:popover` Dropdown modifier renders the menu in the browser top layer (so it
+escapes `overflow` clipping) and positions it next to the trigger using **CSS
+anchor positioning** (`anchor-name` / `position-anchor`). This works with **zero
+JavaScript** on Chrome/Edge 125+, Safari 26+, and Firefox 147+.
+
+```ruby
+Dropdown(:popover, :end) do |dropdown|
+  dropdown.button(:ghost, :sm) { "Actions" }
+  dropdown.menu(:sm, class: "w-52") do |menu|
+    menu.item { a(href: "#") { "Edit" } }
+    menu.item { a(href: "#") { "Delete" } }
+  end
+end
+```
+
+On **older engines (Safari < 26, Firefox < 147)** the popover still opens in the
+top layer, but without CSS anchor positioning it falls back to the viewport
+default (DaisyUI centers it via `@supports not (position-area)`), so it is not
+positioned next to the trigger.
+
+To position correctly on those browsers with no application code, pin the
+[OddBird CSS anchor positioning polyfill](https://github.com/oddbird/css-anchor-positioning)
+and load it lazily:
+
+```ruby
+# config/importmap.rb
+pin "@oddbird/css-anchor-positioning", to: "https://ga.jspm.io/npm:@oddbird/css-anchor-positioning@1/dist/css-anchor-positioning.fn.js", preload: false
+```
+
+```js
+// app/javascript/application.js — load only when the browser lacks native support
+if (!CSS.supports("anchor-name: --x")) {
+  import("@oddbird/css-anchor-positioning").then(({ default: polyfill }) => polyfill())
+}
+```
+
+Modern browsers fetch nothing extra; the polyfill loads only where it is needed.
+For WAI-ARIA roving keyboard navigation inside `role="menu"` menus (which a CSS
+polyfill cannot provide), see the optional Stimulus controller below.
+
+## Optional `daisy-dropdown` Stimulus controller
+
+The `:popover` dropdown needs **no JavaScript** on modern browsers. For two
+specific cases — a JS positioning fallback on browsers without CSS anchor
+positioning, and roving keyboard navigation over `role="menu"` items — the gem
+ships an **opt-in** Stimulus controller. It deliberately does **not** re-implement
+open/toggle, light-dismiss, or Escape; the native Popover API already handles
+those.
+
+Under Rails with importmap-rails, the gem auto-pins the controller (no manual
+pin). Register it once, lazily:
+
+```js
+// app/javascript/controllers/index.js
+import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading"
+lazyLoadControllersFrom("daisy_ui/controllers", application)
+```
+
+Then opt in per call site:
+
+```ruby
+Dropdown(:popover, :end, stimulus: true) do |dropdown|
+  dropdown.button(:ghost, :sm) { "Actions" }
+  dropdown.menu(:sm, class: "w-52") do |menu|
+    menu.item { a(href: "#", role: "menuitem", tabindex: "-1") { "Edit" } }
+  end
+end
+```
+
+- `stimulus: true` wires the `daisy-dropdown` controller (namespaced to avoid
+  colliding with your own `dropdown` controller).
+- `stimulus: "your-id"` overrides the identifier.
+- The positioning fallback lazily imports `@floating-ui/dom` **only** when CSS
+  anchor positioning is unavailable (Safari < 26, Firefox < 147), so modern
+  browsers fetch nothing. The gem does **not** bundle it — if you enable the
+  controller **and** need to support those browsers, pin it yourself (lazy, so
+  modern browsers still skip it):
+
+  ```ruby
+  # config/importmap.rb
+  pin "@floating-ui/dom", to: "https://ga.jspm.io/npm:@floating-ui/dom@1.7.6/dist/floating-ui.dom.mjs", preload: false
+  ```
+
+  If the pin is missing the menu still opens (native popover) — it just won't be
+  repositioned on those legacy browsers, and the controller logs a console
+  warning. Evergreen-only apps can skip the pin entirely.
+- Enable keyboard navigation with
+  `data: { daisy_dropdown_keyboard_value: true }` on the dropdown. Roving focus
+  targets `role="menuitem"` items, falling back to links/buttons in the menu.
+
+JS-bundler (esbuild/vite/webpack) consumers: import the controller from the
+gem's `app/javascript/daisy_ui/controllers/daisy_dropdown_controller.js` and
+register it manually.
+
 # MCP Server (Claude Code Integration)
 
 This gem includes an MCP (Model Context Protocol) server that provides component information to AI assistants like Claude Code.
