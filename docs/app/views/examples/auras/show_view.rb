@@ -12,6 +12,7 @@ module Examples
           BasicComponent,
           AroundButtonComponent,
           RainbowComponent,
+          StylesComponent,
           SizesComponent,
         ]
       end

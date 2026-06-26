@@ -14,6 +14,7 @@ module Examples
           SizesComponent,
           WithStepsComponent,
           WithLabelComponent,
+          VerticalComponent,
         ]
       end
     end
