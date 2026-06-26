@@ -11,7 +11,7 @@ module DaisyUI
     end
 
     def crumb(href: nil, **options, &block)
-      li(class: component_classes(options: options), **options) do
+      li(class: component_classes(options:), **options) do
         if href
           a(href: href, &block)
         else

@@ -18,8 +18,8 @@ module DaisyUI
       style_parts = []
       style_parts << style if style && !style.empty?
       style_parts << "--value: #{value};"
-      style_parts << "--size: #{size};" if size && !size.empty?
-      style_parts << "--thickness: #{thickness};" if thickness && !thickness.empty?
+      style_parts << "--size: #{size};" if size
+      style_parts << "--thickness: #{thickness};" if thickness
 
       public_send(as, role: :progressbar, class: classes, style: style_parts.join(" "), **attributes, &)
     end

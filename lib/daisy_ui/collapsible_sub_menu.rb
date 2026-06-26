@@ -7,7 +7,7 @@ module DaisyUI
 
     def initialize(*, **)
       super
-      @items ||= []
+      @items = []
     end
 
     def view_template(&block)

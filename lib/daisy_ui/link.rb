@@ -2,7 +2,7 @@
 
 module DaisyUI
   class Link < Base
-    self.component_class = "link"
+    self.component_class = :link
 
     def view_template(&)
       a(class: classes, **attributes, &)

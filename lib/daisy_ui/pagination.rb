@@ -3,7 +3,7 @@
 module DaisyUI
   # @component html class="join"
   class Pagination < Base
-    self.component_class = "join"
+    self.component_class = :join
 
     def view_template(&)
       public_send(as, class: classes, **attributes, &)

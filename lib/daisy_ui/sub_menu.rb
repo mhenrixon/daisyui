@@ -5,7 +5,7 @@ module DaisyUI
   class SubMenu < Base
     def initialize(*, **)
       super
-      @items ||= []
+      @items = []
     end
 
     def view_template(&)
