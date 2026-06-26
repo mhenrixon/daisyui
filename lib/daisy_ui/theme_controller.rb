@@ -34,7 +34,7 @@ module DaisyUI
 
     def view_template(&block)
       # Input always has just the theme-controller class
-      input_classes = self.class.component_class.to_s
+      input_classes = apply_prefix(self.class.component_class.to_s)
 
       attrs = { type: :checkbox, class: input_classes }
       attrs[:value] = theme_value if theme_value

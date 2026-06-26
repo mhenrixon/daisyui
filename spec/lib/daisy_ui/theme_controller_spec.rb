@@ -13,6 +13,32 @@ describe DaisyUI::ThemeController do
     expect(output).to eq(expected_html)
   end
 
+  describe "with a configured prefix" do
+    subject(:output) { render described_class.new }
+
+    around do |example|
+      original_prefix = DaisyUI.configuration.prefix
+
+      DaisyUI.configure do |config|
+        config.prefix = "foo-"
+      end
+
+      example.run
+
+      DaisyUI.configure do |config|
+        config.prefix = original_prefix
+      end
+    end
+
+    it "prefixes the input class" do
+      expected_html = html <<~HTML
+        <input type="checkbox" class="foo-theme-controller">
+      HTML
+
+      expect(output).to eq(expected_html)
+    end
+  end
+
   describe "with theme_value" do
     subject(:output) do
       render described_class.new(theme_value: "dark")
