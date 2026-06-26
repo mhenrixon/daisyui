@@ -13,7 +13,7 @@ GIT
 PATH
   remote: ..
   specs:
-    daisyui (1.1.1)
+    daisyui (1.2.0)
       phlex (~> 2.0, >= 2.0.0)
       zeitwerk (~> 2.6)
 
