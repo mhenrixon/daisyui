@@ -17,7 +17,7 @@
         "@tailwindcss/container-queries": "^0.1.1",
         "@tailwindcss/forms": "^0.5.11",
         "@tailwindcss/typography": "^0.5.19",
-        "daisyui": "^5.5.14",
+        "daisyui": "^5.6.0",
         "playwright": "1.57.0",
         "prettier": "^3.7.4",
         "tailwindcss": "^4.1.18",
@@ -193,7 +193,7 @@
 
     "cssesc": ["cssesc@3.0.0", "", { "bin": { "cssesc": "bin/cssesc" } }, "sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg=="],
 
-    "daisyui": ["daisyui@5.5.14", "", {}, "sha512-L47rvw7I7hK68TA97VB8Ee0woHew+/ohR6Lx6Ah/krfISOqcG4My7poNpX5Mo5/ytMxiR40fEaz6njzDi7cuSg=="],
+    "daisyui": ["daisyui@5.6.1", "", {}, "sha512-pIss+Pv4OFD6zpULyIfsJGOQv1vYD+RvM0lBjVL42+m4S79s1Kk/TEexH/cxTl2J9HGg7tejOmeLlc/R+p8feA=="],
 
     "debug": ["debug@4.4.3", "", { "dependencies": { "ms": "^2.1.3" } }, "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="],
 

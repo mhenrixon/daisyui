@@ -27,7 +27,8 @@ describe DaisyUI::Range do
       success: "range-success",
       warning: "range-warning",
       info: "range-info",
-      error: "range-error"
+      error: "range-error",
+      vertical: "range-vertical"
     }.each do |modifier, css|
       context "when given :#{modifier} modifier" do
         subject(:output) { render described_class.new(modifier) }

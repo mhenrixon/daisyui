@@ -104,7 +104,14 @@ module DaisyUI
       # "@md:range-error"
       # "lg:range-error"
       # "@lg:range-error"
-      error: "range-error"
+      error: "range-error",
+      # "sm:range-vertical"
+      # "@sm:range-vertical"
+      # "md:range-vertical"
+      # "@md:range-vertical"
+      # "lg:range-vertical"
+      # "@lg:range-vertical"
+      vertical: "range-vertical"
     )
   end
 end

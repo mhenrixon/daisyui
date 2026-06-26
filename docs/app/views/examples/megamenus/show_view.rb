@@ -1,20 +1,16 @@
 # frozen_string_literal: true
 
 module Examples
-  module Ranges
+  module Megamenus
     class ShowView < BaseView
       def view_template
         title do
-          "Range"
+          "Megamenu"
         end
 
         render_examples [
           BasicComponent,
-          WithColorsComponent,
           SizesComponent,
-          WithStepsComponent,
-          WithLabelComponent,
-          VerticalComponent,
         ]
       end
     end

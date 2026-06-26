@@ -614,4 +614,32 @@ RSpec.describe "Components", type: :system do
       expect(page).to have_css(".list")
     end
   end
+
+  describe "Aura component" do
+    it "displays aura examples" do
+      visit examples_path(component: "aura")
+      wait_for_turbo
+
+      expect(page).to have_css(".aura")
+    end
+  end
+
+  describe "Megamenu component" do
+    it "displays megamenu examples" do
+      visit examples_path(component: "megamenu")
+      wait_for_turbo
+
+      # Megamenu uses popover, so it may be hidden until opened
+      expect(page).to have_css(".megamenu", visible: :all)
+    end
+  end
+
+  describe "OTP component" do
+    it "displays otp examples" do
+      visit examples_path(component: "otp")
+      wait_for_turbo
+
+      expect(page).to have_css(".otp")
+    end
+  end
 end

@@ -15,6 +15,9 @@ module Examples
           BottomComponent,
           LeftComponent,
           RightComponent,
+          AlignStartComponent,
+          AlignCenterComponent,
+          AlignEndComponent,
           PrimaryComponent,
           SecondaryComponent,
           AccentComponent,
@@ -22,6 +25,7 @@ module Examples
           SuccessComponent,
           WarningComponent,
           ErrorComponent,
+          WithContentComponent,
           ResponsiveComponent,
         ]
       end

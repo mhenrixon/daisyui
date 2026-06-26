@@ -4,13 +4,19 @@ module DaisyUI
   class Tooltip < Base
     self.component_class = :tooltip
 
-    def initialize(*, tip:, as: :div, **)
+    def initialize(*, tip: nil, as: :div, **)
       super(*, as:, **)
       @tip = tip
     end
 
     def view_template(&)
-      public_send(as, class: classes, data_tip: tip, **attributes, &)
+      opts = { class: classes, **attributes }
+      opts[:data_tip] = tip if tip
+      public_send(as, **opts, &)
+    end
+
+    def content(**options, &)
+      div(class: component_classes("tooltip-content", options:), **options, &)
     end
 
     private
@@ -108,7 +114,28 @@ module DaisyUI
       # "@md:tooltip-error"
       # "lg:tooltip-error"
       # "@lg:tooltip-error"
-      error: "tooltip-error"
+      error: "tooltip-error",
+      # "sm:tooltip-start"
+      # "@sm:tooltip-start"
+      # "md:tooltip-start"
+      # "@md:tooltip-start"
+      # "lg:tooltip-start"
+      # "@lg:tooltip-start"
+      start: "tooltip-start",
+      # "sm:tooltip-center"
+      # "@sm:tooltip-center"
+      # "md:tooltip-center"
+      # "@md:tooltip-center"
+      # "lg:tooltip-center"
+      # "@lg:tooltip-center"
+      center: "tooltip-center",
+      # "sm:tooltip-end"
+      # "@sm:tooltip-end"
+      # "md:tooltip-end"
+      # "@md:tooltip-end"
+      # "lg:tooltip-end"
+      # "@lg:tooltip-end"
+      end: "tooltip-end"
     )
   end
 end

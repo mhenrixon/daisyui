@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Documentation website for DaisyUI, a Ruby UI component library using Phlex. Built with Rails 8.1+, Phlex-Rails, Tailwind CSS 4.1, and DaisyUI 5.5.
+Documentation website for DaisyUI, a Ruby UI component library using Phlex. Built with Rails 8.1+, Phlex-Rails, Tailwind CSS 4.1, and DaisyUI 5.6.
 
 ## Common Commands
 
@@ -50,7 +50,7 @@ app/views/
 - Components loaded at startup via `config/initializers/load_components.rb`
 
 ### Frontend Stack
-- Tailwind CSS 4.1 + DaisyUI 5.5.5 (entry: `app/assets/stylesheets/application.tailwind.css`)
+- Tailwind CSS 4.1 + DaisyUI 5.6 (entry: `app/assets/stylesheets/application.tailwind.css`)
 - Hotwired Turbo + Stimulus for interactivity
 - Importmap for JavaScript (no bundler)
 - Package manager: Bun 1.3.2
