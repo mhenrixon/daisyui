@@ -20,6 +20,10 @@ module DaisyUI
       li(class: step_classes, **options, &)
     end
 
+    def icon(**options, &)
+      div(class: component_classes("step-icon", options:), **options, &)
+    end
+
     private
 
     def build_step_classes(step_modifiers, options)
@@ -40,12 +44,6 @@ module DaisyUI
         warning: "step-warning",
         error: "step-error"
       }
-    end
-
-    public
-
-    def icon(**options, &)
-      div(class: component_classes("step-icon", options:), **options, &)
     end
 
     register_modifiers(

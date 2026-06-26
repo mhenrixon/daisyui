@@ -3,6 +3,37 @@
 require "spec_helper"
 
 describe DaisyUI::Base do
+  describe "responsive base class with a symbol component_class and a prefix" do
+    around do |example|
+      original_prefix = DaisyUI.configuration.prefix
+
+      DaisyUI.configure do |config|
+        config.prefix = "foo-"
+      end
+
+      example.run
+
+      DaisyUI.configure do |config|
+        config.prefix = original_prefix
+      end
+    end
+
+    it "coerces the symbol component_class before prefixing" do
+      output = render DaisyUI::Link.new(responsive: { sm: true })
+
+      expected_html = html <<~HTML
+        <a class="sm:foo-link"></a>
+      HTML
+
+      expect(output).to eq(expected_html)
+    end
+
+    it "works for components whose component_class was always a symbol" do
+      expect { render DaisyUI::Button.new(responsive: { sm: true }) }
+        .not_to raise_error
+    end
+  end
+
   describe "modifiers inheritance" do
     let(:daisy_ui_class) do
       Class.new(DaisyUI::Base) do

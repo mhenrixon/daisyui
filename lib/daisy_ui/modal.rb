@@ -5,8 +5,7 @@ module DaisyUI
     self.component_class = :modal
 
     def initialize(*, id:, **)
-      super(*, **)
-      @id = id
+      super
     end
 
     def view_template(&block)

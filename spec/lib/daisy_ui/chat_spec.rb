@@ -37,6 +37,38 @@ describe DaisyUI::Chat do
     end
   end
 
+  describe "with a configured prefix" do
+    subject(:output) do
+      render described_class.new do |c|
+        c.bubble(:primary) { "Message" }
+      end
+    end
+
+    around do |example|
+      original_prefix = DaisyUI.configuration.prefix
+
+      DaisyUI.configure do |config|
+        config.prefix = "foo-"
+      end
+
+      example.run
+
+      DaisyUI.configure do |config|
+        config.prefix = original_prefix
+      end
+    end
+
+    it "prefixes the bubble and its color modifier" do
+      expected_html = html <<~HTML
+        <div class="foo-chat">
+          <div class="foo-chat-bubble foo-chat-bubble-primary">Message</div>
+        </div>
+      HTML
+
+      expect(output).to eq(expected_html)
+    end
+  end
+
   describe "conditions" do
     {
       start: "chat-start",

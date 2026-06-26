@@ -9,20 +9,32 @@ module DaisyUI
 
     register_modifiers(
       # "sm:swap"
+      # "@sm:swap"
       # "md:swap"
+      # "@md:swap"
       # "lg:swap"
+      # "@lg:swap"
       swap: "swap",
       # "sm:swap sm:swap-rotate"
+      # "@sm:swap @sm:swap-rotate"
       # "md:swap md:swap-rotate"
+      # "@md:swap @md:swap-rotate"
       # "lg:swap lg:swap-rotate"
+      # "@lg:swap @lg:swap-rotate"
       swap_rotate: "swap swap-rotate",
       # "sm:swap sm:swap-flip"
+      # "@sm:swap @sm:swap-flip"
       # "md:swap md:swap-flip"
+      # "@md:swap @md:swap-flip"
       # "lg:swap lg:swap-flip"
+      # "@lg:swap @lg:swap-flip"
       swap_flip: "swap swap-flip",
       # "sm:toggle"
+      # "@sm:toggle"
       # "md:toggle"
+      # "@md:toggle"
       # "lg:toggle"
+      # "@lg:toggle"
       toggle: "toggle"
     )
 
@@ -34,7 +46,7 @@ module DaisyUI
 
     def view_template(&block)
       # Input always has just the theme-controller class
-      input_classes = self.class.component_class.to_s
+      input_classes = apply_prefix(self.class.component_class.to_s)
 
       attrs = { type: :checkbox, class: input_classes }
       attrs[:value] = theme_value if theme_value

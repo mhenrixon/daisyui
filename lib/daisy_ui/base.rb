@@ -224,7 +224,7 @@ module DaisyUI
             base_class_value = self.class.component_class
             next unless base_class_value
 
-            "#{breakpoint}:#{apply_prefix(base_class_value)}"
+            "#{breakpoint}:#{apply_prefix(base_class_value.to_s)}"
           else
             # Get the modifier classes (may be multiple like "bg-primary text-primary-content")
             modifier_classes = modifier_map[mod]

@@ -107,12 +107,8 @@ module DaisyUI
     private
 
     def build_bubble_classes(modifiers, options)
-      classes = ["chat-bubble"]
-      modifiers.each do |mod|
-        classes << BUBBLE_MODIFIERS[mod] if BUBBLE_MODIFIERS.key?(mod)
-      end
-      classes << options.delete(:class) if options[:class]
-      classes.compact.join(" ")
+      modifier_classes = modifiers.filter_map { |mod| apply_prefix(BUBBLE_MODIFIERS[mod]) }
+      merge_classes(apply_prefix("chat-bubble"), *modifier_classes, options.delete(:class))
     end
   end
 end

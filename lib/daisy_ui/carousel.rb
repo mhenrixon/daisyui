@@ -28,12 +28,12 @@ module DaisyUI
       # "lg:carousel-center"
       # "@lg:carousel-center"
       center: "carousel-center",
-        # "sm:carousel-end"
-        # "@sm:carousel-end"
-        # "md:carousel-end"
-        # "@md:carousel-end"
-        # "lg:carousel-end"
-        # "@lg:carousel-end"
+      # "sm:carousel-end"
+      # "@sm:carousel-end"
+      # "md:carousel-end"
+      # "@md:carousel-end"
+      # "lg:carousel-end"
+      # "@lg:carousel-end"
       end: "carousel-end",
       # "sm:carousel-vertical"
       # "@sm:carousel-vertical"

@@ -3,7 +3,7 @@
 module DaisyUI
   # @private
   class TabWithoutContent < Base
-    self.component_class = "tab"
+    self.component_class = :tab
 
     def initialize(*, label: nil, **)
       super(*, **)

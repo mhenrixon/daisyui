@@ -37,6 +37,42 @@ describe DaisyUI::Accordion do
     end
   end
 
+  describe "with a configured prefix" do
+    subject(:output) do
+      accordion = described_class.new(:arrow, name: "accordion-1")
+      accordion.title { "Title" }
+      render accordion do
+        "Content"
+      end
+    end
+
+    around do |example|
+      original_prefix = DaisyUI.configuration.prefix
+
+      DaisyUI.configure do |config|
+        config.prefix = "foo-"
+      end
+
+      example.run
+
+      DaisyUI.configure do |config|
+        config.prefix = original_prefix
+      end
+    end
+
+    it "prefixes the title and content sub-component classes" do
+      expected_html = html <<~HTML
+        <div class="foo-collapse foo-collapse-arrow">
+          <input type="radio" name="accordion-1">
+          <div class="foo-collapse-title">Title</div>
+          <div class="foo-collapse-content">Content</div>
+        </div>
+      HTML
+
+      expect(output).to eq(expected_html)
+    end
+  end
+
   describe "with checked parameter" do
     subject(:output) do
       render described_class.new(name: "accordion-1", checked: true)
