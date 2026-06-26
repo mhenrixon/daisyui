@@ -137,7 +137,7 @@ module DaisyUI
     # any `dropdown-content` — that descendant rule forces `position: absolute`,
     # which conflicts with the top-layer popover.
     def popover_menu_options(options)
-      caller_classes = options.delete(:class).to_s.split.reject { |c| c == "dropdown-content" }
+      caller_classes = Array(options.delete(:class)).flat_map { |v| v.to_s.split }.reject { |c| c.empty? || c == "dropdown-content" }
       placement = PLACEMENT_MODIFIERS.select { |m| modifiers.include?(m) }.map { |m| apply_prefix("dropdown-#{m}") }
 
       options[:class] = merge_classes(apply_prefix("dropdown"), *placement, *caller_classes)
@@ -152,7 +152,9 @@ module DaisyUI
     # clobbering caller-supplied data.
     def merge_stimulus_data(options, target:)
       data = (options[:data] || {}).dup
-      data[:"#{stimulus_identifier}_target"] = target
+      key = :"#{stimulus_identifier}_target"
+      existing = data[key].to_s.split
+      data[key] = (existing + [target]).uniq.join(" ")
       options[:data] = data
       options
     end
