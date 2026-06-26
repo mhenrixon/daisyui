@@ -13,6 +13,10 @@ module DaisyUI
       public_send(as, class: classes, data_tip: tip, **attributes, &)
     end
 
+    def content(**options, &)
+      div(class: component_classes("tooltip-content", options:), **options, &)
+    end
+
     private
 
     attr_reader :tip
@@ -108,7 +112,28 @@ module DaisyUI
       # "@md:tooltip-error"
       # "lg:tooltip-error"
       # "@lg:tooltip-error"
-      error: "tooltip-error"
+      error: "tooltip-error",
+      # "sm:tooltip-start"
+      # "@sm:tooltip-start"
+      # "md:tooltip-start"
+      # "@md:tooltip-start"
+      # "lg:tooltip-start"
+      # "@lg:tooltip-start"
+      start: "tooltip-start",
+      # "sm:tooltip-center"
+      # "@sm:tooltip-center"
+      # "md:tooltip-center"
+      # "@md:tooltip-center"
+      # "lg:tooltip-center"
+      # "@lg:tooltip-center"
+      center: "tooltip-center",
+      # "sm:tooltip-end"
+      # "@sm:tooltip-end"
+      # "md:tooltip-end"
+      # "@md:tooltip-end"
+      # "lg:tooltip-end"
+      # "@lg:tooltip-end"
+      end: "tooltip-end"
     )
   end
 end
