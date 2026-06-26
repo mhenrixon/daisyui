@@ -4,13 +4,15 @@ module DaisyUI
   class Tooltip < Base
     self.component_class = :tooltip
 
-    def initialize(*, tip:, as: :div, **)
+    def initialize(*, tip: nil, as: :div, **)
       super(*, as:, **)
       @tip = tip
     end
 
     def view_template(&)
-      public_send(as, class: classes, data_tip: tip, **attributes, &)
+      opts = { class: classes, **attributes }
+      opts[:data_tip] = tip if tip
+      public_send(as, **opts, &)
     end
 
     def content(**options, &)

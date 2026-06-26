@@ -4,9 +4,10 @@ module DaisyUI
   class Otp < Base
     self.component_class = :otp
 
-    def initialize(*, digits: 4, as: :label, **)
+    def initialize(*, digits: 4, as: :label, input_attributes: {}, **)
       super(*, as:, **)
       @digits = digits
+      @input_attributes = input_attributes
     end
 
     def view_template(&)
@@ -18,14 +19,15 @@ module DaisyUI
           inputmode: :numeric,
           maxlength: digits,
           pattern: "[0-9]{#{digits}}",
-          required: true
+          required: true,
+          **input_attributes
         )
       end
     end
 
     private
 
-    attr_reader :digits
+    attr_reader :digits, :input_attributes
 
     register_modifiers(
       # "sm:otp-joined"

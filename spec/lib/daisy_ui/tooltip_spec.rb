@@ -5,6 +5,14 @@ require "spec_helper"
 describe DaisyUI::Tooltip do
   subject(:output) { render described_class.new }
 
+  it "renders without data-tip when tip is omitted" do
+    expected_html = html <<~HTML
+      <div class="tooltip"></div>
+    HTML
+
+    expect(output).to eq(expected_html)
+  end
+
   describe "modifiers" do
     {
       open: "tooltip-open",
@@ -139,6 +147,31 @@ describe DaisyUI::Tooltip do
       HTML
 
       expect(output).to eq(expected_html)
+    end
+  end
+
+  describe "rendering a content-only tooltip without tip" do
+    subject(:output) do
+      render component.new
+    end
+
+    let(:component) do
+      Class.new(Phlex::HTML) do
+        def view_template(&)
+          render DaisyUI::Tooltip.new(:open, :primary) do |tooltip|
+            tooltip.content do
+              plain "Rich content"
+            end
+            plain "Hover me"
+          end
+        end
+      end
+    end
+
+    it "renders without data-tip attribute" do
+      expect(output).to include('class="tooltip tooltip-open tooltip-primary"')
+      expect(output).to include('<div class="tooltip-content">Rich content</div>')
+      expect(output).not_to include("data-tip")
     end
   end
 end

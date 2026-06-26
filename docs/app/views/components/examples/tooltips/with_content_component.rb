@@ -8,7 +8,7 @@ module Examples
       end
 
       def example
-        Tooltip :open, :primary, tip: "" do |tooltip|
+        Tooltip :open, :primary do |tooltip|
           tooltip.content do
             div class: "text-orange-400 -rotate-10 text-2xl font-black" do
               "Wow!"

@@ -162,6 +162,23 @@ describe DaisyUI::Otp do
     end
   end
 
+  describe "input_attributes" do
+    subject(:output) do
+      render described_class.new(:primary, input_attributes: { name: "otp_code", id: "otp-input", value: "1234" })
+    end
+
+    it "passes attributes to the input element" do
+      expected_html = html <<~HTML
+        <label class="otp otp-primary">
+          <span></span><span></span><span></span><span></span>
+          <input type="text" autocomplete="one-time-code" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" required name="otp_code" id="otp-input" value="1234">
+        </label>
+      HTML
+
+      expect(output).to eq(expected_html)
+    end
+  end
+
   describe "rendering via Kit" do
     subject(:output) do
       Otp(:primary)
