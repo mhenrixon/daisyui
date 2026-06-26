@@ -30,16 +30,25 @@ module DaisyUI
 
     register_modifiers(
       # "sm:floating-label"
+      # "@sm:floating-label"
       # "md:floating-label"
+      # "@md:floating-label"
       # "lg:floating-label"
+      # "@lg:floating-label"
       floating: "floating-label",
       # "sm:input"
+      # "@sm:input"
       # "md:input"
+      # "@md:input"
       # "lg:input"
+      # "@lg:input"
       input: "input",
       # "sm:select"
+      # "@sm:select"
       # "md:select"
+      # "@md:select"
       # "lg:select"
+      # "@lg:select"
       select: "select"
     )
 

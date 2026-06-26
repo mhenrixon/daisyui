@@ -9,20 +9,32 @@ module DaisyUI
 
     register_modifiers(
       # "sm:swap"
+      # "@sm:swap"
       # "md:swap"
+      # "@md:swap"
       # "lg:swap"
+      # "@lg:swap"
       swap: "swap",
       # "sm:swap sm:swap-rotate"
+      # "@sm:swap @sm:swap-rotate"
       # "md:swap md:swap-rotate"
+      # "@md:swap @md:swap-rotate"
       # "lg:swap lg:swap-rotate"
+      # "@lg:swap @lg:swap-rotate"
       swap_rotate: "swap swap-rotate",
       # "sm:swap sm:swap-flip"
+      # "@sm:swap @sm:swap-flip"
       # "md:swap md:swap-flip"
+      # "@md:swap @md:swap-flip"
       # "lg:swap lg:swap-flip"
+      # "@lg:swap @lg:swap-flip"
       swap_flip: "swap swap-flip",
       # "sm:toggle"
+      # "@sm:toggle"
       # "md:toggle"
+      # "@md:toggle"
       # "lg:toggle"
+      # "@lg:toggle"
       toggle: "toggle"
     )
 

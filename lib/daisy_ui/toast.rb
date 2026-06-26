@@ -24,12 +24,12 @@ module DaisyUI
       # "lg:toast-center"
       # "@lg:toast-center"
       center: "toast-center",
-        # "sm:toast-end"
-        # "@sm:toast-end"
-        # "md:toast-end"
-        # "@md:toast-end"
-        # "lg:toast-end"
-        # "@lg:toast-end"
+      # "sm:toast-end"
+      # "@sm:toast-end"
+      # "md:toast-end"
+      # "@md:toast-end"
+      # "lg:toast-end"
+      # "@lg:toast-end"
       end: "toast-end",
       # "sm:toast-top"
       # "@sm:toast-top"

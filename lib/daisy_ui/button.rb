@@ -31,7 +31,12 @@ module DaisyUI
 
     register_modifiers(
       # Styles
-      # "sm:btn-ghost" "md:btn-ghost" "lg:btn-ghost"
+      # "sm:btn-ghost"
+      # "@sm:btn-ghost"
+      # "md:btn-ghost"
+      # "@md:btn-ghost"
+      # "lg:btn-ghost"
+      # "@lg:btn-ghost"
       ghost: "btn-ghost",
       # "sm:btn-link"
       # "@sm:btn-link"
