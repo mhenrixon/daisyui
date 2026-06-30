@@ -48,12 +48,17 @@ builder:
     type: registry
     options: mode=max,image-manifest=true,oci-mediatypes=true
 
-# Inject ENV variables into containers. The docs app uses no encrypted Rails
-# credentials, so it needs no RAILS_MASTER_KEY / app secrets here.
+# Inject ENV variables into containers. The app has no encrypted Rails
+# credentials, but production still needs a secret_key_base (sessions/cookies +
+# phlex-reactive token signing). This is a public read-only docs site with no
+# user accounts or sensitive data, so the key carries no real risk and lives in
+# clear here rather than dragging in a 1Password fetch. Rotate it by generating
+# a new value (bin/rails secret) if ever needed.
 env:
   clear:
     RAILS_SERVE_STATIC_FILES: "true"
     RAILS_LOG_TO_STDOUT: "true"
+    SECRET_KEY_BASE: "b9155e47dce1f0bb6c653eeef87d02fc8ce3b77210338903c74a82c17f8959e442c13d3072f56ac5c074aa498909e34236f0e22c38ccb6f529c97d90a5dc6049"
 
 # Persist SQLite database.
 volumes:
