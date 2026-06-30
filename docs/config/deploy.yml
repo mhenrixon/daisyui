@@ -4,22 +4,29 @@ service: daisyui-docs
 # Name of the container image.
 image: mhenrixon/daisyui-docs
 
-# Deploy to these servers.
+# Deploy to the OSS docs server (oss-docs, provisioned by oss-infrastructure).
+# Host and domain come from the GitHub `docs` environment secrets at deploy time.
 servers:
   web:
     hosts:
       - <%= ENV["DEPLOY_HOST"] %>
-    labels:
-      traefik.http.routers.daisyui-docs.rule: Host(`<%= ENV["DEPLOY_DOMAIN"] %>`)
-      traefik.http.routers.daisyui-docs.entrypoints: websecure
-      traefik.http.routers.daisyui-docs.tls.certresolver: letsencrypt
-    options:
-      network: traefik
 
-# Enable SSL auto certification via Let's Encrypt and target port 443.
+# The server is accessed over SSH as the unprivileged "oss" user (not root);
+# Docker runs via the docker group for that user.
+ssh:
+  user: oss
+
+# kamal-proxy routes by Host header. The Cloudflare Tunnel (cloudflared on the
+# server) terminates TLS at the edge and forwards http://localhost:80 ->
+# kamal-proxy -> this container, so ssl is disabled here.
 proxy:
-  ssl: true
+  ssl: false
   host: <%= ENV["DEPLOY_DOMAIN"] %>
+  app_port: 3000
+  healthcheck:
+    path: /up
+    interval: 5
+    timeout: 60
 
 # Credentials for your image host.
 registry:
@@ -28,31 +35,34 @@ registry:
   password:
     - KAMAL_REGISTRY_PASSWORD
 
-# Configure builder for multi-arch builds.
+# Builder uses repo root as context so path gem dependency resolves.
 builder:
   arch: amd64
   remote: false
+  # Run kamal from docs/. The build context is the repo root (..) so the
+  # path gem dependency `gem "daisyui", path: ".."` resolves; the dockerfile
+  # path is relative to the working dir (docs/), i.e. docs/Dockerfile.
+  context: ..
+  dockerfile: Dockerfile
   cache:
     type: registry
     options: mode=max,image-manifest=true,oci-mediatypes=true
 
-# Inject ENV variables into containers (secrets come from .kamal/secrets).
+# Inject ENV variables into containers. The app has no encrypted Rails
+# credentials, but production still needs a secret_key_base (sessions/cookies +
+# phlex-reactive token signing). This is a public read-only docs site with no
+# user accounts or sensitive data, so the key carries no real risk and lives in
+# clear here rather than dragging in a 1Password fetch. Rotate it by generating
+# a new value (bin/rails secret) if ever needed.
 env:
   clear:
     RAILS_SERVE_STATIC_FILES: "true"
     RAILS_LOG_TO_STDOUT: "true"
-  secret:
-    - RAILS_MASTER_KEY
-    - DATABASE_URL
+    SECRET_KEY_BASE: "b9155e47dce1f0bb6c653eeef87d02fc8ce3b77210338903c74a82c17f8959e442c13d3072f56ac5c074aa498909e34236f0e22c38ccb6f529c97d90a5dc6049"
 
 # Persist SQLite database.
 volumes:
-  - "daisyui_docs_data:/rails/data"
-
-# Configure health check.
-healthcheck:
-  path: /up
-  port: 3000
+  - "daisyui_docs_data:/data"
 
 # Configure boot options.
 boot:
@@ -61,4 +71,4 @@ boot:
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # temporary errors during deploy.
-asset_path: /rails/public/assets
+asset_path: /gem/docs/public/assets
