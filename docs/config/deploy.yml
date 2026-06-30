@@ -4,23 +4,23 @@ service: daisyui-docs
 # Name of the container image.
 image: mhenrixon/daisyui-docs
 
-# Deploy to the OSS docs server.
+# Deploy to the OSS docs server (oss-docs, provisioned by oss-infrastructure).
 servers:
   web:
     hosts:
-      - <%= ENV["DEPLOY_HOST"] %>
+      - 178.105.2.54
 
 # The server is accessed over SSH as the unprivileged "oss" user (not root);
-# Docker runs rootless / via the docker group for that user.
+# Docker runs via the docker group for that user.
 ssh:
   user: oss
 
-# kamal-proxy handles routing by Host header.
-# Cloudflare Tunnel terminates TLS at the edge, then forwards
-# http://localhost:80 -> kamal-proxy -> this container.
+# kamal-proxy routes by Host header. The Cloudflare Tunnel (cloudflared on the
+# server) terminates TLS at the edge and forwards http://localhost:80 ->
+# kamal-proxy -> this container, so ssl is disabled here.
 proxy:
   ssl: false
-  host: <%= ENV["DEPLOY_DOMAIN"] %>
+  host: daisyui.zoolutions.llc
   app_port: 3000
   healthcheck:
     path: /up
