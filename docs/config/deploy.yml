@@ -39,19 +39,21 @@ registry:
 builder:
   arch: amd64
   remote: false
+  # Run kamal from docs/. The build context is the repo root (..) so the
+  # path gem dependency `gem "daisyui", path: ".."` resolves; the dockerfile
+  # path is relative to the working dir (docs/), i.e. docs/Dockerfile.
   context: ..
-  dockerfile: docs/Dockerfile
+  dockerfile: Dockerfile
   cache:
     type: registry
     options: mode=max,image-manifest=true,oci-mediatypes=true
 
-# Inject ENV variables into containers (secrets come from .kamal/secrets).
+# Inject ENV variables into containers. The docs app uses no encrypted Rails
+# credentials, so it needs no RAILS_MASTER_KEY / app secrets here.
 env:
   clear:
     RAILS_SERVE_STATIC_FILES: "true"
     RAILS_LOG_TO_STDOUT: "true"
-  secret:
-    - RAILS_MASTER_KEY
 
 # Persist SQLite database.
 volumes:
