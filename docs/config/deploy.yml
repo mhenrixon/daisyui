@@ -10,6 +10,11 @@ servers:
     hosts:
       - <%= ENV["DEPLOY_HOST"] %>
 
+# The server is accessed over SSH as the unprivileged "oss" user (not root);
+# Docker runs rootless / via the docker group for that user.
+ssh:
+  user: oss
+
 # kamal-proxy handles routing by Host header.
 # Cloudflare Tunnel terminates TLS at the edge, then forwards
 # http://localhost:80 -> kamal-proxy -> this container.
