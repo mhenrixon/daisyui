@@ -61,6 +61,11 @@ RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 # Final stage for app image
 FROM base
 
+# Kamal verifies this label on deploy (must match `service:` in deploy.yml).
+# The image is built by the workflow's buildx, not `kamal build`, so we set it
+# here rather than relying on Kamal's --label injection.
+LABEL service="daisyui"
+
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
