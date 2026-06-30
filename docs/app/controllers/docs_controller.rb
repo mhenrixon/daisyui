@@ -1,31 +1,11 @@
 # frozen_string_literal: true
 
 class DocsController < ApplicationController
-  before_action :verify_doc_exists
-
   def show
-    render view_class.new
-  end
+    doc = Doc.from_slug(params[:doc])
+    view = doc&.view_class
+    return head :not_found unless view
 
-  private
-
-  def verify_doc_exists
-    return if view_class
-
-    render Application::NotFoundView.new, status: :not_found
-  end
-
-  def view_class
-    "Docs::#{doc_name.classify.pluralize}::ShowView".safe_constantize
-  end
-
-  def doc_name
-    params[:doc_name]
-  end
-
-  def title
-    "DaisyUI - #{doc_name.humanize}"
-  rescue StandardError
-    nil
+    render_page view.new
   end
 end

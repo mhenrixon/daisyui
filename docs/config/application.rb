@@ -10,9 +10,10 @@ Bundler.require(*Rails.groups)
 
 module PhlexyUiDocs
   class Application < Rails::Application
-    config.autoload_paths << "#{root}/app/views"
-    config.autoload_paths << "#{root}/app/views/layouts"
-    config.autoload_paths << "#{root}/app/views/components"
+    # Phlex views/components are autoloaded with namespaces in
+    # config/initializers/phlex.rb (Views::, Components::) plus the top-level
+    # app/reactive_components dir. No bare autoload_paths needed here.
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
 

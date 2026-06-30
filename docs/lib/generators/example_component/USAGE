@@ -1,8 +1,0 @@
-Description:
-    Generates a new component example.
-
-Example:
-    bin/rails generate example_component Cards::Responsive "Optional title"
-
-    This will create:
-        app/views/components/examples/cards/responsive_component.rb

@@ -21,6 +21,8 @@ gem "turbo-rails"
 gem "daisyui", path: ".."
 gem "method_source"
 gem "phlex-rails"
+gem "phlex-reactive"
+gem "rails_icons", "~> 1.1"
 gem "rouge"
 
 # Database & Performance
