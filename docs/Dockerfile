@@ -69,10 +69,12 @@ RUN apt-get update -qq && \
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /gem /gem
 
-# Run and own only the runtime files as a non-root user for security
+# Run and own only the runtime files as a non-root user for security.
+# log/ storage/ tmp/ are gitignored (no .keep), so they aren't present after
+# COPY — create them before chowning so the build doesn't fail.
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    mkdir /data && \
+    mkdir -p /data /gem/docs/db /gem/docs/log /gem/docs/storage /gem/docs/tmp && \
     chown -R 1000:1000 /gem/docs/db /gem/docs/log /gem/docs/storage /gem/docs/tmp /data
 USER 1000:1000
 
