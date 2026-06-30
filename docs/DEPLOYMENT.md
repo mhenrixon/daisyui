@@ -59,26 +59,26 @@ compiled CSS — no separate step is required.
 
 ## GitHub Setup
 
-The server IP (`178.105.2.54`) and domain (`daisyui.zoolutions.llc`) are set
-directly in `docs/config/deploy.yml` — they are not secrets. Only two secrets are
-needed in the `docs` environment:
+In the daisyui repo settings, create an environment named `docs` with these secrets:
 
 | Secret | Description |
 |--------|-------------|
 | `SSH_PRIVATE_KEY` | Private key for the `oss` user on the docs server |
+| `DEPLOY_HOST` | Server IP or hostname (e.g. `178.105.2.54`) |
+| `DEPLOY_DOMAIN` | Public domain (e.g. `daisyui.zoolutions.llc`) |
 | `OP_SERVICE_ACCOUNT_TOKEN` | 1Password service account token (read access to the `oss-infrastructure` vault) |
 
 Set them with:
 
 ```bash
 gh secret set SSH_PRIVATE_KEY --env docs --repo mhenrixon/daisyui < ~/.ssh/<deploy-key>
+gh secret set DEPLOY_HOST --env docs --repo mhenrixon/daisyui --body "178.105.2.54"
+gh secret set DEPLOY_DOMAIN --env docs --repo mhenrixon/daisyui --body "daisyui.zoolutions.llc"
 gh secret set OP_SERVICE_ACCOUNT_TOKEN --env docs --repo mhenrixon/daisyui --body "<token>"
 ```
 
 The `GITHUB_TOKEN` is automatically available and used for ghcr.io authentication.
-
-To change the server or domain later, edit `servers:` / `proxy.host` in
-`docs/config/deploy.yml` directly.
+`DEPLOY_HOST`/`DEPLOY_DOMAIN` are injected into `deploy.yml` via ERB at deploy time.
 
 `RAILS_MASTER_KEY` is **not** a GitHub secret — it's fetched from 1Password at deploy time via Kamal's adapter (see `docs/.kamal/secrets`).
 

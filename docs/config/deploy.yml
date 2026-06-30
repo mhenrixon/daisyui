@@ -5,10 +5,11 @@ service: daisyui-docs
 image: mhenrixon/daisyui-docs
 
 # Deploy to the OSS docs server (oss-docs, provisioned by oss-infrastructure).
+# Host and domain come from the GitHub `docs` environment secrets at deploy time.
 servers:
   web:
     hosts:
-      - 178.105.2.54
+      - <%= ENV["DEPLOY_HOST"] %>
 
 # The server is accessed over SSH as the unprivileged "oss" user (not root);
 # Docker runs via the docker group for that user.
@@ -20,7 +21,7 @@ ssh:
 # kamal-proxy -> this container, so ssl is disabled here.
 proxy:
   ssl: false
-  host: daisyui.zoolutions.llc
+  host: <%= ENV["DEPLOY_DOMAIN"] %>
   app_port: 3000
   healthcheck:
     path: /up
