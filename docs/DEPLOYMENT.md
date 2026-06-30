@@ -66,7 +66,6 @@ In the daisyui repo settings, create an environment named `docs` with these secr
 | `SSH_PRIVATE_KEY` | Private key for the `oss` user on the docs server |
 | `DEPLOY_HOST` | Server IP or hostname (e.g. `178.105.2.54`) |
 | `DEPLOY_DOMAIN` | Public domain (e.g. `daisyui.zoolutions.llc`) |
-| `OP_SERVICE_ACCOUNT_TOKEN` | 1Password service account token (read access to the `oss-infrastructure` vault) |
 
 Set them with:
 
@@ -74,28 +73,18 @@ Set them with:
 gh secret set SSH_PRIVATE_KEY --env docs --repo mhenrixon/daisyui < ~/.ssh/<deploy-key>
 gh secret set DEPLOY_HOST --env docs --repo mhenrixon/daisyui --body "178.105.2.54"
 gh secret set DEPLOY_DOMAIN --env docs --repo mhenrixon/daisyui --body "daisyui.zoolutions.llc"
-gh secret set OP_SERVICE_ACCOUNT_TOKEN --env docs --repo mhenrixon/daisyui --body "<token>"
 ```
 
 The `GITHUB_TOKEN` is automatically available and used for ghcr.io authentication.
 `DEPLOY_HOST`/`DEPLOY_DOMAIN` are injected into `deploy.yml` via ERB at deploy time.
 
-`RAILS_MASTER_KEY` is **not** a GitHub secret — it's fetched from 1Password at deploy time via Kamal's adapter (see `docs/.kamal/secrets`).
-
-## 1Password setup
-
-The gem's secrets live in 1Password under:
-
-```
-op://oss-infrastructure/daisyui-docs/
-  └─ rails_master_key  (concealed)
-```
-
-To add or rotate:
-
-```bash
-op item edit daisyui-docs --vault oss-infrastructure rails_master_key='<new-value>'
-```
+The docs site is a public showcase with **no encrypted Rails credentials**, so it
+needs no `RAILS_MASTER_KEY` and no 1Password secret. If the app ever grows real
+secrets, add them to a `daisyui-docs` item in the `oss-infrastructure` 1Password
+vault (`bin/secrets set -d daisyui <key> <value>` in the oss-infrastructure repo),
+re-add the Kamal 1Password fetch to `docs/.kamal/secrets`, list the keys under
+`env.secret` in `deploy.yml`, and add `OP_SERVICE_ACCOUNT_TOKEN` back to the
+`docs` GitHub environment.
 
 ## Container Layout
 
@@ -133,7 +122,6 @@ cd docs && bundle exec kamal deploy --version=v1.0.6
 | Symptom | Likely cause | Fix |
 |---------|--------------|-----|
 | Workflow fails at "Login to GHCR" | Token missing `packages: write` | Already set in workflow `permissions:` |
-| Workflow fails fetching from 1Password | Missing or expired `OP_SERVICE_ACCOUNT_TOKEN` | Rotate in 1Password and update GitHub secret |
 | Kamal "host unreachable" | `DEPLOY_HOST` wrong or SSH key not authorized | Verify secret + `~/.ssh/authorized_keys` on server |
 | 502 from Cloudflare after deploy | App container crashed or kamal-proxy not running | `docker logs daisyui-docs-web`, `docker logs kamal-proxy` |
 | 404 from kamal-proxy | `proxy.host` doesn't match `DEPLOY_DOMAIN` | Check the `host:` value in `docs/config/deploy.yml` matches the GitHub secret |
