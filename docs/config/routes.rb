@@ -16,13 +16,10 @@ Rails.application.routes.draw do
 
   # Component reference pages — the slug resolves to a ComponentDoc in the
   # in-memory registry, rendered through one shared Views::Components::Show page.
+  # Each example uses the reactive ExampleViewer (Preview/Source toggle). The
+  # phlex-reactive engine mounts POST /reactive/actions itself — do NOT add it
+  # here, and keep no catch-all route below that could shadow it.
   get "components/:component" => "components#show", as: :component
-
-  # Live reactive demos — the slug resolves to a Demo in the registry, rendered
-  # through one shared Views::Demos::Show page. The phlex-reactive engine mounts
-  # POST /reactive/actions itself — do NOT add it here, and keep no catch-all
-  # route below that could shadow it.
-  get "demos/:demo" => "demos#show", as: :demo
 
   # Reference docs (guides) — the slug resolves to a Doc whose hand-authored
   # Phlex page class renders it.

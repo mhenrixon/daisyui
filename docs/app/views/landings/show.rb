@@ -5,10 +5,6 @@ module Views
     class Show < Phlex::HTML
       include Phlex::Rails::Helpers::Routes
 
-      def initialize(demos:)
-        @demos = demos
-      end
-
       def view_template
         render Views::Layout.new do
           header(class: "mb-10") do
@@ -18,13 +14,11 @@ module Views
               a(href: "https://daisyui.com", class: "link") { "daisyUI" }
               plain ", built with "
               a(href: "https://www.phlex.fun", class: "link") { "Phlex" }
-              plain ". Compose modern, accessible interfaces in plain Ruby — and "
-              plain "make them reactive with zero custom JavaScript. Every demo "
-              plain "below runs live."
+              plain ". Compose modern, accessible interfaces in plain Ruby — "
+              plain "every component below has a live preview and its source."
             end
           end
 
-          live_demos_section
           components_section
           docs_section
         end
@@ -32,23 +26,17 @@ module Views
 
       private
 
-      def live_demos_section
-        section(class: "mb-12") do
-          h2(class: "text-sm uppercase tracking-wide opacity-60 mb-4") { "Live demos" }
-          div(class: "grid gap-4 sm:grid-cols-2") do
-            @demos.each { demo_card(it) }
-          end
-        end
-      end
-
       def components_section
-        components = ComponentDoc.all.select(&:example_class)
-        return if components.empty?
+        grouped = ComponentDoc.all.select(&:example_class).group_by(&:category)
+        return if grouped.empty?
 
         section(class: "mb-12") do
           h2(class: "text-sm uppercase tracking-wide opacity-60 mb-4") { "Components" }
-          div(class: "grid gap-2 sm:grid-cols-2") do
-            components.each { component_link(it) }
+          grouped.each do |category, components|
+            h3(class: "text-xs font-semibold uppercase tracking-wider opacity-50 mt-6 mb-2") { category }
+            div(class: "grid gap-2 sm:grid-cols-2 md:grid-cols-3") do
+              components.each { component_link(it) }
+            end
           end
         end
       end
@@ -63,15 +51,6 @@ module Views
             docs.each { doc_link(it) }
           end
         end
-      end
-
-      def demo_card(demo)
-        a(href: demo_path(demo.slug),
-          class: "card bg-base-200 hover:bg-base-300 transition-colors p-5 block",
-          data: { testid: "demo-card-#{demo.slug}" }) do
-            h3(class: "text-xl font-semibold mb-1") { demo.title }
-            p(class: "opacity-70 text-sm") { demo.blurb }
-          end
       end
 
       def component_link(component)

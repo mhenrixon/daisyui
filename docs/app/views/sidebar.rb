@@ -10,11 +10,6 @@ module Views
     include Phlex::Rails::Helpers::Request
     include DaisyUI
 
-    # A lucide icon per demo slug; groups fall back to a default.
-    DEMO_ICONS = {
-      "counter" => "calculator",
-      "searchable-combobox" => "search",
-    }.freeze
     GROUP_ICON = {
       "Guide" => "book-open",
     }.freeze
@@ -26,7 +21,6 @@ module Views
           Menu(class: "w-full gap-1") do
             nav_group("Docs", authored_docs) { |doc| nav_link(doc_path(doc.slug), doc.title, doc_icon(doc)) }
             nav_group("Components", authored_components) { |c| nav_link(component_path(c.slug), c.title, nil) }
-            nav_group("Demos", Demo.grouped) { |demo| nav_link(demo_path(demo.slug), demo.title, DEMO_ICONS[demo.slug]) }
           end
         end
       end

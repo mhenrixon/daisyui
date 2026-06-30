@@ -11,12 +11,12 @@ RSpec.describe "Pages", type: :request do
   let(:headers) { { "HTTP_USER_AGENT" => MODERN_UA } }
 
   describe "GET /" do
-    it "renders the landing page with the live demos" do
+    it "renders the landing page with the component reference" do
       get root_path, headers: headers
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("DaisyUI Ruby")
-      Demo.all.each { |demo| expect(response.body).to include(demo.title) }
+      expect(response.body).to include("Button")
     end
   end
 
@@ -42,12 +42,18 @@ RSpec.describe "Pages", type: :request do
   end
 
   describe "GET /components/:component" do
-    it "renders an authored component reference page" do
+    it "renders a component page with the reactive Preview/Source viewer" do
       get component_path("button"), headers: headers
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include("Button")
-      expect(response.body).to include('data-testid="component-panel"')
+      # The example viewer is reactive: it carries the controller + signed token.
+      expect(response.body).to include('data-controller="reactive"')
+      expect(response.body).to include("data-reactive-token-value")
+      expect(response.body).to include('data-testid="example-viewer"')
+      # daisyUI tabs use `tabs-lift` (not the removed `tabs-lifted`).
+      expect(response.body).to include("tabs-lift")
+      expect(response.body).not_to include("tabs-lifted")
     end
 
     it "404s for an unknown component" do
@@ -57,20 +63,24 @@ RSpec.describe "Pages", type: :request do
     end
   end
 
-  describe "GET /demos/:demo" do
-    it "renders a reactive demo with its signed token and controller wiring" do
-      get demo_path("counter"), headers: headers
+  describe "the reactive example viewer" do
+    it "toggles to the Source tab via a phlex-reactive action" do
+      get component_path("button"), headers: headers
+      token = response.body[/data-reactive-token-value="([^"]+)"/, 1]
+      csrf = response.body[/name="csrf-token" content="([^"]+)"/, 1]
+      expect(token).to be_present
+
+      post "/reactive/actions",
+           params: { token: token, act: "show_source", params: {} }.to_json,
+           headers: headers.merge(
+             "CONTENT_TYPE" => "application/json",
+             "HTTP_ACCEPT" => "text/vnd.turbo-stream.html",
+             "HTTP_X_CSRF_TOKEN" => csrf
+           )
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('data-controller="reactive"')
-      expect(response.body).to include("data-reactive-token-value")
-      expect(response.body).to include('id="counter"')
-    end
-
-    it "404s for an unknown demo" do
-      get demo_path("nope"), headers: headers
-
-      expect(response).to have_http_status(:not_found)
+      expect(response.body).to include("turbo-stream")
+      expect(response.body).to include('data-testid="tab-source"')
     end
   end
 
