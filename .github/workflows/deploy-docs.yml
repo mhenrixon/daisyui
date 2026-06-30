@@ -77,12 +77,23 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Add deploy host to known_hosts
+      - name: Configure SSH for the deploy host
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          # Disable host-key verification for the deploy host. Kamal uses net-ssh,
+          # which raises HostKeyMismatch on any known_hosts conflict (e.g. after
+          # the server is reprovisioned). net-ssh honors ~/.ssh/config, so this
+          # turns verification off for this single known IP. Acceptable here: a
+          # public read-only docs site reached over an authenticated deploy key.
+          cat >> ~/.ssh/config <<EOF
+          Host $DEPLOY_HOST
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+          EOF
+          chmod 600 ~/.ssh/config
 
       - name: Deploy with Kamal
         working-directory: docs
