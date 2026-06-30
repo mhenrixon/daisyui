@@ -4,7 +4,7 @@ The docs site is deployed automatically when a new gem version is released.
 
 ## Flow
 
-```
+```text
 rake release[X.Y.Z]
   └─> creates GitHub release
         └─> deploy-docs.yml workflow runs
@@ -17,7 +17,7 @@ rake release[X.Y.Z]
 
 ## Architecture
 
-```
+```text
 Internet
    │  HTTPS (TLS at edge)
    ▼
