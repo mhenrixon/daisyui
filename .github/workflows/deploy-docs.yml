@@ -53,10 +53,10 @@ jobs:
           file: docs/Dockerfile
           push: true
           tags: |
-            ghcr.io/mhenrixon/daisyui-docs:${{ steps.tag.outputs.image_tag }}
-            ghcr.io/mhenrixon/daisyui-docs:latest
-          cache-from: type=registry,ref=ghcr.io/mhenrixon/daisyui-docs:buildcache
-          cache-to: type=registry,ref=ghcr.io/mhenrixon/daisyui-docs:buildcache,mode=max
+            ghcr.io/mhenrixon/daisyui:${{ steps.tag.outputs.image_tag }}
+            ghcr.io/mhenrixon/daisyui:latest
+          cache-from: type=registry,ref=ghcr.io/mhenrixon/daisyui:buildcache
+          cache-to: type=registry,ref=ghcr.io/mhenrixon/daisyui:buildcache,mode=max
 
   deploy:
     needs: build

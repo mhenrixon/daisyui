@@ -1,8 +1,8 @@
 # Name of your application. Used to uniquely configure containers.
-service: daisyui-docs
+service: daisyui
 
 # Name of the container image.
-image: mhenrixon/daisyui-docs
+image: mhenrixon/daisyui
 
 # Deploy to the OSS docs server (oss-docs, provisioned by oss-infrastructure).
 # Host and domain come from the GitHub `docs` environment secrets at deploy time.
@@ -62,7 +62,7 @@ env:
 
 # Persist SQLite database.
 volumes:
-  - "daisyui_docs_data:/data"
+  - "daisyui_data:/data"
 
 # Configure boot options.
 boot:
