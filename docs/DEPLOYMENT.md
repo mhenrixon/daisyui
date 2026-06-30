@@ -39,11 +39,23 @@ The server is provisioned by [`mhenrixon/oss-infrastructure`](https://github.com
 
 A docs server must exist with:
 
-- **Docker** installed
+- **Docker** installed (the deploy user must be in the `docker` group)
 - **cloudflared** running as a systemd service, connected to a Cloudflare Tunnel
 - **kamal-proxy** running on `:80` (started automatically by Kamal on first deploy)
-- The **deploy SSH user** configured with the public key matching `SSH_PRIVATE_KEY`
+- The **`oss` SSH user** (see `ssh: user:` in `deploy.yml`) configured with the
+  public key matching `SSH_PRIVATE_KEY`
 - A **Cloudflare Tunnel public hostname** for `${DEPLOY_DOMAIN}` routing to `http://localhost:80`
+
+The provisioned server is `oss@<DEPLOY_HOST>` (e.g. `178.105.2.54`), domain
+`daisyui.zoolutions.llc`.
+
+### CSS at build time
+
+The daisyUI/Tailwind stylesheet is compiled by **bun** (`bun run build:css`) into
+`app/assets/builds/application.css`, which is gitignored. `rails assets:precompile`
+is enhanced to run `css:build` first (see `docs/lib/tasks/build_css.rake`), and the
+Dockerfile installs bun in the build stage, so the image is built with fully
+compiled CSS — no separate step is required.
 
 ## GitHub Setup
 
@@ -91,16 +103,16 @@ Inside the container:
 gh workflow run deploy-docs.yml --repo mhenrixon/daisyui
 
 # Tail logs on the server
-ssh deploy@$DEPLOY_HOST "docker logs daisyui-docs-web -f"
+ssh oss@$DEPLOY_HOST "docker logs daisyui-docs-web -f"
 
 # Tail kamal-proxy logs
-ssh deploy@$DEPLOY_HOST "docker logs kamal-proxy -f"
+ssh oss@$DEPLOY_HOST "docker logs kamal-proxy -f"
 
 # Tail cloudflared logs
-ssh deploy@$DEPLOY_HOST "sudo journalctl -u cloudflared -f"
+ssh oss@$DEPLOY_HOST "sudo journalctl -u cloudflared -f"
 
 # SSH into the running container
-ssh deploy@$DEPLOY_HOST "docker exec -it daisyui-docs-web bash"
+ssh oss@$DEPLOY_HOST "docker exec -it daisyui-docs-web bash"
 
 # Roll back to a previous version
 cd docs && bundle exec kamal deploy --version=v1.0.6
