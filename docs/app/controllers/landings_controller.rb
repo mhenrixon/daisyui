@@ -2,6 +2,6 @@
 
 class LandingsController < ApplicationController
   def show
-    render Landings::ShowView.new
+    render_page Views::Landings::Show.new
   end
 end
