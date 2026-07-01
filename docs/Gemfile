@@ -19,6 +19,10 @@ gem "turbo-rails"
 
 # Views
 gem "daisyui", path: ".."
+# Shared docs-site chrome (Shell/Sidebar/Code/Page/...) — the single place the
+# layout/design lives, shared with the phlex-reactive docs site. Configured
+# per-site via DocsKit.configure (config/initializers/docs_kit.rb).
+gem "docs-kit", path: "../../docs-kit"
 gem "method_source"
 gem "phlex-rails"
 gem "phlex-reactive"

@@ -13,12 +13,16 @@
 
 /* Configure content sources */
 @source "../../../app/views/**/*.{rb,erb,haml,html,slim}";
+@source "../../../app/reactive_components/**/*.rb";
 @source "../../../app/helpers/**/*.rb";
 @source "../../../app/javascript/**/*.js";
 @source "../../../public/*.html";
 
-/* Include DaisyUI gem for class name extraction */
-@source "../../../.bundle/gems/daisyui*/**/*.rb";
+/* The daisyui + docs-kit GEMS emit class names from their .rb files; their
+   install dir varies by environment (path gem in dev, vendored in Docker), so
+   the @source globs are resolved at build time into the generated file imported
+   below — see bin/build-css. Without them the shared shell classes tree-shake. */
+@import "./tailwind.sources.css";
 
 /* Theme configuration */
 @theme {

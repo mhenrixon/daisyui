@@ -11,6 +11,16 @@ GIT
       tilt (~> 2)
 
 PATH
+  remote: ../../docs-kit
+  specs:
+    docs-kit (0.1.0)
+      daisyui (>= 1.2)
+      phlex-rails (>= 2.0, < 3)
+      rails_icons (~> 1.1)
+      rouge (>= 4.0)
+      zeitwerk (~> 2.6)
+
+PATH
   remote: ..
   specs:
     daisyui (1.2.0)
@@ -446,6 +456,7 @@ DEPENDENCIES
   daisyui!
   debug
   dockerfile-rails
+  docs-kit!
   dotenv
   factory_bot_rails
   faker
