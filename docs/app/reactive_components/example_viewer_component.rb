@@ -11,10 +11,7 @@
 # `example` is the example class NAME (a String), validated against the
 # ComponentDoc registry on every action so a forged class name can't be
 # instantiated.
-class ExampleViewerComponent < Phlex::HTML
-  include Phlex::Reactive::Streamable
-  include Phlex::Reactive::Component
-
+class ExampleViewerComponent < ReactiveBase
   TABS = %w[preview source].freeze
 
   reactive_state :example, :tab
@@ -100,7 +97,7 @@ class ExampleViewerComponent < Phlex::HTML
   def source
     cmp = example_component
     if cmp
-      render Views::Code.new(cmp.example_source, lexer: :ruby)
+      DocsUI::Code(cmp.example_source, lexer: :ruby)
     else
       div(class: "opacity-60 text-sm") { "# source unavailable" }
     end

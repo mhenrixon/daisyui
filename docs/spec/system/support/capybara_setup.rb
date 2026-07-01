@@ -30,9 +30,24 @@ Capybara.configure do |c|
   c.always_include_port   = true
 end
 
+# Also run at several viewport widths so responsive layout regressions are
+# caught. Pick with CAPYBARA_SCREEN (default desktop); specs asserting
+# desktop-only layout are tagged :desktop_only and skipped on small screens.
+SCREEN_SIZES = {
+  "mobile" => [390, 844],
+  "tablet" => [820, 1180],
+  "desktop" => [1920, 1080],
+}.freeze
+CAPYBARA_SCREEN = ENV.fetch("CAPYBARA_SCREEN", "desktop")
+CAPYBARA_SCREEN_SIZE = SCREEN_SIZES.fetch(CAPYBARA_SCREEN) do
+  raise "CAPYBARA_SCREEN must be one of #{SCREEN_SIZES.keys.join(', ')} (got #{CAPYBARA_SCREEN.inspect})"
+end
+
 RSpec.configure do |config|
+  config.filter_run_excluding(:desktop_only) unless CAPYBARA_SCREEN == "desktop"
+
   config.prepend_before(:each, type: :system) do
-    driven_by(:daisyui_playwright, screen_size: [1920, 1080], options: { js_errors: true })
+    driven_by(:daisyui_playwright, screen_size: CAPYBARA_SCREEN_SIZE, options: { js_errors: true })
   end
 
   config.around(:each, type: :system) do |ex|

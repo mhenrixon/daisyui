@@ -12,7 +12,7 @@ module Views
 
           def example
             Alert(:vertical, responsive: { sm: :horizontal }) do
-              render Views::Icon.new("info", class: "stroke-info h-6 w-6 shrink-0")
+              DocsUI::Icon("info", class: "stroke-info h-6 w-6 shrink-0")
               div do
                 h3(class: "font-bold") { "New message!" }
                 div(class: "text-xs") { "You have 1 unread message" }
