@@ -1,108 +1,17 @@
 name: Deploy Docs
 
+# Deploys the docs site (docs/) to the oss-infrastructure server via Kamal when a
+# release is published, or on demand. The build+deploy logic is shared across all
+# docs-kit sites — see mhenrixon/docs-kit/.github/workflows/deploy.yml.
 on:
   release:
     types: [published]
   workflow_dispatch:
 
-concurrency:
-  group: deploy-docs
-  cancel-in-progress: false
-
-permissions:
-  contents: read
-  packages: write
-
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    outputs:
-      image_tag: ${{ steps.tag.outputs.image_tag }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Determine image tag
-        id: tag
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: |
-          if [ "$EVENT_NAME" = "release" ]; then
-            TAG="$RELEASE_TAG"
-          else
-            TAG="sha-$(git rev-parse --short HEAD)"
-          fi
-          echo "image_tag=$TAG" >> "$GITHUB_OUTPUT"
-          echo "Building image tag: $TAG"
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: docs/Dockerfile
-          push: true
-          tags: |
-            ghcr.io/mhenrixon/daisyui:${{ steps.tag.outputs.image_tag }}
-            ghcr.io/mhenrixon/daisyui:latest
-          cache-from: type=registry,ref=ghcr.io/mhenrixon/daisyui:buildcache
-          cache-to: type=registry,ref=ghcr.io/mhenrixon/daisyui:buildcache,mode=max
-
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment: docs
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.4"
-          bundler-cache: true
-          working-directory: docs
-
-      - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.9.1
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Configure SSH for the deploy host
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          # Disable host-key verification for the deploy host. Kamal uses net-ssh,
-          # which raises HostKeyMismatch on any known_hosts conflict (e.g. after
-          # the server is reprovisioned). net-ssh honors ~/.ssh/config, so this
-          # turns verification off for this single known IP. Acceptable here: a
-          # public read-only docs site reached over an authenticated deploy key.
-          cat >> ~/.ssh/config <<EOF
-          Host $DEPLOY_HOST
-            StrictHostKeyChecking no
-            UserKnownHostsFile /dev/null
-          EOF
-          chmod 600 ~/.ssh/config
-
-      - name: Deploy with Kamal
-        working-directory: docs
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_DOMAIN: ${{ secrets.DEPLOY_DOMAIN }}
-          KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
-        run: |
-          bundle exec kamal deploy \
-            --skip-push \
-            --version="$IMAGE_TAG"
+    uses: mhenrixon/docs-kit/.github/workflows/deploy.yml@main
+    with:
+      image: mhenrixon/daisyui
+      service: daisyui
+    secrets: inherit

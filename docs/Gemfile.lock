@@ -1,4 +1,15 @@
 GIT
+  remote: https://github.com/mhenrixon/docs-kit.git
+  revision: d0a62c539d7dfbdadc1afa180b059ca775d77726
+  specs:
+    docs-kit (0.1.0)
+      daisyui (>= 1.2)
+      phlex-rails (>= 2.0, < 3)
+      rails_icons (~> 1.1)
+      rouge (>= 4.0)
+      zeitwerk (~> 2.6)
+
+GIT
   remote: https://github.com/oldmoe/litestack.git
   revision: e598e1b1f0d46f45df1e2c6213ff9b136b63d9bf
   specs:
@@ -9,16 +20,6 @@ GIT
       rackup (~> 2)
       sqlite3 (>= 1.6.0, < 3.0.0)
       tilt (~> 2)
-
-PATH
-  remote: ../../docs-kit
-  specs:
-    docs-kit (0.1.0)
-      daisyui (>= 1.2)
-      phlex-rails (>= 2.0, < 3)
-      rails_icons (~> 1.1)
-      rouge (>= 4.0)
-      zeitwerk (~> 2.6)
 
 PATH
   remote: ..
