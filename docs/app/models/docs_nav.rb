@@ -33,9 +33,13 @@ module DocsNav
   end
 
   # Only components with at least one authored example are linkable.
+  # Uses ComponentDoc.grouped to preserve official DaisyUI category ordering.
   def component_group
-    ComponentDoc.all.select(&:example_class).group_by(&:category).transform_values do |items|
-      items.map { |c| DocsKit::NavItem.new(href: "/components/#{c.slug}", label: c.title) }
-    end
+    ComponentDoc.grouped.transform_values do |items|
+      linkable = items.select(&:example_class)
+      next nil if linkable.empty?
+
+      linkable.map { |c| DocsKit::NavItem.new(href: "/components/#{c.slug}", label: c.title) }
+    end.compact
   end
 end

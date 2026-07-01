@@ -49,6 +49,16 @@
   background-image: none !important;
 }
 
+/* FAB uses position:fixed — contain it within the preview panel */
+.fab-preview-container {
+  position: relative;
+  min-height: 16rem;
+}
+
+.fab-preview-container .fab {
+  position: absolute;
+}
+
 /* Responsive drawer-open - outside layers for highest specificity */
 @media (width >= 1024px) {
   .lg\:drawer-open {
