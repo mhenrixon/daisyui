@@ -12,7 +12,7 @@ module Views
 
           def example
             Alert(:error) do
-              render ::Docs::Icon.new("circle-x", class: "h-6 w-6 shrink-0 stroke-current")
+              DocsUI::Icon("circle-x", class: "h-6 w-6 shrink-0 stroke-current")
               span { "Error! Task failed successfully." }
             end
           end

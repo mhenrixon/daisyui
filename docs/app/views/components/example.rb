@@ -28,6 +28,10 @@ module Views
     #     end
     #   end
     class Example < Phlex::HTML
+      # Example subclasses render docs-kit chrome (DocsUI::Icon) alongside daisyUI
+      # components, so expose the DocsUI kit's short form here too.
+      include DocsUI
+
       class << self
         # The heading shown above this example (e.g. "Buttons with colors").
         # Defaults to a humanized version of the class's last name segment.

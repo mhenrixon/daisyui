@@ -12,7 +12,7 @@ module Views
 
           def example
             Alert(:warning) do
-              render ::Docs::Icon.new("triangle-alert", class: "h-6 w-6 shrink-0 stroke-current")
+              DocsUI::Icon("triangle-alert", class: "h-6 w-6 shrink-0 stroke-current")
               span { "Warning: Invalid email address!" }
             end
           end

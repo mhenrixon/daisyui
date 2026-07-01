@@ -12,7 +12,7 @@ module Views
 
           def example
             Alert do
-              render ::Docs::Icon.new("info", class: "stroke-info h-6 w-6 shrink-0")
+              DocsUI::Icon("info", class: "stroke-info h-6 w-6 shrink-0")
               span { "12 unread messages. Tap to see." }
             end
           end

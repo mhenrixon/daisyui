@@ -12,7 +12,7 @@ module Views
 
           def example
             Alert(:success) do
-              render ::Docs::Icon.new("circle-check", class: "h-6 w-6 shrink-0 stroke-current")
+              DocsUI::Icon("circle-check", class: "h-6 w-6 shrink-0 stroke-current")
               span { "Your purchase has been confirmed!" }
             end
           end

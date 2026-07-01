@@ -15,7 +15,7 @@ module Views
       def view_template
         # on_page: true → the auto "On this page" TOC (config default placement)
         # over the component's example sections, same as the guide pages.
-        render ::Docs::Shell.new(title: @component.title, on_page: true) do
+        DocsUI::Shell(title: @component.title, on_page: true) do
           nav(class: "mb-6") do
             a(href: root_path, class: "link link-hover text-sm opacity-70") { "← Home" }
           end
