@@ -11,8 +11,10 @@ module Views
           order 1
 
           def example
-            Fab do
-              Button(:lg, :circle, :primary) { "F" }
+            div(class: "fab-preview-container w-full") do
+              Fab do
+                Button(:lg, :circle, :primary) { "F" }
+              end
             end
           end
         end

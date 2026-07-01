@@ -9,79 +9,52 @@
 # Only components that have at least one example class are linked in the sidebar
 # and the landing page, so there are never dead links while the reference is
 # being authored.
+#
+# Category order matches official DaisyUI docs:
+# Actions → Data display → Navigation → Feedback → Data input → Layout → Mockup
 class ComponentDoc
+  CATEGORIES = [
+    "Actions",
+    "Data display",
+    "Navigation",
+    "Feedback",
+    "Data input",
+    "Layout",
+    "Mockup",
+  ].freeze
+
   REGISTRY = [
-    # Actions
+    # ── Actions ──────────────────────────────────────────────────────────
     { slug: "button", title: "Button", category: "Actions" },
     { slug: "dropdown", title: "Dropdown", category: "Actions" },
-    { slug: "fab", title: "FAB", category: "Actions" },
-    { slug: "filter", title: "Filter", category: "Actions" },
+    { slug: "fab", title: "FAB / Speed Dial", category: "Actions" },
     { slug: "modal", title: "Modal", category: "Actions" },
     { slug: "swap", title: "Swap", category: "Actions" },
     { slug: "theme-controller", title: "Theme Controller", category: "Actions" },
 
-    # Data display
+    # ── Data display ─────────────────────────────────────────────────────
     { slug: "accordion", title: "Accordion", category: "Data display" },
-    { slug: "aura", title: "Aura", category: "Data display" },
     { slug: "avatar", title: "Avatar", category: "Data display" },
+    { slug: "avatar-group", title: "Avatar Group", category: "Data display" },
+    { slug: "aura", title: "Aura", category: "Data display" },
     { slug: "badge", title: "Badge", category: "Data display" },
     { slug: "card", title: "Card", category: "Data display" },
     { slug: "carousel", title: "Carousel", category: "Data display" },
-    { slug: "chat", title: "Chat", category: "Data display" },
+    { slug: "chat", title: "Chat bubble", category: "Data display" },
     { slug: "collapse", title: "Collapse", category: "Data display" },
     { slug: "countdown", title: "Countdown", category: "Data display" },
     { slug: "diff", title: "Diff", category: "Data display" },
+    { slug: "hover-3d", title: "Hover 3D card", category: "Data display" },
     { slug: "hover-gallery", title: "Hover Gallery", category: "Data display" },
     { slug: "kbd", title: "Kbd", category: "Data display" },
     { slug: "list", title: "List", category: "Data display" },
     { slug: "stat", title: "Stat", category: "Data display" },
+    { slug: "status", title: "Status", category: "Data display" },
     { slug: "table", title: "Table", category: "Data display" },
+    { slug: "text-rotate", title: "Text Rotate", category: "Data display" },
     { slug: "timeline", title: "Timeline", category: "Data display" },
 
-    # Data input
-    { slug: "calendar", title: "Calendar", category: "Data input" },
-    { slug: "checkbox", title: "Checkbox", category: "Data input" },
-    { slug: "fieldset", title: "Fieldset", category: "Data input" },
-    { slug: "file-input", title: "File Input", category: "Data input" },
-    { slug: "form-control", title: "Form Control", category: "Data input" },
-    { slug: "input", title: "Input", category: "Data input" },
-    { slug: "label", title: "Label", category: "Data input" },
-    { slug: "otp", title: "OTP", category: "Data input" },
-    { slug: "radio", title: "Radio", category: "Data input" },
-    { slug: "range", title: "Range", category: "Data input" },
-    { slug: "rating", title: "Rating", category: "Data input" },
-    { slug: "select", title: "Select", category: "Data input" },
-    { slug: "textarea", title: "Textarea", category: "Data input" },
-    { slug: "toggle", title: "Toggle", category: "Data input" },
-    { slug: "validator", title: "Validator", category: "Data input" },
-
-    # Feedback
-    { slug: "alert", title: "Alert", category: "Feedback" },
-    { slug: "loading", title: "Loading", category: "Feedback" },
-    { slug: "progress", title: "Progress", category: "Feedback" },
-    { slug: "radial-progress", title: "Radial Progress", category: "Feedback" },
-    { slug: "skeleton", title: "Skeleton", category: "Feedback" },
-    { slug: "status", title: "Status", category: "Feedback" },
-    { slug: "toast", title: "Toast", category: "Feedback" },
-    { slug: "tooltip", title: "Tooltip", category: "Feedback" },
-
-    # Layout
-    { slug: "divider", title: "Divider", category: "Layout" },
-    { slug: "drawer", title: "Drawer", category: "Layout" },
-    { slug: "footer", title: "Footer", category: "Layout" },
-    { slug: "hero", title: "Hero", category: "Layout" },
-    { slug: "indicator", title: "Indicator", category: "Layout" },
-    { slug: "join", title: "Join", category: "Layout" },
-    { slug: "mask", title: "Mask", category: "Layout" },
-    { slug: "stack", title: "Stack", category: "Layout" },
-
-    # Mockup
-    { slug: "mockup-browser", title: "Mockup Browser", category: "Mockup" },
-    { slug: "mockup-code", title: "Mockup Code", category: "Mockup" },
-    { slug: "mockup-phone", title: "Mockup Phone", category: "Mockup" },
-    { slug: "mockup-window", title: "Mockup Window", category: "Mockup" },
-
-    # Navigation
+    # ── Navigation ───────────────────────────────────────────────────────
     { slug: "breadcrumbs", title: "Breadcrumbs", category: "Navigation" },
     { slug: "dock", title: "Dock", category: "Navigation" },
     { slug: "link", title: "Link", category: "Navigation" },
@@ -92,10 +65,48 @@ class ComponentDoc
     { slug: "steps", title: "Steps", category: "Navigation" },
     { slug: "tabs", title: "Tabs", category: "Navigation" },
 
-    # Special effects
-    { slug: "avatar-group", title: "Avatar Group", category: "Data display" },
-    { slug: "hover-3d", title: "Hover 3D", category: "Data display" },
-    { slug: "text-rotate", title: "Text Rotate", category: "Data display" },
+    # ── Feedback ─────────────────────────────────────────────────────────
+    { slug: "alert", title: "Alert", category: "Feedback" },
+    { slug: "loading", title: "Loading", category: "Feedback" },
+    { slug: "progress", title: "Progress", category: "Feedback" },
+    { slug: "radial-progress", title: "Radial Progress", category: "Feedback" },
+    { slug: "skeleton", title: "Skeleton", category: "Feedback" },
+    { slug: "toast", title: "Toast", category: "Feedback" },
+    { slug: "tooltip", title: "Tooltip", category: "Feedback" },
+
+    # ── Data input ───────────────────────────────────────────────────────
+    { slug: "calendar", title: "Calendar", category: "Data input" },
+    { slug: "checkbox", title: "Checkbox", category: "Data input" },
+    { slug: "fieldset", title: "Fieldset", category: "Data input" },
+    { slug: "file-input", title: "File Input", category: "Data input" },
+    { slug: "filter", title: "Filter", category: "Data input" },
+    { slug: "form-control", title: "Form Control", category: "Data input" },
+    { slug: "input", title: "Text Input", category: "Data input" },
+    { slug: "label", title: "Label", category: "Data input" },
+    { slug: "otp", title: "OTP", category: "Data input" },
+    { slug: "radio", title: "Radio", category: "Data input" },
+    { slug: "range", title: "Range", category: "Data input" },
+    { slug: "rating", title: "Rating", category: "Data input" },
+    { slug: "select", title: "Select", category: "Data input" },
+    { slug: "textarea", title: "Textarea", category: "Data input" },
+    { slug: "toggle", title: "Toggle", category: "Data input" },
+    { slug: "validator", title: "Validator", category: "Data input" },
+
+    # ── Layout ───────────────────────────────────────────────────────────
+    { slug: "divider", title: "Divider", category: "Layout" },
+    { slug: "drawer", title: "Drawer sidebar", category: "Layout" },
+    { slug: "footer", title: "Footer", category: "Layout" },
+    { slug: "hero", title: "Hero", category: "Layout" },
+    { slug: "indicator", title: "Indicator", category: "Layout" },
+    { slug: "join", title: "Join (group items)", category: "Layout" },
+    { slug: "mask", title: "Mask", category: "Layout" },
+    { slug: "stack", title: "Stack", category: "Layout" },
+
+    # ── Mockup ───────────────────────────────────────────────────────────
+    { slug: "mockup-browser", title: "Browser", category: "Mockup" },
+    { slug: "mockup-code", title: "Code", category: "Mockup" },
+    { slug: "mockup-phone", title: "Phone", category: "Mockup" },
+    { slug: "mockup-window", title: "Window", category: "Mockup" },
   ].freeze
 
   attr_reader :slug, :title, :category
@@ -115,7 +126,10 @@ class ComponentDoc
   end
 
   def self.grouped
-    all.group_by(&:category)
+    result = all.group_by(&:category)
+    CATEGORIES.each_with_object({}) do |cat, hash|
+      hash[cat] = result[cat] if result[cat]
+    end
   end
 
   # The example namespace module for this component (e.g.
