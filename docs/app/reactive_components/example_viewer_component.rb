@@ -100,7 +100,7 @@ class ExampleViewerComponent < Phlex::HTML
   def source
     cmp = example_component
     if cmp
-      render Views::Code.new(cmp.example_source, lexer: :ruby)
+      render ::Docs::Code.new(cmp.example_source, lexer: :ruby)
     else
       div(class: "opacity-60 text-sm") { "# source unavailable" }
     end

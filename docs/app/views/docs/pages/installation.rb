@@ -5,7 +5,7 @@ module Views
     module Pages
       # Template guide page. Each private method renders one Section interleaving
       # Code + Prose + Callout — copy this shape to author the rest of the docs.
-      class Installation < Views::Docs::Page
+      class Installation < ::Docs::Page
         title "Installation"
         eyebrow "Guide"
 
@@ -22,24 +22,24 @@ module Views
         private
 
         def add_the_gem
-          render Views::Docs::Section.new("Add the gem") do
-            render Views::Docs::Prose.new do
+          render ::Docs::Section.new("Add the gem") do
+            render ::Docs::Prose.new do
               p do
                 plain "Add "
                 code { "daisyui" }
                 plain " to your Gemfile and install:"
               end
             end
-            render Views::Code.new(<<~RUBY, lexer: :ruby, filename: "Gemfile")
+            render ::Docs::Code.new(<<~RUBY, lexer: :ruby, filename: "Gemfile")
               gem "daisyui"
             RUBY
-            render Views::Code.new("bundle install", lexer: :shell)
+            render ::Docs::Code.new("bundle install", lexer: :shell)
           end
         end
 
         def render_a_component
-          render Views::Docs::Section.new("Render a component") do
-            render Views::Docs::Prose.new do
+          render ::Docs::Section.new("Render a component") do
+            render ::Docs::Prose.new do
               p do
                 plain "Components are Phlex classes under the "
                 code { "DaisyUI" }
@@ -47,7 +47,7 @@ module Views
                 plain "syntax, then call a component like a method:"
               end
             end
-            render Views::Code.new(<<~RUBY, lexer: :ruby, filename: "app/views/home_view.rb")
+            render ::Docs::Code.new(<<~RUBY, lexer: :ruby, filename: "app/views/home_view.rb")
               class HomeView < Phlex::HTML
                 include DaisyUI
 
@@ -56,7 +56,7 @@ module Views
                 end
               end
             RUBY
-            render Views::Docs::Callout.new(:tip, title: "Modifiers are symbols") do
+            render ::Docs::Callout.new(:tip, title: "Modifiers are symbols") do
               plain "Pass daisyUI modifiers as leading symbols — "
               plain "Button(:primary, :lg) renders btn btn-primary btn-lg."
             end
@@ -64,8 +64,8 @@ module Views
         end
 
         def tailwind_setup
-          render Views::Docs::Section.new("Tailwind & daisyUI CSS") do
-            render Views::Docs::Prose.new do
+          render ::Docs::Section.new("Tailwind & daisyUI CSS") do
+            render ::Docs::Prose.new do
               p do
                 plain "The gem renders the class names; Tailwind + the daisyUI "
                 plain "plugin produce the CSS. Load the daisyUI plugin in your "
@@ -73,7 +73,7 @@ module Views
                 plain "render-time class names are detected:"
               end
             end
-            render Views::Code.new(<<~CSS, lexer: :plaintext, filename: "application.tailwind.css")
+            render ::Docs::Code.new(<<~CSS, lexer: :plaintext, filename: "application.tailwind.css")
               @import "tailwindcss";
 
               @plugin "daisyui" {
@@ -83,7 +83,7 @@ module Views
               /* Detect class names the gem generates at render time. */
               @source "../../../.bundle/gems/daisyui*/**/*.rb";
             CSS
-            render Views::Docs::Callout.new(:warning, title: "Render-time classes") do
+            render ::Docs::Callout.new(:warning, title: "Render-time classes") do
               plain "daisyUI components (like Drawer) emit some class names only "
               plain "at render time. Add an @source for the gem so Tailwind does "
               plain "not tree-shake their CSS."

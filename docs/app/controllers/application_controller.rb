@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # Render a Phlex page view. Views::Layout IS the full HTML document (its own
+  # Render a Phlex page view. Docs::Shell IS the full HTML document (its own
   # <html>/<head>/<body> + the daisyUI drawer shell), so it must NOT be wrapped
   # in a Rails ERB application layout — `layout: false` prevents double <html>
   # nesting. phlex-rails still renders through a real view context, so the

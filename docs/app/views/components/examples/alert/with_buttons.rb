@@ -12,7 +12,7 @@ module Views
 
           def example
             Alert(:vertical, responsive: { sm: :horizontal }) do
-              render Views::Icon.new("info", class: "stroke-info h-6 w-6 shrink-0")
+              render ::Docs::Icon.new("info", class: "stroke-info h-6 w-6 shrink-0")
               span { "we use cookies for no reason." }
               div do
                 Button(:sm) { "Deny" }

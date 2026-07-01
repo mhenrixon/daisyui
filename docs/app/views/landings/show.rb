@@ -6,7 +6,7 @@ module Views
       include Phlex::Rails::Helpers::Routes
 
       def view_template
-        render Views::Layout.new do
+        render ::Docs::Shell.new do
           header(class: "mb-10") do
             h1(class: "text-4xl font-bold mb-3") { "DaisyUI Ruby" }
             p(class: "text-lg opacity-80 max-w-2xl") do
