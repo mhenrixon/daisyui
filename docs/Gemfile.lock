@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/mhenrixon/docs-kit.git
-  revision: 8fe6febc8128fef1fe893b632ab7cac2f099cae8
+  revision: 8641c703e5eb8d96f5ef22d46582c6eae0df9b58
   specs:
     docs-kit (0.1.0)
       daisyui (>= 1.2)
@@ -213,7 +213,7 @@ GEM
     loofah (2.25.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    mail (2.9.0)
+    mail (2.9.1)
       logger
       mini_mime (>= 0.1.1)
       net-imap
