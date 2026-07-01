@@ -12,7 +12,6 @@
 # ComponentDoc registry on every action so a forged class name can't be
 # instantiated.
 class ExampleViewerComponent < ReactiveBase
-
   TABS = %w[preview source].freeze
 
   reactive_state :example, :tab
