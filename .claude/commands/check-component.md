@@ -1,3 +1,9 @@
+---
+description: "Compare a gem component against official DaisyUI 5 docs. Use when verifying a single component's alignment."
+model: sonnet
+argument-hint: "component name (e.g., button, card, modal)"
+---
+
 # Check Component Against DaisyUI 5
 
 Compare a gem component against the official DaisyUI 5 documentation.

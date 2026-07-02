@@ -1,3 +1,8 @@
+---
+description: "Audit all gem components against DaisyUI 5 documentation for inconsistencies. Use when checking alignment after a DaisyUI version bump."
+model: sonnet
+---
+
 # Audit All Components
 
 Check all gem components against DaisyUI 5 documentation for inconsistencies.

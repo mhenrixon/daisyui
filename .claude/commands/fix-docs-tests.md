@@ -1,3 +1,8 @@
+---
+description: "Run docs tests and fix any failures. Use when docs specs are red after component or example changes."
+model: sonnet
+---
+
 # Fix Docs Tests
 
 Run docs tests and fix any failures.

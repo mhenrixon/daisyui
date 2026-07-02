@@ -1,3 +1,8 @@
+---
+description: "Run the complete test suite for both the gem and docs site. Use after broad changes to verify nothing is broken."
+model: sonnet
+---
+
 # Run All Tests
 
 Run the complete test suite for both the gem and docs site.
