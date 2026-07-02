@@ -1,3 +1,9 @@
+---
+description: "Add a new DaisyUI component with full test coverage and documentation. Use when creating a component that doesn't exist yet."
+model: sonnet
+argument-hint: "component name in snake_case (e.g., floating_label, bottom_nav)"
+---
+
 # Add New Component
 
 Create a new DaisyUI component with full test coverage and documentation.

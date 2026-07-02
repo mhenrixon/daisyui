@@ -115,6 +115,26 @@ bundle exec rspec spec/system/           # Only system tests
 HEADLESS=false bundle exec rspec         # Watch browser tests run
 ```
 
+## Slash Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/plan` | Fable-powered planning → GitHub issue or `docs/plans/` markdown (read-only; execute with `/lfg`) |
+| `/lfg` | Full autonomous engineering workflow with verification |
+| `/add-component` | Create a new DaisyUI component with tests and docs |
+| `/check-component` | Verify a single component against DaisyUI 5 spec |
+| `/audit-components` | Audit all components against DaisyUI 5 |
+| `/tdd` | RED → GREEN → REFACTOR cycle |
+| `/test-all` | Run complete test suite (gem + docs) |
+| `/fix-docs-tests` | Fix failing docs specs |
+| `/review-pr` | Review a GitHub PR for quality and patterns |
+| `/github-review-comments` | Respond to unresolved PR review comments |
+| `/github-ci-failures` | Diagnose and fix CI failures |
+
+### Model tier convention
+
+Commands and agents pin a model tier via frontmatter aliases: `haiku` for mechanical/config work, `sonnet` for layer specialists (the default), `opus` for orchestration and PR review, `fable` for read-only planning. Always use tier aliases, never full model IDs — aliases track the latest model in each tier. When spawning subagents for mechanical work (file finding, pattern scans), pass a cheaper model explicitly rather than letting them inherit the session model.
+
 ## CI Pipeline
 
 All jobs run in parallel:
