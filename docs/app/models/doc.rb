@@ -33,8 +33,21 @@ class Doc
     all.group_by(&:group)
   end
 
+  # { group => [DocsKit::NavItem] } for the authored guides — the Registry v2
+  # shape docs-kit's AI surfaces (/llms.txt, /llms-full.txt, search) consume via
+  # config.nav_registries. Unwritten pages (no view_class) are dropped.
+  def self.nav_items
+    all.select(&:view_class).group_by(&:group).transform_values do |docs|
+      docs.map { |doc| DocsKit::NavItem.new(href: doc.href, label: doc.title) }
+    end
+  end
+
   # The hand-authored Phlex page class for this doc (nil if not yet written).
   def view_class
     "Views::Docs::Pages::#{view_name}".safe_constantize
   end
+
+  # The guide's URL path — consumed by docs-kit's search index and the .md-twin
+  # links in /llms.txt.
+  def href = "/docs/#{slug}"
 end

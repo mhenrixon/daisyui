@@ -1,156 +1,96 @@
+---
 plugins:
-  - rubocop-performance
-  - rubocop-rails
-  - rubocop-rake
-  - rubocop-rspec
-
-# Local custom cop: enforce the DocsUI/DaisyUI Phlex kit form
-# (DocsUI::Code(...)) over `render DocsUI::Code.new(...)`.
+- rubocop-performance
+- rubocop-rails
+- rubocop-rake
+- rubocop-rspec
 require:
-  - ./lib/rubocop/cop/docs_kit/render_component_preferred.rb
-
+- "./lib/rubocop/cop/docs_kit/render_component_preferred.rb"
+- docs_kit/rubocop
 DocsKit/RenderComponentPreferred:
   Enabled: true
   Include:
-    - app/**/*.rb
+  - app/**/*.rb
   Exclude:
-    - lib/rubocop/cop/**/*.rb
-
+  - lib/rubocop/cop/**/*.rb
 AllCops:
   TargetRubyVersion: 3.4
   NewCops: enable
   SuggestExtensions: false
   Exclude:
-    - "bin/**/*"
-    - "db/schema.rb"
-    - "node_modules/**/*"
-    - "tmp/**/*"
-    - "vendor/**/*"
-
-#===============
-#=== LAYOUT ===
-#===============
-
+  - bin/**/*
+  - db/schema.rb
+  - node_modules/**/*
+  - tmp/**/*
+  - vendor/**/*
 Layout/BlockAlignment:
   EnforcedStyleAlignWith: start_of_block
-
 Layout/LineLength:
   Enabled: false
-
-#===============
-#=== LINT ===
-#===============
-
 Lint/AmbiguousBlockAssociation:
   Exclude:
-    - "spec/**/*"
-
+  - spec/**/*
 Lint/EmptyBlock:
   Exclude:
-    - "app/views/**/*"
-
+  - app/views/**/*
 Lint/MissingSuper:
   Exclude:
-    - "app/views/**/*"
-    - "app/components/**/*"
-
+  - app/views/**/*
+  - app/components/**/*
 Lint/UselessConstantScoping:
   Enabled: false
-
-#===============
-#=== METRICS ===
-#===============
-
 Metrics:
   Enabled: false
-
-#===============
-#=== NAMING ===
-#===============
-
 Naming/VariableNumber:
   Exclude:
-    - "app/views/**/*"
-    - "app/components/**/*"
-
-#===============
-#=== RAILS ===
-#===============
-
+  - app/views/**/*
+  - app/components/**/*
 Rails:
   Enabled: true
-
 Rails/Exit:
   Exclude:
-    - "lib/generators/**/*"
-
+  - lib/generators/**/*
 Rails/FindEach:
   Exclude:
-    - "app/views/**/*"
-
+  - app/views/**/*
 Rails/FilePath:
   EnforcedStyle: arguments
-
 Rails/I18nLocaleTexts:
   Enabled: false
-
 Rails/OutputSafety:
   Enabled: false
-
 Rails/SkipsModelValidations:
   Enabled: false
-
-#===============
-#=== RAKE ===
-#===============
-
 Rake/Desc:
   Exclude:
-    - "lib/tasks/annotate.rake"
-    - "lib/tasks/auto_annotate_models.rake"
-
-#===============
-#=== STYLE ===
-#===============
-
+  - lib/tasks/annotate.rake
+  - lib/tasks/auto_annotate_models.rake
 Style/ClassAndModuleChildren:
   Enabled: false
-
 Style/Documentation:
   Enabled: false
-
 Style/ClassVars:
   Exclude:
-    - "app/models/category.rb"
-    - "app/models/component.rb"
-
+  - app/models/category.rb
+  - app/models/component.rb
 Style/Lambda:
   EnforcedStyle: literal
-
 Style/OpenStructUse:
   Enabled: false
-
 Style/StringLiterals:
   EnforcedStyle: double_quotes
-
 Style/SymbolArray:
   EnforcedStyle: brackets
-
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
-
 Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
-
-#=============
-#=== RSpec ===
-#=============
-
 RSpec/ExampleLength:
   Enabled: false
-
 RSpec/MultipleExpectations:
   Enabled: false
-
 RSpec/NestedGroups:
   Enabled: false
+inherit_gem:
+  docs-kit:
+  - config/rubocop/docs_kit.yml

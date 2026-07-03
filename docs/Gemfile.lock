@@ -1,9 +1,11 @@
 GIT
   remote: https://github.com/mhenrixon/docs-kit.git
-  revision: 73e52fd390a4236f460b984dc4c22b9ba3b2252f
+  revision: 75584e2c5a8b2e61e0f1e20991827b3a5b8a9ab7
   specs:
     docs-kit (0.1.0)
+      commonmarker (~> 2.0)
       daisyui (>= 1.2)
+      nokogiri (>= 1.15)
       phlex-rails (>= 2.0, < 3)
       rails_icons (~> 1.1)
       rouge (>= 4.0)
@@ -133,6 +135,10 @@ GEM
       addressable
       capybara
       playwright-ruby-client (>= 1.16.0)
+    commonmarker (2.8.2-aarch64-linux)
+    commonmarker (2.8.2-arm64-darwin)
+    commonmarker (2.8.2-x86_64-darwin)
+    commonmarker (2.8.2-x86_64-linux)
     concurrent-ruby (1.3.7)
     connection_pool (3.0.2)
     crass (1.0.7)

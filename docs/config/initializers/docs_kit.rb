@@ -11,13 +11,28 @@ Rails.application.config.to_prepare do
   DocsKit.configure do |c|
     c.brand         = "DaisyUI Ruby"
     c.title_suffix  = "DaisyUI Ruby"
+    # The one-line summary agents read first in /llms.txt (the llmstxt.org
+    # blockquote under the H1).
+    c.tagline       = "daisyUI's components as first-class Phlex — 70+ Ruby " \
+                      "components you compose in views, no HTML class soup."
     c.themes        = %w[
       dark light cupcake synthwave retro cyberpunk valentine
       dracula night coffee nord sunset business emerald corporate
     ]
-    # Monokai, inlined by Docs::Code — same as the phlex-reactive docs site.
-    c.code_theme    = "Rouge::Themes::Monokai"
-    c.version_badge = -> { "v#{DaisyUI::VERSION}" }
-    c.nav           = -> { DocsNav.groups }
+
+    # A light base with a dark override, so code stays readable when the switcher
+    # lands on a dark theme. CSS-only scoping ([data-theme=X]) — no JS, no flash.
+    c.code_theme      = "Rouge::Themes::Github"
+    c.code_theme_dark = "Rouge::Themes::Monokai"
+    c.version_badge   = -> { "v#{DaisyUI::VERSION}" }
+
+    # The sidebar interleaves Components + Guides, so it stays a bespoke lambda.
+    c.nav = -> { DocsNav.groups }
+
+    # nav_registries feeds the AI surfaces (/llms.txt, /llms-full.txt, search)
+    # from the registries — the custom c.nav above only drives the sidebar, so
+    # without this the AI index would be empty. Both registries expose the
+    # Registry v2 shape (#nav_items + #href + #view_class).
+    c.nav_registries = { "Components" => ComponentDoc, "Guides" => Doc }
   end
 end
