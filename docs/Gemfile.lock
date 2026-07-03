@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/mhenrixon/docs-kit.git
-  revision: 75584e2c5a8b2e61e0f1e20991827b3a5b8a9ab7
+  revision: 82d76a761cf21f1380f71eccdbbae49fe8c1ad6f
   specs:
     docs-kit (0.1.0)
       commonmarker (~> 2.0)
