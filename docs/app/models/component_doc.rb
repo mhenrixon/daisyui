@@ -170,4 +170,35 @@ class ComponentDoc
   def example_class
     examples.first
   end
+
+  # --- docs-kit AI-surface adapter (Registry v2 contract) ------------------
+  # /llms.txt, /llms-full.txt, and search consume config.nav_registries, calling
+  # #nav_items on the registry and #href / #view_class on each entry. A component
+  # page renders Views::Components::Show.new(component:), so #view_class returns a
+  # no-arg subclass with the component pre-bound — satisfying `view_class.new`.
+
+  # { category => [DocsKit::NavItem] } for components that have at least one
+  # example (no dead entries), in the official category order.
+  def self.nav_items
+    items_by_category = grouped.transform_values do |components|
+      authored = components.select { |c| c.examples.any? }
+      authored.map { |c| DocsKit::NavItem.new(href: c.href, label: c.title) }
+    end
+    items_by_category.reject { |_cat, items| items.empty? }
+  end
+
+  # The component page URL.
+  def href = "/components/#{slug}"
+
+  # A no-arg Phlex class that renders this component's Show page — so docs-kit's
+  # AI surfaces (which call view_class.new) can export the component's Markdown
+  # twin. nil when the component has no examples yet (dropped from the index).
+  def view_class
+    return nil if examples.empty?
+
+    component = self
+    Class.new(Views::Components::Show) do
+      define_method(:initialize) { super(component: component) }
+    end
+  end
 end
