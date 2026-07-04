@@ -17,6 +17,12 @@
 /.rspec
 /CLAUDE.md
 /codedb.snapshot
+/coverage/
+/pkg/
+/tmp/
+/.bundle
+/.worktrees/
+.rspec_status
 
 # Docs development files
 /docs/.bundle
@@ -28,6 +34,8 @@
 /docs/tmp/*
 /docs/storage/*
 /docs/spec/
+/docs/.rspec
+/docs/coverage/
 /docs/.dockerignore
 /docs/.kamal/
 /docs/config/master.key

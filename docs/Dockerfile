@@ -54,8 +54,12 @@ COPY --link docs/ .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY.
+# Drop node_modules + the bun toolchain afterwards — only the built CSS is kept,
+# so the final stage's COPY of /gem never carries the JS deps. tmp/cache stays:
+# it holds the bootsnap cache precompiled above.
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile && \
+    rm -rf node_modules /usr/local/bun
 
 
 # Final stage for app image
@@ -89,4 +93,12 @@ ENTRYPOINT ["/gem/docs/bin/docker-entrypoint"]
 
 EXPOSE 3000
 VOLUME /data
-CMD ["./bin/rails", "server"]
+# Thruster fronts Puma (HTTP caching + compression + X-Sendfile). It listens on
+# HTTP_PORT and proxies to Puma on TARGET_PORT (it sets PORT for the child, which
+# config/puma.rb reads). HTTP_PORT MUST be the port traffic is routed to (Kamal's
+# `app_port: 3000` in config/deploy.yml, the EXPOSE above) — Thruster's default
+# is 80, which the non-root user can't reliably bind AND which kamal-proxy would
+# never route to, silently bypassing Thruster straight into Puma.
+ENV HTTP_PORT="3000" \
+    TARGET_PORT="3001"
+CMD ["./bin/thrust", "./bin/rails", "server"]

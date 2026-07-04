@@ -21,15 +21,19 @@ gem "turbo-rails"
 gem "daisyui", path: ".."
 # Shared docs-site chrome (Shell/Sidebar/Code/Page/...) — the single place the
 # layout/design lives, shared with the phlex-reactive docs site. Configured
-# per-site via DocsKit.configure (config/initializers/docs_kit.rb). Referenced
-# from GitHub (not a local path) so the Docker build — whose context is THIS repo
-# — can resolve it; the gem lives in a sibling repo, outside the build context.
-gem "docs-kit", github: "mhenrixon/docs-kit", require: "docs_kit"
+# per-site via DocsKit.configure (config/initializers/docs_kit.rb). Now pulled
+# from RubyGems as a released gem — the old GitHub ref existed only because the
+# sibling repo sat outside the Docker build context, which no longer applies.
+gem "docs-kit", "~> 1.0.3", require: "docs_kit"
 gem "method_source"
 gem "phlex-rails"
 gem "phlex-reactive"
 gem "rails_icons", "~> 1.1"
 gem "rouge"
+
+# HTTP/2 proxy in front of Puma in the container (compression, static-asset
+# caching, X-Sendfile). Invoked via bin/thrust in the Dockerfile CMD.
+gem "thruster", require: false
 
 # Database & Performance
 gem "friendly_id"
