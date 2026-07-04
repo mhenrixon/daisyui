@@ -5,14 +5,11 @@ plugins:
 - rubocop-rake
 - rubocop-rspec
 require:
-- "./lib/rubocop/cop/docs_kit/render_component_preferred.rb"
 - docs_kit/rubocop
 DocsKit/RenderComponentPreferred:
   Enabled: true
   Include:
   - app/**/*.rb
-  Exclude:
-  - lib/rubocop/cop/**/*.rb
 AllCops:
   TargetRubyVersion: 3.4
   NewCops: enable
