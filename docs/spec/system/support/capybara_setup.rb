@@ -68,10 +68,12 @@ RSpec.configure do |config|
       # Save HTML to file
       html_path = "tmp/capybara/failures_#{example.id.tr('/', '_').tr(':', '_')}.html"
       File.write(html_path, page.html)
+      # rubocop:disable RSpec/Output -- deliberate debug dump on failure
       puts "\n[HTML saved to: #{html_path}]"
       puts "\n[Page URL: #{page.current_url}]"
       puts "\n[Page HTML snippet - first 2000 chars]:"
       puts page.html[0..2000]
+      # rubocop:enable RSpec/Output
     end
   end
 end

@@ -72,6 +72,9 @@ Style/ClassVars:
   - app/models/component.rb
 Style/Lambda:
   EnforcedStyle: literal
+Style/OneClassPerFile:
+  Exclude:
+  - config/initializers/phlex.rb
 Style/OpenStructUse:
   Enabled: false
 Style/StringLiterals:
