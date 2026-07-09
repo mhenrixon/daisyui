@@ -128,6 +128,7 @@ HEADLESS=false bundle exec rspec         # Watch browser tests run
 | `/test-all` | Run complete test suite (gem + docs) |
 | `/fix-docs-tests` | Fix failing docs specs |
 | `/review-pr` | Review a GitHub PR for quality and patterns |
+| `/github-review-pr` | Full PR pass: resolve merge conflicts, then fix CI failures, then resolve review comments (in that order) |
 | `/github-review-comments` | Respond to unresolved PR review comments |
 | `/github-ci-failures` | Diagnose and fix CI failures |
 
