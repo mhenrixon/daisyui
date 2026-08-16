@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# docs-kit synced: v1.0.8
+
 # Per-site configuration for the shared docs chrome (docs-kit). Everything that
 # makes this site look like "DaisyUI Ruby" rather than any other docs site lives
 # here; the Shell/Sidebar/ThemeSwitcher themselves are shared with the

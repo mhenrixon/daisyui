@@ -2,7 +2,7 @@
 service: daisyui
 
 # Name of the container image.
-image: mhenrixon/daisyui
+image: zoolutions/daisyui
 
 # Deploy to the OSS docs server (oss-docs, provisioned by oss-infrastructure).
 # Host and domain come from the GitHub `docs` environment secrets at deploy time.

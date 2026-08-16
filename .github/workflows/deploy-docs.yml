@@ -2,7 +2,7 @@ name: Deploy Docs
 
 # Deploys the docs site (docs/) to the oss-infrastructure server via Kamal when a
 # release is published, or on demand. The build+deploy logic is shared across all
-# docs-kit sites — see mhenrixon/docs-kit/.github/workflows/deploy.yml.
+# docs-kit sites — see zoolutions/docs-kit/.github/workflows/deploy.yml.
 on:
   release:
     types: [published]
@@ -17,8 +17,8 @@ permissions:
 
 jobs:
   deploy:
-    uses: mhenrixon/docs-kit/.github/workflows/deploy.yml@main
+    uses: zoolutions/docs-kit/.github/workflows/deploy.yml@main
     with:
-      image: mhenrixon/daisyui
+      image: zoolutions/daisyui
       service: daisyui
     secrets: inherit
