@@ -31,11 +31,11 @@ Gem::Specification.new do |s|
   end
   s.bindir = "exe"
   s.executables = s.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
-  s.homepage = "https://github.com/mhenrixon/daisyui"
+  s.homepage = "https://github.com/zoolutions/daisyui"
   s.metadata = {
-    "source_code_uri" => "https://github.com/mhenrixon/daisyui",
-    "changelog_uri" => "https://github.com/mhenrixon/daisyui/blob/main/CHANGELOG.md",
-    "bug_tracker_uri" => "https://github.com/mhenrixon/daisyui/issues",
+    "source_code_uri" => "https://github.com/zoolutions/daisyui",
+    "changelog_uri" => "https://github.com/zoolutions/daisyui/blob/main/CHANGELOG.md",
+    "bug_tracker_uri" => "https://github.com/zoolutions/daisyui/issues",
     "rubygems_mfa_required" => "true"
   }
 
