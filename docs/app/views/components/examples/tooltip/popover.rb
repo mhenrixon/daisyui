@@ -12,7 +12,10 @@ module Views
 
           def example
             div(class: "flex w-full justify-between overflow-hidden p-2") do
-              Tooltip(:popover, tip: "The tooltip remains visible at the left viewport edge", popover_id: "left_edge_tooltip") do
+              Tooltip(:popover, popover_id: "left_edge_tooltip") do |tooltip|
+                tooltip.content(class: "max-w-64") do
+                  plain "The tooltip keeps its caller-defined width and remains visible at the left viewport edge"
+                end
                 Button { "Left edge" }
               end
 

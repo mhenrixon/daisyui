@@ -20,6 +20,7 @@ export default class extends Controller {
   connect() {
     if (!this.hasContentTarget) return
 
+    this.originalMaxWidth = this.contentTarget.style.maxWidth
     this.onPointerEnter = () => this.show()
     this.onPointerLeave = () => this.#hideUnlessFocused()
     this.onFocusIn = () => this.show()
@@ -37,12 +38,15 @@ export default class extends Controller {
   }
 
   disconnect() {
+    if (!this.hasContentTarget) return
+
     this.element.removeEventListener("pointerenter", this.onPointerEnter)
     this.element.removeEventListener("pointerleave", this.onPointerLeave)
     this.element.removeEventListener("focusin", this.onFocusIn)
     this.element.removeEventListener("focusout", this.onFocusOut)
     this.#teardownOpen()
     this.#restoreDescription()
+    this.contentTarget.style.maxWidth = this.originalMaxWidth
   }
 
   show() {
@@ -86,7 +90,11 @@ export default class extends Controller {
     if (!this.#isOpen()) return
 
     const viewport = this.#viewport()
-    this.contentTarget.style.maxWidth = `${Math.max(0, viewport.width - VIEWPORT_PADDING * 2)}px`
+    const availableWidth = Math.max(0, viewport.width - VIEWPORT_PADDING * 2)
+    this.contentTarget.style.maxWidth = this.originalMaxWidth
+    const computedMaxWidth = Number.parseFloat(getComputedStyle(this.contentTarget).maxWidth)
+    const maxWidth = Number.isFinite(computedMaxWidth) ? Math.min(computedMaxWidth, availableWidth) : availableWidth
+    this.contentTarget.style.maxWidth = `${maxWidth}px`
 
     const trigger = this.element.getBoundingClientRect()
     const tooltip = this.contentTarget.getBoundingClientRect()

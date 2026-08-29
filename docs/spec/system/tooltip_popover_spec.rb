@@ -9,18 +9,27 @@ RSpec.describe "Popover tooltip", type: :system do
     trigger = find_button("Left edge")
     trigger.hover
 
-    expect(page).to have_css("#left_edge_tooltip:popover-open")
+    expect(page).to have_css("#left_edge_tooltip:popover-open", visible: true)
     expect(trigger["aria-describedby"]).to eq("left_edge_tooltip")
 
     bounds = page.evaluate_script(<<~JS)
       (() => {
         const rect = document.querySelector("#left_edge_tooltip").getBoundingClientRect()
-        return { left: rect.left, right: rect.right, viewport: window.innerWidth }
+        const style = getComputedStyle(document.querySelector("#left_edge_tooltip"))
+        return {
+          left: rect.left,
+          right: rect.right,
+          viewport: window.innerWidth,
+          maxWidth: Number.parseFloat(style.maxWidth),
+          visibility: style.visibility,
+        }
       })()
     JS
 
     expect(bounds.fetch("left")).to be >= 8
     expect(bounds.fetch("right")).to be <= bounds.fetch("viewport") - 8
+    expect(bounds.fetch("maxWidth")).to eq(256)
+    expect(bounds.fetch("visibility")).to eq("visible")
 
     arrow = page.evaluate_script(<<~JS)
       (() => {

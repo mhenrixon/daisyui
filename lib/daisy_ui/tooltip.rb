@@ -17,7 +17,11 @@ module DaisyUI
       @popover_id = popover_id if @popover
       @stimulus = stimulus
       @tip = tip
-      wire_controller(options, modifiers) if popover?
+      if popover?
+        validate_stimulus!
+        boolean_placements = PLACEMENTS.select { |candidate| options[candidate] == true }
+        wire_controller(options, modifiers + boolean_placements)
+      end
       super(*modifiers, as:, **options)
     end
 
@@ -72,6 +76,13 @@ module DaisyUI
       return DEFAULT_STIMULUS_IDENTIFIER if @stimulus == true
 
       @stimulus.to_s
+    end
+
+    def validate_stimulus!
+      valid_identifier = (@stimulus.is_a?(String) || @stimulus.is_a?(Symbol)) && @stimulus.to_s.match?(/\A\S+\z/)
+      return if @stimulus == true || valid_identifier
+
+      raise ArgumentError, "stimulus must be true or a non-empty controller identifier in popover mode"
     end
 
     def stimulus_target_key

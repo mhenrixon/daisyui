@@ -214,6 +214,13 @@ describe DaisyUI::Tooltip do
       end
     end
 
+    it "derives placement from boolean directional modifiers" do
+      output = render popover_component(bottom: true).new
+
+      expect(output).to include('class="tooltip tooltip-bottom after:hidden"')
+      expect(output).to include('data-daisy-tooltip-placement-value="bottom"')
+    end
+
     it "uses rich content instead of the tip string when content is rendered" do
       component = Class.new(Phlex::HTML) do
         def view_template
@@ -239,6 +246,13 @@ describe DaisyUI::Tooltip do
       expect(output).to include('data-floating-tooltip-target="content"')
       expect(output).to include('data-floating-tooltip-target="arrow"')
       expect(output).not_to include("daisy-tooltip")
+    end
+
+    it "rejects disabled or empty controller identifiers" do
+      [false, nil, "", :""].each do |stimulus|
+        expect { render popover_component(stimulus:).new }
+          .to raise_error(ArgumentError, /stimulus must be true or a non-empty controller identifier/)
+      end
     end
 
     it "does not change classic tooltip markup" do
