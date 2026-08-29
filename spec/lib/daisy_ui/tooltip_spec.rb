@@ -249,7 +249,7 @@ describe DaisyUI::Tooltip do
     end
 
     it "rejects disabled or empty controller identifiers" do
-      [false, nil, "", :""].each do |stimulus|
+      [false, nil, "", "   ", :""].each do |stimulus|
         expect { render popover_component(stimulus:).new }
           .to raise_error(ArgumentError, /stimulus must be true or a non-empty controller identifier/)
       end

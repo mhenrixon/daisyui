@@ -38,15 +38,13 @@ export default class extends Controller {
   }
 
   disconnect() {
-    if (!this.hasContentTarget) return
-
     this.element.removeEventListener("pointerenter", this.onPointerEnter)
     this.element.removeEventListener("pointerleave", this.onPointerLeave)
     this.element.removeEventListener("focusin", this.onFocusIn)
     this.element.removeEventListener("focusout", this.onFocusOut)
     this.#teardownOpen()
     this.#restoreDescription()
-    this.contentTarget.style.maxWidth = this.originalMaxWidth
+    if (this.hasContentTarget) this.contentTarget.style.maxWidth = this.originalMaxWidth
   }
 
   show() {
