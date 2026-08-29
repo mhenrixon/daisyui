@@ -19,6 +19,12 @@
   positioning fallback (Safari < 26, Firefox < 147) and optional roving
   keyboard navigation. The default `:popover` dropdown remains zero-JS, and the
   gem stays a plain Phlex library when Rails is absent.
+- `Tooltip` `:popover` modifier for collision-aware tooltips. It renders real
+  tooltip content in the browser top layer, opens on hover or focus, flips and
+  shifts within the visual viewport, follows scroll/resize while open, and
+  exposes `role="tooltip"`/`aria-describedby` semantics. The bundled
+  `daisy-tooltip` Stimulus controller is auto-pinned for importmap-rails apps
+  and supports a custom controller identifier via `stimulus:`.
 
 ### Changed
 

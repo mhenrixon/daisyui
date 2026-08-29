@@ -248,6 +248,58 @@ JS-bundler (esbuild/vite/webpack) consumers: import the controller from the
 gem's `app/javascript/daisy_ui/controllers/daisy_dropdown_controller.js` and
 register it manually.
 
+## Collision-aware `Tooltip(:popover)`
+
+The `:popover` Tooltip modifier renders real tooltip content in the browser top
+layer instead of a `data-tip` pseudo-element. It therefore escapes clipping
+ancestors, and the bundled `daisy-tooltip` controller flips and shifts the
+tooltip to remain inside the visual viewport. Geometry listeners are attached
+only while the tooltip is open.
+
+```ruby
+Tooltip(:popover, tip: "Helpful details") do
+  Button(:circle) { "?" }
+end
+```
+
+Directional and color modifiers compose normally:
+
+```ruby
+Tooltip(:popover, :bottom, :info, tip: "Saved automatically") do
+  Button(:ghost) { "Status" }
+end
+```
+
+Rich content uses the existing `content` sub-component:
+
+```ruby
+Tooltip(:popover) do |tooltip|
+  tooltip.content(class: "max-w-64") do
+    strong { "Keyboard shortcut" }
+    kbd { "⌘ K" }
+  end
+  Button { "Commands" }
+end
+```
+
+Register the gem controllers once with
+`lazyLoadControllersFrom("daisy_ui/controllers", application)`, as shown in the
+dropdown controller section above. Importmap-rails applications receive the
+controller pin from the gem automatically. Bundler applications can import
+`app/javascript/daisy_ui/controllers/daisy_tooltip_controller.js` and register
+it as `daisy-tooltip`.
+
+Popover tooltips:
+
+- open on pointer hover or keyboard focus and close on leave, blur, or Escape;
+- use `role="tooltip"` and merge their id into the first interactive trigger's
+  `aria-describedby`;
+- preserve caller-supplied Stimulus controllers;
+- accept `popover_id:` for a stable tooltip id and `stimulus: "your-id"` to
+  override the controller identifier.
+
+Classic `Tooltip(tip: ...)` rendering remains unchanged.
+
 # MCP Server (Claude Code Integration)
 
 This gem includes an MCP (Model Context Protocol) server that provides component information to AI assistants like Claude Code.

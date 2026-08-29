@@ -1,27 +1,105 @@
 # frozen_string_literal: true
 
+require "securerandom"
+
 module DaisyUI
   class Tooltip < Base
     self.component_class = :tooltip
 
-    def initialize(*, tip: nil, as: :div, **)
-      super(*, as:, **)
+    PLACEMENTS = %i[top bottom left right].freeze
+    DEFAULT_STIMULUS_IDENTIFIER = "daisy-tooltip"
+    POPOVER_STYLE = "position:fixed;inset:auto;margin:0;border:0;opacity:1;transform:none;pointer-events:none;visibility:hidden"
+    ARROW_STYLE = "position:absolute;width:.625rem;height:.25rem;background:var(--tt-bg);" \
+                  "clip-path:polygon(0 0,100% 0,50% 100%);pointer-events:none"
+
+    def initialize(*modifiers, tip: nil, as: :div, popover_id: nil, stimulus: true, **options)
+      @popover = modifiers.include?(:popover)
+      @popover_id = popover_id if @popover
+      @stimulus = stimulus
       @tip = tip
+      wire_controller(options, modifiers) if popover?
+      super(*modifiers, as:, **options)
     end
 
     def view_template(&)
-      opts = { class: classes, **attributes }
-      opts[:data_tip] = tip if tip
-      public_send(as, **opts, &)
+      if popover?
+        public_send(as, class: merge_classes(classes, "after:hidden"), **attributes) do
+          yield self if block_given?
+          content { plain tip } if tip && !@content_rendered
+        end
+      else
+        opts = { class: classes, **attributes }
+        opts[:data_tip] = tip if tip
+        public_send(as, **opts, &)
+      end
     end
 
     def content(**options, &)
-      div(class: component_classes("tooltip-content", options:), **options, &)
+      if popover?
+        @content_rendered = true
+        options[:id] ||= popover_id
+        options[:popover] = "manual"
+        options[:role] ||= "tooltip"
+        options[:style] = merge_style(options[:style], POPOVER_STYLE)
+        merge_stimulus_target(options, "content")
+
+        div(class: component_classes("tooltip-content", options:), **options) do
+          span(
+            aria_hidden: "true",
+            data: { stimulus_target_key => "arrow" },
+            style: ARROW_STYLE
+          )
+          yield if block_given?
+        end
+      else
+        div(class: component_classes("tooltip-content", options:), **options, &)
+      end
     end
 
     private
 
     attr_reader :tip
+
+    def popover?
+      @popover
+    end
+
+    def popover_id
+      @popover_id ||= "tooltip_#{SecureRandom.hex(8)}"
+    end
+
+    def stimulus_identifier
+      return DEFAULT_STIMULUS_IDENTIFIER if @stimulus == true
+
+      @stimulus.to_s
+    end
+
+    def stimulus_target_key
+      :"#{stimulus_identifier}_target"
+    end
+
+    def placement(source_modifiers = modifiers)
+      PLACEMENTS.find { |candidate| source_modifiers.include?(candidate) } || :top
+    end
+
+    def wire_controller(options, source_modifiers)
+      data = (options[:data] || {}).dup
+      controllers = data[:controller].to_s.split
+      data[:controller] = (controllers + [stimulus_identifier]).uniq.join(" ")
+      data[:"#{stimulus_identifier}_placement_value"] = placement(source_modifiers)
+      options[:data] = data
+    end
+
+    def merge_stimulus_target(options, target)
+      data = (options[:data] || {}).dup
+      targets = data[stimulus_target_key].to_s.split
+      data[stimulus_target_key] = (targets + [target]).uniq.join(" ")
+      options[:data] = data
+    end
+
+    def merge_style(existing, added)
+      [existing&.chomp(";"), added].compact.join(";")
+    end
 
     register_modifiers(
       # "sm:tooltip-open"
