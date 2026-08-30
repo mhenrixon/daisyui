@@ -174,4 +174,100 @@ describe DaisyUI::Tooltip do
       expect(output).not_to include("data-tip")
     end
   end
+
+  describe "popover mode" do
+    def popover_component(*modifiers, **options)
+      Class.new(Phlex::HTML) do
+        define_method(:view_template) do
+          render DaisyUI::Tooltip.new(:popover, *modifiers, tip: "Helpful details", **options) do
+            button { "More information" }
+          end
+        end
+      end
+    end
+
+    it "renders the tooltip content in the browser top layer" do
+      output = render popover_component(:top, popover_id: "help_tip").new
+
+      expect(output).to include('data-controller="daisy-tooltip"')
+      expect(output).to include('data-daisy-tooltip-placement-value="top"')
+      expect(output).to include('id="help_tip"')
+      expect(output).to include('popover="manual"')
+      expect(output).to include('role="tooltip"')
+      expect(output).to include('data-daisy-tooltip-target="content"')
+      expect(output).to include('data-daisy-tooltip-target="arrow"')
+      expect(output).to include("Helpful details")
+      expect(output).not_to include("data-tip")
+    end
+
+    it "preserves caller-supplied controllers" do
+      output = render popover_component(data: { controller: "analytics" }).new
+
+      expect(output).to include('data-controller="analytics daisy-tooltip"')
+    end
+
+    it "derives placement from directional modifiers" do
+      %i[top bottom left right].each do |placement|
+        output = render popover_component(placement).new
+
+        expect(output).to include(%(data-daisy-tooltip-placement-value="#{placement}"))
+      end
+    end
+
+    it "derives placement from boolean directional modifiers" do
+      output = render popover_component(bottom: true).new
+
+      expect(output).to include('class="tooltip tooltip-bottom after:hidden"')
+      expect(output).to include('data-daisy-tooltip-placement-value="bottom"')
+    end
+
+    it "uses rich content instead of the tip string when content is rendered" do
+      component = Class.new(Phlex::HTML) do
+        def view_template
+          render DaisyUI::Tooltip.new(:popover, tip: "Fallback") do |tooltip|
+            tooltip.content(class: "max-w-48") { strong { "Rich details" } }
+            button { "More information" }
+          end
+        end
+      end
+
+      output = render component.new
+
+      expect(output).to include('class="tooltip-content max-w-48"')
+      expect(output).to include("Rich details")
+      expect(output).not_to include("Fallback")
+    end
+
+    it "uses a caller-supplied controller identifier" do
+      output = render popover_component(stimulus: "floating-tooltip").new
+
+      expect(output).to include('data-controller="floating-tooltip"')
+      expect(output).to include('data-floating-tooltip-placement-value="top"')
+      expect(output).to include('data-floating-tooltip-target="content"')
+      expect(output).to include('data-floating-tooltip-target="arrow"')
+      expect(output).not_to include("daisy-tooltip")
+    end
+
+    it "rejects disabled or empty controller identifiers" do
+      [false, nil, "", "   ", :""].each do |stimulus|
+        expect { render popover_component(stimulus:).new }
+          .to raise_error(ArgumentError, /stimulus must be true or a non-empty controller identifier/)
+      end
+    end
+
+    it "does not change classic tooltip markup" do
+      component = Class.new(Phlex::HTML) do
+        def view_template
+          render DaisyUI::Tooltip.new(:top, tip: "Classic") { button { "Hover" } }
+        end
+      end
+
+      output = render component.new
+
+      expect(output).to include('class="tooltip tooltip-top"')
+      expect(output).to include('data-tip="Classic"')
+      expect(output).not_to include("popover")
+      expect(output).not_to include("daisy-tooltip")
+    end
+  end
 end

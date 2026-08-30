@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # Auto-pins the gem's bundled Stimulus controllers for importmap-rails consumers.
-# Exposes `daisy_ui/controllers/daisy_dropdown_controller`. Register it in the
-# host app (lazily recommended):
+# Exposes the bundled `daisy-dropdown` and `daisy-tooltip` controllers. Register
+# them in the host app (lazily recommended):
 #
 #   // app/javascript/controllers/index.js
 #   import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading"
