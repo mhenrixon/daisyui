@@ -31,6 +31,10 @@
 - Range component: added range-vertical modifier for vertical orientation (DaisyUI 5.6)
 - Tooltip component: added alignment modifiers (tooltip-start, tooltip-center, tooltip-end) and tooltip-content sub-component (DaisyUI 5.6)
 
+### Fixed
+
+- Popover tooltips no longer clip arrows that extend beyond the tooltip card.
+
 ## [0.1.0] - 2024-08-02
 
 - Initial release

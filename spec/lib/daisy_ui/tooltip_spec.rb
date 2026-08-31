@@ -196,6 +196,7 @@ describe DaisyUI::Tooltip do
       expect(output).to include('role="tooltip"')
       expect(output).to include('data-daisy-tooltip-target="content"')
       expect(output).to include('data-daisy-tooltip-target="arrow"')
+      expect(output).to include("overflow:visible")
       expect(output).to include("Helpful details")
       expect(output).not_to include("data-tip")
     end

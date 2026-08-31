@@ -38,11 +38,15 @@ RSpec.describe "Popover tooltip", type: :system do
         const arrow = tooltip.querySelector('[data-daisy-tooltip-target~="arrow"]')
         const arrowStyle = getComputedStyle(arrow)
         const arrowBounds = arrow.getBoundingClientRect()
+        const tooltipBounds = tooltip.getBoundingClientRect()
 
         return {
           stockArrowDisplay: getComputedStyle(host, "::after").display,
+          tooltipOverflow: getComputedStyle(tooltip).overflow,
           width: arrowBounds.width,
           height: arrowBounds.height,
+          arrowBottom: arrowBounds.bottom,
+          tooltipBottom: tooltipBounds.bottom,
           background: arrowStyle.backgroundColor,
           tooltipBackground: getComputedStyle(tooltip).backgroundColor,
           borders: [
@@ -56,8 +60,10 @@ RSpec.describe "Popover tooltip", type: :system do
     JS
 
     expect(arrow.fetch("stockArrowDisplay")).to eq("none")
+    expect(arrow.fetch("tooltipOverflow")).to eq("visible")
     expect(arrow.fetch("width")).to be > 0
     expect(arrow.fetch("height")).to be > 0
+    expect(arrow.fetch("arrowBottom")).to be > arrow.fetch("tooltipBottom")
     expect(arrow.fetch("background")).to eq(arrow.fetch("tooltipBackground"))
     expect(arrow.fetch("borders")).to all(eq("0px"))
 
