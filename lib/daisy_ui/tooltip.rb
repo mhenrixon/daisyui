@@ -8,7 +8,8 @@ module DaisyUI
 
     PLACEMENTS = %i[top bottom left right].freeze
     DEFAULT_STIMULUS_IDENTIFIER = "daisy-tooltip"
-    POPOVER_STYLE = "position:fixed;inset:auto;margin:0;border:0;opacity:1;transform:none;pointer-events:none;visibility:hidden"
+    POPOVER_STYLE = "position:fixed;inset:auto;margin:0;border:0;opacity:1;transform:none;overflow:visible;" \
+                    "pointer-events:none;visibility:hidden"
     ARROW_STYLE = "position:absolute;width:.625rem;height:.25rem;background:var(--tt-bg);" \
                   "clip-path:polygon(0 0,100% 0,50% 100%);pointer-events:none"
 
