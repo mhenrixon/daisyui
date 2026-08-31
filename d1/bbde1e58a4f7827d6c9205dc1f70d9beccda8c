@@ -1,0 +1,15 @@
+lib/daisy_ui/updated_at.rb
+  ai_agent 6
+Gemfile.lock
+  ai_agent 4
+docs/Gemfile.lock
+  ai_agent 16
+lib/daisy_ui/version.rb
+  ai_agent 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "d1bbde1e58a4f7827d6c9205dc1f70d9beccda8c",
+  "prompts": {}
+}
